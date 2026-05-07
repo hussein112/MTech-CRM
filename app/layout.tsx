@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Manrope } from "next/font/google"
-import { Sidebar } from "./components/dashboard/Sidebar"
+import { Sidebar }         from "./components/dashboard/Sidebar"
+import { SidebarProvider } from "./components/dashboard/SidebarContext"
 import "./styles/dashboard.css"
 
 const manrope = Manrope({
@@ -22,13 +23,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <title>Document</title>
     </head>
     <body>
-      <div className={manrope.variable} style={{ display: "flex", minHeight: "100vh", fontFamily: "var(--font-manrope), sans-serif", overflowX: "hidden" }}>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-        <Sidebar />
-        <main style={{ flex: 1, minWidth: 0, background: "var(--bg)" }}>
-          {children}
-        </main>
-      </div>
+      <SidebarProvider>
+        <div className={manrope.variable} style={{ display: "flex", minHeight: "100vh", fontFamily: "var(--font-manrope), sans-serif", overflowX: "hidden" }}>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+          <Sidebar />
+          <main style={{ flex: 1, minWidth: 0, background: "var(--bg)", marginLeft: "var(--sidebar-w, 250px)", transition: "margin-left 0.22s ease" }}>
+            {children}
+          </main>
+        </div>
+      </SidebarProvider>
     </body>
     </html>
 

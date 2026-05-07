@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
+import { useSidebar } from "./SidebarContext"
 
 const NAV_ITEMS = [
   { label: "Dashboard",        href: "/dashboard",            icon: "dashboard"           },
@@ -28,9 +29,9 @@ const NAV_ITEMS = [
 
 export function Sidebar() {
   const pathname  = usePathname()
-  const [expanded,  setExpanded]  = useState<string | null>("Onboarding")
-  const [collapsed, setCollapsed] = useState(false)
-  const [tooltip,   setTooltip]   = useState<{ label: string; y: number } | null>(null)
+  const { collapsed, toggle: toggleSidebar } = useSidebar()
+  const [expanded, setExpanded] = useState<string | null>("Onboarding")
+  const [tooltip,  setTooltip]  = useState<{ label: string; y: number } | null>(null)
 
   function openTooltip(label: string, e: React.MouseEvent<HTMLElement>) {
     const r = e.currentTarget.getBoundingClientRect()
@@ -38,7 +39,7 @@ export function Sidebar() {
   }
 
   function toggle() {
-    setCollapsed(c => !c)
+    toggleSidebar()
     setTooltip(null)
   }
 
@@ -46,14 +47,16 @@ export function Sidebar() {
     <>
       <aside
         style={{
-          width: collapsed ? 64 : 200,
+          width: collapsed ? 64 : 250,
           background: "var(--bg2)",
           borderRight: "1px solid var(--border)",
           display: "flex",
           flexDirection: "column",
           height: "100vh",
-          position: "sticky",
+          position: "fixed",
           top: 0,
+          left: 0,
+          zIndex: 100,
           flexShrink: 0,
           transition: "width 0.22s ease",
           overflow: "hidden",
@@ -76,11 +79,11 @@ export function Sidebar() {
               href="/dashboard"
               style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 0, overflow: "hidden" }}
             >
-              <div style={{ width: 28, height: 28, borderRadius: 8, background: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: "var(--accent-crm)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <span className="material-symbols-outlined" style={{ fontSize: 16, color: "#fff" }}>credit_card</span>
               </div>
               <span style={{ fontWeight: 900, fontSize: 14, color: "var(--text)", fontFamily: "'Mulish', sans-serif", whiteSpace: "nowrap" }}>
-                <span style={{ color: "var(--accent)" }}>MTech</span>Distributors
+                <span style={{ color: "var(--accent-crm)" }}>MTech</span>Distributors
               </span>
             </Link>
           )}
@@ -115,15 +118,15 @@ export function Sidebar() {
                       justifyContent: "center",
                       height: 40,
                       borderRadius: 8,
-                      background: isActive ? "var(--accent-light)" : "transparent",
-                      outline: isActive ? "2px solid var(--accent)" : "2px solid transparent",
+                      background: isActive ? "var(--accent-crm-light)" : "transparent",
+                      outline: isActive ? "2px solid var(--accent-crm)" : "2px solid transparent",
                       outlineOffset: -2,
                       transition: ".15s",
                     }}
                     onMouseEnter={e => { openTooltip(item.label, e); if (!isActive) (e.currentTarget as HTMLElement).style.background = "var(--bg3)" }}
                     onMouseLeave={e => { setTooltip(null);            if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent" }}
                   >
-                    <span className="material-symbols-outlined" style={{ fontSize: 20, color: isActive ? "var(--accent)" : "var(--text3)" }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 20, color: isActive ? "var(--accent-crm)" : "var(--text3)" }}>
                       {item.icon}
                     </span>
                   </Link>
@@ -136,20 +139,20 @@ export function Sidebar() {
               <div key={item.label}>
                 <div
                   onClick={() => hasChildren ? setExpanded(isExpanded ? null : item.label) : undefined}
-                  style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", borderRadius: 8, marginBottom: 2, cursor: "pointer", background: isActive ? "var(--accent-light)" : "transparent", borderLeft: isActive ? "2px solid var(--accent)" : "2px solid transparent", transition: ".15s" }}
+                  style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", borderRadius: 8, marginBottom: 2, cursor: "pointer", background: isActive ? "var(--accent-crm-light)" : "transparent", borderLeft: isActive ? "2px solid var(--accent-crm)" : "2px solid transparent", transition: ".15s" }}
                   onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "var(--bg3)" }}
                   onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent" }}
                 >
                   {hasChildren ? (
                     <>
-                      <span className="material-symbols-outlined" style={{ fontSize: 18, color: isActive ? "var(--accent)" : "var(--text3)", flexShrink: 0 }}>{item.icon}</span>
-                      <span style={{ flex: 1, fontSize: 13, fontWeight: isActive ? 700 : 600, color: isActive ? "var(--accent)" : "var(--text2)" }}>{item.label}</span>
+                      <span className="material-symbols-outlined" style={{ fontSize: 18, color: isActive ? "var(--accent-crm)" : "var(--text3)", flexShrink: 0 }}>{item.icon}</span>
+                      <span style={{ flex: 1, fontSize: 13, fontWeight: isActive ? 700 : 600, color: isActive ? "var(--accent-crm)" : "var(--text2)" }}>{item.label}</span>
                       <span className="material-symbols-outlined" style={{ fontSize: 16, color: "var(--text3)", transition: "transform .2s", transform: isExpanded ? "rotate(180deg)" : "none" }}>expand_more</span>
                     </>
                   ) : (
                     <Link href={item.href} style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", textDecoration: "none" }}>
-                      <span className="material-symbols-outlined" style={{ fontSize: 18, color: isActive ? "var(--accent)" : "var(--text3)", flexShrink: 0 }}>{item.icon}</span>
-                      <span style={{ fontSize: 13, fontWeight: isActive ? 700 : 600, color: isActive ? "var(--accent)" : "var(--text2)" }}>{item.label}</span>
+                      <span className="material-symbols-outlined" style={{ fontSize: 18, color: isActive ? "var(--accent-crm)" : "var(--text3)", flexShrink: 0 }}>{item.icon}</span>
+                      <span style={{ fontSize: 13, fontWeight: isActive ? 700 : 600, color: isActive ? "var(--accent-crm)" : "var(--text2)" }}>{item.label}</span>
                     </Link>
                   )}
                 </div>
@@ -162,9 +165,9 @@ export function Sidebar() {
                         <Link
                           key={child.href}
                           href={child.href}
-                          style={{ display: "block", padding: "5px 10px", fontSize: 12, fontWeight: childActive ? 700 : 500, color: childActive ? "var(--accent)" : "var(--text3)", textDecoration: "none", borderRadius: 6, marginBottom: 2, transition: ".15s" }}
+                          style={{ display: "block", padding: "5px 10px", fontSize: 12, fontWeight: childActive ? 700 : 500, color: childActive ? "var(--accent-crm)" : "var(--text3)", textDecoration: "none", borderRadius: 6, marginBottom: 2, transition: ".15s" }}
                           onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--text)" }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = childActive ? "var(--accent)" : "var(--text3)" }}
+                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = childActive ? "var(--accent-crm)" : "var(--text3)" }}
                         >
                           {child.label}
                         </Link>
@@ -182,7 +185,7 @@ export function Sidebar() {
           {collapsed ? (
             <Link
               href="/tickets/new"
-              style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 40, background: "var(--accent)", color: "#fff", borderRadius: 10, textDecoration: "none", transition: ".15s" }}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 40, background: "var(--accent-crm)", color: "#fff", borderRadius: 10, textDecoration: "none", transition: ".15s" }}
               onMouseEnter={e => openTooltip("New Ticket", e)}
               onMouseLeave={() => setTooltip(null)}
             >
@@ -191,7 +194,7 @@ export function Sidebar() {
           ) : (
             <Link
               href="/tickets/new"
-              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "var(--accent)", color: "#fff", borderRadius: 10, padding: "10px 0", fontSize: 13, fontWeight: 800, textDecoration: "none", transition: ".15s" }}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "var(--accent-crm)", color: "#fff", borderRadius: 10, padding: "10px 0", fontSize: 13, fontWeight: 800, textDecoration: "none", transition: ".15s" }}
             >
               <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>
               New Ticket

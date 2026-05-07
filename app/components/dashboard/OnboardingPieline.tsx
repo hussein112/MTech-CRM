@@ -23,9 +23,9 @@ export function OnboardingPipeline({
   merchantStatuses,
   agentStatuses,
 }: Props) {
-  const statBox = (value: number, label: string, accent?: boolean) => (
-    <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 14, padding: "18px 16px", textAlign: "center" }}>
-      <div style={{ fontSize: 28, fontWeight: 900, color: accent ? "var(--accent)" : "var(--text)", lineHeight: 1 }}>
+  const statBox = (value: number, label: string, accent?: boolean, delay = 0) => (
+    <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 14, padding: "18px 16px", textAlign: "center", animation: "fadeIn 0.35s ease both", animationDelay: `${delay}ms` }}>
+      <div style={{ fontSize: 28, fontWeight: 900, color: accent ? "var(--accent-crm)" : "var(--text)", lineHeight: 1 }}>
         {value}
       </div>
       <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 6, fontWeight: 600 }}>{label}</div>
@@ -44,10 +44,10 @@ export function OnboardingPipeline({
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
-        {statBox(merchantActive,   "Merchant Active")}
-        {statBox(merchantResolved, "Merchant Resolved", true)}
-        {statBox(agentActive,      "Agent Active")}
-        {statBox(agentResolved,    "Agent Resolved", true)}
+        {statBox(merchantActive,   "Merchant Active",    false, 0)}
+        {statBox(merchantResolved, "Merchant Resolved",  true,  70)}
+        {statBox(agentActive,      "Agent Active",       false, 140)}
+        {statBox(agentResolved,    "Agent Resolved",     true,  210)}
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>

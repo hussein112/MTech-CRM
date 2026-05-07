@@ -17,7 +17,13 @@
   cursor: default;
   color: #fff !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  animation: fadeUp 0.45s ease both;
 }
+
+.stat-v2:nth-child(1) { animation-delay: 0ms; }
+.stat-v2:nth-child(2) { animation-delay: 70ms; }
+.stat-v2:nth-child(3) { animation-delay: 140ms; }
+.stat-v2:nth-child(4) { animation-delay: 210ms; }
 
 html[data-theme="dark"] .stat-v2 { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); }
 
@@ -28,6 +34,7 @@ html[data-theme="dark"] .stat-v2 { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); }
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.04);
   border: 1px solid var(--border);
   backdrop-filter: blur(20px);
+  animation: fadeUp 0.45s ease both;
 }
 
 html[data-theme="dark"] .dash-card-v2 {
@@ -132,6 +139,20 @@ html[data-theme="dark"] .dash-card-v2 {
   50% { opacity: 0.4; }
 }
 
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dash-card-v2, .stat-v2 { animation: none !important; }
+}
+
 /* ── Responsive page layout ───────────────────────────────── */
 .dash-layout {
   padding: 24px;
@@ -186,6 +207,11 @@ html[data-theme="dark"] .dash-card-v2 {
 @media (max-width: 1200px) {
   .stat-v2-row { grid-template-columns: repeat(2, 1fr); }
 }
+
+@media (max-width: 640px) {
+  .stat-v2-row { grid-template-columns: repeat(1, 1fr); }
+}
+
 
 @media (max-width: 1024px) {
   .dash-grid-2-1,

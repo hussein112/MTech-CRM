@@ -45,13 +45,13 @@ export function LiveFeed({ items, loading, totalCount }: Props) {
         )}
 
         {!loading && items.map((item, i) => (
-          <div key={item.id} className="act-item-v2">
+          <div key={item.id} className="act-item-v2" style={{ animation: "fadeIn 0.35s ease both", animationDelay: `${i * 45}ms` }}>
             <div className="act-dot-v2" style={{ background: item.dotColor ?? DOT_COLORS[i % DOT_COLORS.length] }} />
             <div>
               <div className="act-text-v2">
                 <strong style={{ color: "var(--text)", fontWeight: 800 }}>{item.userName}</strong>
                 {" "}{item.action}{item.targetId ? (
-                  <> <Link href={`/tickets/${item.targetId}`} style={{ color: "var(--accent)", fontWeight: 700, textDecoration: "none" }}>{item.targetId}</Link></>
+                  <> <Link href={`/tickets/${item.targetId}`} style={{ color: "var(--accent-crm)", fontWeight: 700, textDecoration: "none" }}>{item.targetId}</Link></>
                 ) : item.target ? <> <span style={{ color: "var(--text)", fontWeight: 700 }}>{item.target}</span></> : null}
               </div>
               <div className="act-time-v2">{item.timestamp}</div>

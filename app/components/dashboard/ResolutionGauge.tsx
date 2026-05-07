@@ -36,7 +36,8 @@ export function ResolutionGauge({ counts }: Props) {
     if (!canvasRef.current) return
     const ctx = canvasRef.current.getContext("2d")
     if (!ctx) return
-    chartRef.current?.destroy()
+    Chart.getChart(canvasRef.current)?.destroy()
+    chartRef.current = null
 
     chartRef.current = new Chart(ctx, {
       type: "doughnut",
@@ -57,7 +58,7 @@ export function ResolutionGauge({ counts }: Props) {
       },
     })
 
-    return () => { chartRef.current?.destroy() }
+    return () => { chartRef.current?.destroy(); chartRef.current = null }
   }, [counts])
 
   return (
@@ -77,8 +78,8 @@ export function ResolutionGauge({ counts }: Props) {
       </div>
 
       <div style={{ background: "var(--bg)", borderRadius: 12, padding: 14, border: "1px solid var(--border)", marginTop: 24 }}>
-        {LEGEND.map(({ key, label, color }) => (
-          <div key={key} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+        {LEGEND.map(({ key, label, color }, i) => (
+          <div key={key} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, animation: "fadeIn 0.3s ease both", animationDelay: `${i * 55}ms` }}>
             <div style={{ width: 10, height: 10, borderRadius: "50%", background: color, flexShrink: 0 }} />
             <span style={{ fontSize: 12, color: "var(--text2)", flex: 1 }}>{label}</span>
             <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>{counts[key]}</span>

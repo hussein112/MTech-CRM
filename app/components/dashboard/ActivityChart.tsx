@@ -43,7 +43,9 @@ export function ActivityChart({ data }: Props) {
     const ctx = canvasRef.current.getContext("2d")
     if (!ctx) return
 
-    chartRef.current?.destroy()
+    // Destroy any stale instance still attached to this canvas element
+    Chart.getChart(canvasRef.current)?.destroy()
+    chartRef.current = null
 
     const pts = data[period] ?? []
 
@@ -118,15 +120,15 @@ export function ActivityChart({ data }: Props) {
 
     chartRef.current = new Chart(ctx, config)
 
-    return () => { chartRef.current?.destroy() }
+    return () => { chartRef.current?.destroy(); chartRef.current = null }
   }, [period, data])
 
   return (
     <div className="dash-card-v2" style={{ display: "flex", flexDirection: "column" }}>
       <div className="dv2-title" style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--accent-light)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span className="material-symbols-outlined" style={{ color: "var(--accent)", fontSize: 18 }}>monitoring</span>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--accent-crm-light)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span className="material-symbols-outlined" style={{ color: "var(--accent-crm)", fontSize: 18 }}>monitoring</span>
           </div>
           <span>Activity Overview</span>
         </div>

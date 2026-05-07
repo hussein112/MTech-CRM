@@ -23,7 +23,8 @@ export function OnboardingVolumeChart({ data }: Props) {
     if (!canvasRef.current) return
     const ctx = canvasRef.current.getContext("2d")
     if (!ctx) return
-    chartRef.current?.destroy()
+    Chart.getChart(canvasRef.current)?.destroy()
+    chartRef.current = null
 
     chartRef.current = new Chart(ctx, {
       type: "line",
@@ -75,7 +76,7 @@ export function OnboardingVolumeChart({ data }: Props) {
       },
     })
 
-    return () => { chartRef.current?.destroy() }
+    return () => { chartRef.current?.destroy(); chartRef.current = null }
   }, [data])
 
   return (

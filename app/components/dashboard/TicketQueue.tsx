@@ -52,14 +52,14 @@ export function TicketQueue({ tickets, loading }: Props) {
       {/* Header */}
       <div className="dv2-title">
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--accent-light)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <span className="material-symbols-outlined" style={{ color: "var(--accent)", fontSize: 18 }}>inbox</span>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--accent-crm-light)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <span className="material-symbols-outlined" style={{ color: "var(--accent-crm)", fontSize: 18 }}>inbox</span>
           </div>
           <span>Open Tickets Queue</span>
         </div>
         <Link
           href="/tickets"
-          style={{ textDecoration: "none", background: "var(--bg)", padding: "6px 14px", borderRadius: 20, border: "1px solid var(--border)", color: "var(--accent)", fontSize: 12, fontWeight: 800, whiteSpace: "nowrap" }}
+          style={{ textDecoration: "none", background: "var(--bg)", padding: "6px 14px", borderRadius: 20, border: "1px solid var(--border)", color: "var(--accent-crm)", fontSize: 12, fontWeight: 800, whiteSpace: "nowrap" }}
         >
           Manage Queue →
         </Link>
@@ -95,10 +95,10 @@ export function TicketQueue({ tickets, loading }: Props) {
         {filtered.length === 0 && (
           <div style={{ textAlign: "center", padding: "32px 0", color: "var(--text3)", fontSize: 13 }}>No tickets match your filter.</div>
         )}
-        {filtered.map(ticket => (
-          <Link key={ticket.id} href={`/tickets/${ticket.id}`} className="tkt-card">
+        {filtered.map((ticket, i) => (
+          <Link key={ticket.id} href={`/tickets/${ticket.id}`} className="tkt-card" style={{ animation: "fadeIn 0.3s ease both", animationDelay: `${i * 45}ms` }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-              <span style={{ fontSize: 11, fontWeight: 700, color: "var(--accent)" }}>{ticket.id}</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: "var(--accent-crm)" }}>{ticket.id}</span>
               <div style={{ display: "flex", gap: 5 }}>
                 <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20, background: `${STATUS_COLORS[ticket.status]}22`, color: STATUS_COLORS[ticket.status] }}>
                   {ticket.status}
@@ -147,14 +147,14 @@ export function TicketQueue({ tickets, loading }: Props) {
           )}
 
           {/* Rows */}
-          {!loading && filtered.map(ticket => (
+          {!loading && filtered.map((ticket, i) => (
             <Link
               key={ticket.id}
               href={`/tickets/${ticket.id}`}
               className="ticket-row"
-              style={{ display: "grid", gridTemplateColumns: COLS, gap: 12, padding: 12, borderBottom: "1px solid var(--border)", alignItems: "center", textDecoration: "none", borderRadius: 8, transition: ".12s" }}
+              style={{ display: "grid", gridTemplateColumns: COLS, gap: 12, padding: 12, borderBottom: "1px solid var(--border)", alignItems: "center", textDecoration: "none", borderRadius: 8, transition: ".12s", animation: "fadeIn 0.3s ease both", animationDelay: `${i * 40}ms` }}
             >
-              <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)" }}>{ticket.id}</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent-crm)" }}>{ticket.id}</div>
               <div style={{ fontSize: 13, color: "var(--text)", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{ticket.subject}</div>
               <div style={{ fontSize: 12, color: "var(--text2)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{ticket.merchant}</div>
               <div>

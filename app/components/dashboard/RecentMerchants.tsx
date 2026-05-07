@@ -44,8 +44,8 @@ export function RecentMerchants({ merchants }: Props) {
           </tr>
         </thead>
         <tbody>
-          {merchants.map(m => (
-            <tr key={m.id} style={{ cursor: "pointer", transition: ".12s" }}
+          {merchants.map((m, i) => (
+            <tr key={m.id} style={{ cursor: "pointer", transition: ".12s", animation: "fadeIn 0.3s ease both", animationDelay: `${i * 55}ms` }}
               onMouseEnter={e => (e.currentTarget.style.background = "var(--bg3)")}
               onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
             >

@@ -45,7 +45,7 @@ export function DashboardClient({ stats, tickets, activity, chartData, today }: 
           <div style={{ fontSize: 13, color: "var(--text3)", marginTop: 2 }}>Home / Analytics</div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 10, padding: "8px 18px", color: "var(--text2)" }}>
-          <span className="material-symbols-outlined" style={{ fontSize: 18, color: "var(--accent)" }}>calendar_month</span>
+          <span className="material-symbols-outlined" style={{ fontSize: 18, color: "var(--accent-crm)" }}>calendar_month</span>
           <span style={{ fontWeight: 700 }}>Today — {today}</span>
         </div>
       </div>

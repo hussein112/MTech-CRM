@@ -1,21 +1,20 @@
 "use client"
 
-import dynamic from "next/dynamic"
 import type { DashboardStats, Ticket, ActivityItem, ChartPoint, ChartPeriod, TicketPriority } from "../../types/dashboard"
 import type { VolumePoint } from "./OnboardingVolumeChart"
-import type { MerchantRow } from "../dashboard/RecentMerchants"
+import type { MerchantRow } from "./RecentMerchants"
 import type { Brand } from "./BrandsAffected"
 import type { ResolutionCounts } from "./ResolutionGauge"
 
-const StatCards             = dynamic(() => import("../dashboard/StatCards").then(m => ({ default: m.StatCards })),                       { ssr: false })
-const ActivityChart         = dynamic(() => import("../dashboard/ActivityChart").then(m => ({ default: m.ActivityChart })),               { ssr: false })
-const ResolutionGauge       = dynamic(() => import("../dashboard/ResolutionGauge").then(m => ({ default: m.ResolutionGauge })),           { ssr: false })
-const LiveFeed              = dynamic(() => import("../dashboard/LiveFeed").then(m => ({ default: m.LiveFeed })),                         { ssr: false })
-const TicketQueue           = dynamic(() => import("../dashboard/TicketQueue").then(m => ({ default: m.TicketQueue })),                   { ssr: false })
-const OnboardingPipeline    = dynamic(() => import("../dashboard/OnboardingPieline").then(m => ({ default: m.OnboardingPipeline })),     { ssr: false })
-const OnboardingVolumeChart = dynamic(() => import("../dashboard/OnboardingVolumeChart").then(m => ({ default: m.OnboardingVolumeChart })), { ssr: false })
-const RecentMerchants       = dynamic(() => import("../dashboard/RecentMerchants").then(m => ({ default: m.RecentMerchants })),           { ssr: false })
-const BrandsAffected        = dynamic(() => import("../dashboard/BrandsAffected").then(m => ({ default: m.BrandsAffected })),             { ssr: false })
+import { StatCards }             from "./StatCards"
+import { ActivityChart }         from "./ActivityChart"
+import { LiveFeed }              from "./LiveFeed"
+import { TicketQueue }           from "./TicketQueue"
+import { ResolutionGauge }       from "./ResolutionGauge"
+import { OnboardingPipeline }    from "./OnboardingPieline"
+import { OnboardingVolumeChart } from "./OnboardingVolumeChart"
+import { RecentMerchants }       from "./RecentMerchants"
+import { BrandsAffected }        from "./BrandsAffected"
 
 interface Props {
   stats:            DashboardStats
@@ -42,7 +41,7 @@ export function DashboardClient({ stats, tickets, activity, chartData, today, on
           <div style={{ fontSize: 13, color: "var(--text3)", marginTop: 2 }}>Home / Analytics</div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 10, padding: "8px 18px", color: "var(--text2)", whiteSpace: "nowrap" }}>
-          <span className="material-symbols-outlined" style={{ fontSize: 18, color: "var(--accent)" }}>calendar_month</span>
+          <span className="material-symbols-outlined" style={{ fontSize: 18, color: "var(--accent-crm)" }}>calendar_month</span>
           <span style={{ fontWeight: 700 }}>Today — {today}</span>
         </div>
       </div>

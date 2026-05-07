@@ -34,8 +34,8 @@ export function BrandsAffected({ brands }: Props) {
       <div className="dv2-title" style={{ marginBottom: 14 }}>Brands Affected</div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        {brands.map(brand => (
-          <div key={brand.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid var(--border)" }}>
+        {brands.map((brand, i) => (
+          <div key={brand.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid var(--border)", animation: "fadeIn 0.3s ease both", animationDelay: `${i * 55}ms` }}>
             <div style={{ width: 38, height: 38, borderRadius: 10, background: brand.avatarColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, color: "#fff", flexShrink: 0 }}>
               {brand.initials}
             </div>
