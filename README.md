@@ -1,3 +1,9 @@
+# Tickets Page
+- Add New Ticket
+- View Ticket details within the same page (as modal)
+- Add new merchant button (Create new merchant through a modal)
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

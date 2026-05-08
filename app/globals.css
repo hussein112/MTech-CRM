@@ -96,6 +96,10 @@
 
   --accent-crm: #6366f1;
   --accent-light: #6366f1;
+  --accent-crm-light: rgba(99, 102, 241, 0.1);
+  --green: #10b981;
+  --green-light: rgba(16, 185, 129, 0.12);
+  --red: #ef4444;
 }
 
 .dark {

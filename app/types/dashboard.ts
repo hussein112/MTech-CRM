@@ -9,6 +9,8 @@ export type TicketStatus = 'Open' | 'In Progress' | 'Pending Internal' | 'Resolv
 export type TicketPriority = 'Low' | 'Medium' | 'High' | 'Critical'
 export type ChartPeriod = 'today' | 'week' | '1' | '6' | '12'
 
+export type TicketBrand = 'Clover' | 'Dejavoo' | 'Dexa' | 'Figure' | 'Ingenico' | 'PAX' | 'Square' | 'Supersonic' | 'SwipeSimple' | 'Valor' | 'Verifone' | 'Other'
+
 export interface Ticket {
   id: string
   subject: string
@@ -18,6 +20,7 @@ export interface Ticket {
   priority: TicketPriority
   assignedTo: string
   createdAt: string
+  brand?: TicketBrand
   dueDate?: string
   tags?: string[]
 }

@@ -1,5 +1,5 @@
-import type { DashboardStats, Ticket, ActivityItem, ChartPoint, ChartPeriod } from "../types/dashboard"
-import { DashboardClient } from "../components/dashboard/DashboardClient"
+import type { DashboardStats, Ticket, ActivityItem, ChartPoint, ChartPeriod } from "@/app/types/dashboard"
+import { DashboardClient } from "@/app/components/dashboard/DashboardClient"
 
 async function getDashboardData() {
   const stats: DashboardStats = { openTickets: 18, totalMerchants: 214, onboarding: 2, resolvedTotal: 47 }
@@ -65,9 +65,9 @@ export default async function DashboardPage() {
   const resolution = { resolved: 40, overdue: 6, closed: 7, inProgress: 9, open: 3 }
 
   const merchants = [
-    { id: "1", name: "322 DELI CORP (Clover)", mid: "496148749880", initials: "3D", avatarColor: "#8b5cf6", ticketCount: 2, barColor: "#8b5cf6", status: "Active" as const },
-    { id: "2", name: "NEW YORK LANDSCAPE",     mid: "584600000776443", initials: "NY", avatarColor: "#ec4899", ticketCount: 2, barColor: "#ec4899", status: "Active" as const },
-    { id: "3", name: "THE BROOKLYN INN",        mid: "8046425800",      initials: "TB", avatarColor: "#06b6d4", ticketCount: 1, barColor: "#06b6d4", status: "Active" as const },
+    { id: "1", name: "322 DELI CORP (Clover)", mid: "496148749880",      initials: "3D", avatarColor: "#8b5cf6", ticketCount: 2, barColor: "#8b5cf6", status: "Active" as const },
+    { id: "2", name: "NEW YORK LANDSCAPE",     mid: "584600000776443",  initials: "NY", avatarColor: "#ec4899", ticketCount: 2, barColor: "#ec4899", status: "Active" as const },
+    { id: "3", name: "THE BROOKLYN INN",        mid: "8046425800",       initials: "TB", avatarColor: "#06b6d4", ticketCount: 1, barColor: "#06b6d4", status: "Active" as const },
     { id: "4", name: "STIMULATING MINDS",       mid: "584600000701904", initials: "SM", avatarColor: "#ef4444", ticketCount: 1, barColor: "#ef4444", status: "Active" as const },
     { id: "5", name: "J & J HEATING FUEL",      mid: "584600000391657", initials: "J&", avatarColor: "#10b981", ticketCount: 1, barColor: "#10b981", status: "Active" as const },
   ]

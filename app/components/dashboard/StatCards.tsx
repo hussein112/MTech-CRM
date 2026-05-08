@@ -4,10 +4,10 @@ import { useRouter } from "next/navigation"
 import type { DashboardStats } from "@/app/types/dashboard"
 
 const STATS = [
-  { key: "openTickets" as const,    label: "Open Tickets",    icon: "confirmation_number", bg: "#ef4444", href: "/tickets?status=open"     },
+  { key: "openTickets" as const,    label: "Open Tickets",    icon: "confirmation_number", bg: "#ef4444", href: "/tickets?status=Open"     },
   { key: "totalMerchants" as const, label: "Total Merchants", icon: "storefront",           bg: "#06b6d4", href: "/merchants"              },
   { key: "onboarding" as const,     label: "Onboarding",      icon: "assignment",           bg: "#10b981", href: "/merchants?tab=onboarding"},
-  { key: "resolvedTotal" as const,  label: "Resolved (Total)",icon: "task_alt",             bg: "#8b5cf6", href: "/tickets?status=resolved" },
+  { key: "resolvedTotal" as const,  label: "Resolved (Total)",icon: "task_alt",             bg: "#8b5cf6", href: "/tickets?status=Resolved" },
 ]
 
 interface Props {
