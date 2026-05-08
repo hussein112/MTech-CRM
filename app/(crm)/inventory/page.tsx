@@ -12,8 +12,8 @@ const MOCK_PRODUCTS: Product[] = [
     brand: "Clover",
     category: "POS Systems",
     status: "Active",
-    description: "Full-featured POS system with customer-facing display, 8\" merchant screen, receipt printer, and cash drawer support.",
-    tags: ["pos", "clover", "dual-screen", "receipt-printer"],
+    description: "Full-featured countertop POS with 8\" merchant display, customer-facing screen, built-in printer, and cash drawer port.",
+    tags: ["pos", "dual-screen", "receipt-printer", "clover"],
     variants: [
       {
         id: "VAR-001-1",
@@ -23,11 +23,11 @@ const MOCK_PRODUCTS: Product[] = [
         price: 749,
         stock: 0,
         units: [
-          { id: "U-001", serial: "CLV2024001234", status: "Available", notes: "" },
-          { id: "U-002", serial: "CLV2024001235", status: "Available", notes: "" },
-          { id: "U-003", serial: "CLV2024001236", status: "Deployed",  notes: "Jerusalem Sweets — deployed May 2026" },
-          { id: "U-004", serial: "CLV2024001237", status: "Deployed",  notes: "Brooklyn Bistro — deployed Mar 2026" },
-          { id: "U-005", serial: "CLV2024001238", status: "Reserved",  notes: "Hold for Upper West Cafe onboarding" },
+          { id: "U-001", serial: "CLV20240011", status: "Available", notes: "" },
+          { id: "U-002", serial: "CLV20240012", status: "Available", notes: "" },
+          { id: "U-003", serial: "CLV20240013", status: "Deployed",  notes: "Pinnacle Sports Bar — deployed Feb 2024" },
+          { id: "U-004", serial: "CLV20240014", status: "Deployed",  notes: "Fieldstone Bakery — deployed Sep 2024" },
+          { id: "U-005", serial: "CLV20240015", status: "Reserved",  notes: "Pending Summit Print & Sign install" },
         ],
       },
       {
@@ -38,8 +38,8 @@ const MOCK_PRODUCTS: Product[] = [
         price: 849,
         stock: 0,
         units: [
-          { id: "U-006", serial: "CLV2024002001", status: "Available", notes: "" },
-          { id: "U-007", serial: "CLV2024002002", status: "Deployed",  notes: "Maple Leaf Market" },
+          { id: "U-006", serial: "CLV20240021", status: "Available", notes: "" },
+          { id: "U-007", serial: "CLV20240022", status: "Deployed",  notes: "Driftwood Tavern — main register" },
         ],
       },
     ],
@@ -51,8 +51,8 @@ const MOCK_PRODUCTS: Product[] = [
     brand: "PAX",
     category: "Terminals",
     status: "Active",
-    description: "Android-based smart terminal with 5\" touchscreen, built-in printer, WiFi/4G/Bluetooth connectivity.",
-    tags: ["android", "smart-terminal", "portable", "wifi", "4g"],
+    description: "Android smart terminal with 5\" touchscreen, built-in thermal printer, WiFi, 4G, and Bluetooth support.",
+    tags: ["android", "handheld", "portable", "wifi", "4g"],
     variants: [
       {
         id: "VAR-002-1",
@@ -64,9 +64,8 @@ const MOCK_PRODUCTS: Product[] = [
         units: [
           { id: "U-010", serial: "PAXA9200001", status: "Available", notes: "" },
           { id: "U-011", serial: "PAXA9200002", status: "Available", notes: "" },
-          { id: "U-012", serial: "PAXA9200003", status: "Available", notes: "" },
-          { id: "U-013", serial: "PAXA9200004", status: "Deployed",  notes: "Metro Gas Station" },
-          { id: "U-014", serial: "PAXA9200005", status: "Defective", notes: "Screen cracked — RMA pending" },
+          { id: "U-012", serial: "PAXA9200003", status: "Deployed",  notes: "Bluewater Seafood — currently offline" },
+          { id: "U-013", serial: "PAXA9200004", status: "Defective", notes: "Screen cracked — RMA submitted" },
         ],
       },
       {
@@ -77,9 +76,9 @@ const MOCK_PRODUCTS: Product[] = [
         price: 399,
         stock: 0,
         units: [
-          { id: "U-015", serial: "PAXA9200101", status: "Available", notes: "" },
-          { id: "U-016", serial: "PAXA9200102", status: "Deployed",  notes: "QuickStop Mart — roaming enabled" },
-          { id: "U-017", serial: "PAXA9200103", status: "Reserved",  notes: "Pending Atlas Auto Parts install" },
+          { id: "U-014", serial: "PAXA9200101", status: "Available", notes: "" },
+          { id: "U-015", serial: "PAXA9200102", status: "Deployed",  notes: "Cascadia Auto Service — bay terminal" },
+          { id: "U-016", serial: "PAXA9200103", status: "Reserved",  notes: "Barranca Taqueria — scheduled Jun 2026" },
         ],
       },
     ],
@@ -91,7 +90,7 @@ const MOCK_PRODUCTS: Product[] = [
     brand: "Ingenico",
     category: "Terminals",
     status: "Active",
-    description: "Countertop payment terminal with color display, contactless NFC, chip, swipe, and PIN pad.",
+    description: "Countertop payment terminal with color display, NFC contactless, EMV chip, and PIN pad.",
     tags: ["countertop", "nfc", "emv", "pinpad", "contactless"],
     variants: [
       {
@@ -104,8 +103,8 @@ const MOCK_PRODUCTS: Product[] = [
         units: [
           { id: "U-020", serial: "ING35000001", status: "Available", notes: "" },
           { id: "U-021", serial: "ING35000002", status: "Available", notes: "" },
-          { id: "U-022", serial: "ING35000003", status: "Deployed",  notes: "Midtown Pharmacy" },
-          { id: "U-023", serial: "ING35000004", status: "Deployed",  notes: "Garden State Deli" },
+          { id: "U-022", serial: "ING35000003", status: "Deployed",  notes: "Ridgeline Health Clinic — reception" },
+          { id: "U-023", serial: "ING35000004", status: "Deployed",  notes: "Ridgeline Health Clinic — billing office" },
         ],
       },
       {
@@ -117,7 +116,7 @@ const MOCK_PRODUCTS: Product[] = [
         stock: 0,
         units: [
           { id: "U-024", serial: "ING35000101", status: "Available", notes: "" },
-          { id: "U-025", serial: "ING35000102", status: "Deployed",  notes: "Harbor View Sushi" },
+          { id: "U-025", serial: "ING35000102", status: "Deployed",  notes: "Noma Nails & Beauty" },
         ],
       },
     ],
@@ -129,8 +128,8 @@ const MOCK_PRODUCTS: Product[] = [
     brand: "Epson",
     category: "Printer",
     status: "Active",
-    description: "High-speed thermal receipt printer, 80mm paper, USB/Ethernet/WiFi interfaces, auto-cutter.",
-    tags: ["thermal", "receipt", "80mm", "autocutter", "usb", "ethernet"],
+    description: "High-speed 80mm thermal receipt printer with USB, Ethernet, and WiFi options. Auto-cutter included.",
+    tags: ["thermal", "receipt", "80mm", "autocutter", "usb"],
     variants: [
       {
         id: "VAR-004-1",
@@ -142,7 +141,7 @@ const MOCK_PRODUCTS: Product[] = [
         units: [
           { id: "U-030", serial: "EPST880001", status: "Available", notes: "" },
           { id: "U-031", serial: "EPST880002", status: "Available", notes: "" },
-          { id: "U-032", serial: "EPST880003", status: "Deployed",  notes: "Fresh Farms Grocery — kitchen station" },
+          { id: "U-032", serial: "EPST880003", status: "Deployed",  notes: "Saffron Threads — checkout counter" },
         ],
       },
       {
@@ -154,7 +153,7 @@ const MOCK_PRODUCTS: Product[] = [
         stock: 0,
         units: [
           { id: "U-033", serial: "EPST880101", status: "Available", notes: "" },
-          { id: "U-034", serial: "EPST880102", status: "Defective", notes: "Paper jam mechanism failure — warranty claim" },
+          { id: "U-034", serial: "EPST880102", status: "Defective", notes: "Paper feed motor failure — warranty claim" },
         ],
       },
     ],
@@ -166,8 +165,8 @@ const MOCK_PRODUCTS: Product[] = [
     brand: "Clover",
     category: "Terminals",
     status: "Active",
-    description: "Compact mobile card reader for Bluetooth or audio jack connection. Supports swipe, chip, and contactless.",
-    tags: ["mobile", "bluetooth", "compact", "contactless", "chip"],
+    description: "Compact Bluetooth card reader for mobile use. Supports swipe, chip, and NFC contactless.",
+    tags: ["mobile", "bluetooth", "compact", "contactless"],
     variants: [
       {
         id: "VAR-005-1",
@@ -175,7 +174,7 @@ const MOCK_PRODUCTS: Product[] = [
         sku: "CLV-GO-BT",
         cost: 29,
         price: 59,
-        stock: 12,
+        stock: 14,
         units: [],
       },
     ],
@@ -187,7 +186,7 @@ const MOCK_PRODUCTS: Product[] = [
     brand: "Generic",
     category: "Paper & Ribbons",
     status: "Active",
-    description: "80mm x 80mm thermal receipt paper rolls, BPA-free, box of 50 rolls.",
+    description: "80mm x 80mm BPA-free thermal receipt paper rolls, box of 50.",
     tags: ["thermal", "paper", "80mm", "consumable", "bpa-free"],
     variants: [
       {
@@ -196,7 +195,7 @@ const MOCK_PRODUCTS: Product[] = [
         sku: "TPR-80MM-50PK-STD",
         cost: 18,
         price: 39,
-        stock: 84,
+        stock: 91,
         units: [],
       },
       {
@@ -205,7 +204,7 @@ const MOCK_PRODUCTS: Product[] = [
         sku: "TPR-80MM-100PK-STD",
         cost: 32,
         price: 69,
-        stock: 36,
+        stock: 44,
         units: [],
       },
     ],
@@ -217,8 +216,8 @@ const MOCK_PRODUCTS: Product[] = [
     brand: "Dejavoo",
     category: "Terminals",
     status: "Active",
-    description: "Feature-rich countertop terminal with 3.5\" color touchscreen, WiFi, Bluetooth, EMV, NFC, and dual pricing support.",
-    tags: ["countertop", "touchscreen", "dual-pricing", "nfc", "emv", "wifi"],
+    description: "3.5\" color touchscreen terminal with WiFi, Bluetooth, EMV, NFC, and dual-pricing support.",
+    tags: ["countertop", "touchscreen", "dual-pricing", "nfc", "emv"],
     variants: [
       {
         id: "VAR-007-1",
@@ -230,10 +229,9 @@ const MOCK_PRODUCTS: Product[] = [
         units: [
           { id: "U-040", serial: "DJVZ110001", status: "Available", notes: "" },
           { id: "U-041", serial: "DJVZ110002", status: "Available", notes: "" },
-          { id: "U-042", serial: "DJVZ110003", status: "Deployed",  notes: "Jerusalem Sweets — primary" },
-          { id: "U-043", serial: "DJVZ110004", status: "Deployed",  notes: "Maple Leaf Market" },
-          { id: "U-044", serial: "DJVZ110005", status: "Deployed",  notes: "Riverdale Hardware" },
-          { id: "U-045", serial: "DJVZ110006", status: "Reserved",  notes: "Greenway Landscaping — scheduled install Jun 2026" },
+          { id: "U-042", serial: "DJVZ110003", status: "Deployed",  notes: "Coppervine Wine Bar — main terminal" },
+          { id: "U-043", serial: "DJVZ110004", status: "Deployed",  notes: "Saffron Threads — boutique floor" },
+          { id: "U-044", serial: "DJVZ110005", status: "Reserved",  notes: "Helix Coworking — scheduled May 2026" },
         ],
       },
       {
@@ -244,8 +242,8 @@ const MOCK_PRODUCTS: Product[] = [
         price: 249,
         stock: 0,
         units: [
-          { id: "U-046", serial: "DJVZ110101", status: "Available", notes: "" },
-          { id: "U-047", serial: "DJVZ110102", status: "Deployed",  notes: "Blue Ocean Diner" },
+          { id: "U-045", serial: "DJVZ110101", status: "Available", notes: "" },
+          { id: "U-046", serial: "DJVZ110102", status: "Deployed",  notes: "Watershed Books — front desk" },
         ],
       },
     ],
@@ -257,7 +255,7 @@ const MOCK_PRODUCTS: Product[] = [
     brand: "PAX",
     category: "Terminals",
     status: "Draft",
-    description: "Compact countertop smart terminal with Android OS, 4\" screen, EMV/NFC/MSR, and Ethernet/WiFi connectivity.",
+    description: "Compact Android countertop terminal with 4\" touchscreen, EMV, NFC, Ethernet and WiFi connectivity.",
     tags: ["android", "compact", "emv", "nfc", "wifi", "ethernet"],
     variants: [
       {

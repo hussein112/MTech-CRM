@@ -14,17 +14,19 @@ export default async function CrmLayout({ children }: { children: React.ReactNod
   const cookieStore = await cookies()
   const initialCollapsed = cookieStore.get("sidebar-collapsed")?.value === "true"
 
+  const sidebarW = initialCollapsed ? "64px" : "250px"
+
   return (
     <SidebarProvider initialCollapsed={initialCollapsed}>
+      <style>{`:root { --sidebar-w: ${sidebarW}; }`}</style>
       <div
         className={manrope.variable}
         style={{
-          "--sidebar-w": initialCollapsed ? "64px" : "250px",
           display: "flex",
           minHeight: "100vh",
           fontFamily: "var(--font-manrope), sans-serif",
           overflowX: "hidden",
-        } as React.CSSProperties}
+        }}
       >
         <Sidebar />
         <main

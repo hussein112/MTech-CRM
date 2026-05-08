@@ -21,7 +21,7 @@ export function SidebarProvider({ initialCollapsed = false, children }: Props) {
   const [collapsed, setCollapsed] = useState(initialCollapsed)
 
   useLayoutEffect(() => {
-    document.body.style.setProperty("--sidebar-w", collapsed ? "64px" : "250px")
+    document.documentElement.style.setProperty("--sidebar-w", collapsed ? "64px" : "250px")
   }, [collapsed])
 
   function toggle() {

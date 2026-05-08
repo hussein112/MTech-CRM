@@ -5,18 +5,18 @@ import { OnboardingQueueClient } from "./OnboardingQueueClient"
 export const metadata: Metadata = { title: "Onboarding Queue" }
 
 const MOCK_TICKETS: OnboardingTicket[] = [
-  { id: "MTECH-ONB-0041", merchant: "Jerusalem Sweets",       submittedBy: "Moe Kadi",       appStatus: "Under Review",       assignedTo: "Joan Huang",     createdAt: "May 6, 2026"  },
-  { id: "MTECH-ONB-0039", merchant: "Green Valley Market",    submittedBy: "Zu Jia He Cen",  appStatus: "Submitted",          assignedTo: "Moe Kadi",       createdAt: "May 5, 2026"  },
-  { id: "MTECH-ONB-0037", merchant: "Sunrise Coffee Co.",     submittedBy: "Joan Huang",     appStatus: "Awaiting Merchant",  assignedTo: "Joan Huang",     createdAt: "May 5, 2026"  },
-  { id: "MTECH-ONB-0035", merchant: "Harbor View Sushi",      submittedBy: "Moe Kadi",       appStatus: "Awaiting Processor", assignedTo: "Zu Jia He Cen",  createdAt: "May 4, 2026"  },
-  { id: "MTECH-ONB-0033", merchant: "Maple Leaf Market",      submittedBy: "Zu Jia He Cen",  appStatus: "Approved",           assignedTo: "Joan Huang",     createdAt: "May 3, 2026"  },
-  { id: "MTECH-ONB-0031", merchant: "Brooklyn Bistro LLC",    submittedBy: "Joan Huang",     appStatus: "Live",               assignedTo: "Moe Kadi",       createdAt: "May 2, 2026"  },
-  { id: "MTECH-ONB-0029", merchant: "QuickStop Mart",         submittedBy: "Moe Kadi",       appStatus: "Declined",           assignedTo: "Joan Huang",     createdAt: "May 1, 2026"  },
-  { id: "MTECH-ONB-0027", merchant: "Upper West Cafe",        submittedBy: "Zu Jia He Cen",  appStatus: "Withdrawn",          assignedTo: "Zu Jia He Cen",  createdAt: "Apr 30, 2026" },
-  { id: "MTECH-ONB-0025", merchant: "Atlas Auto Parts",       submittedBy: "Joan Huang",     appStatus: "Submitted",          assignedTo: "Moe Kadi",       createdAt: "Apr 29, 2026" },
-  { id: "MTECH-ONB-0023", merchant: "Liberty Tax Service",    submittedBy: "Moe Kadi",       appStatus: "Under Review",       assignedTo: "Joan Huang",     createdAt: "Apr 28, 2026" },
-  { id: "MTECH-ONB-0021", merchant: "Garden State Deli",      submittedBy: "Zu Jia He Cen",  appStatus: "Awaiting Merchant",  assignedTo: "Zu Jia He Cen",  createdAt: "Apr 27, 2026" },
-  { id: "MTECH-ONB-0019", merchant: "Crown Jewelers Inc.",    submittedBy: "Joan Huang",     appStatus: "Approved",           assignedTo: "Joan Huang",     createdAt: "Apr 26, 2026" },
+  { id: "MTECH-ONB-0041", merchant: "Pinnacle Sports Bar",     submittedBy: "Amara Singh",       appStatus: "Under Review",       assignedTo: "Derek Foss",    createdAt: "May 6, 2026"  },
+  { id: "MTECH-ONB-0039", merchant: "Saffron Threads",         submittedBy: "Tomas Vega",  appStatus: "Submitted",          assignedTo: "Amara Singh",      createdAt: "May 5, 2026"  },
+  { id: "MTECH-ONB-0037", merchant: "Fieldstone Bakery",       submittedBy: "Derek Foss",     appStatus: "Awaiting Merchant",  assignedTo: "Derek Foss",    createdAt: "May 5, 2026"  },
+  { id: "MTECH-ONB-0035", merchant: "Cascadia Auto Service",   submittedBy: "Amara Singh",       appStatus: "Awaiting Processor", assignedTo: "Tomas Vega", createdAt: "May 4, 2026"  },
+  { id: "MTECH-ONB-0033", merchant: "Ridgeline Health Clinic", submittedBy: "Tomas Vega",  appStatus: "Approved",           assignedTo: "Derek Foss",    createdAt: "May 3, 2026"  },
+  { id: "MTECH-ONB-0031", merchant: "Driftwood Tavern",        submittedBy: "Derek Foss",     appStatus: "Live",               assignedTo: "Amara Singh",      createdAt: "May 2, 2026"  },
+  { id: "MTECH-ONB-0029", merchant: "Noma Nails & Beauty",     submittedBy: "Amara Singh",       appStatus: "Declined",           assignedTo: "Derek Foss",    createdAt: "May 1, 2026"  },
+  { id: "MTECH-ONB-0027", merchant: "Summit Print & Sign",     submittedBy: "Tomas Vega",  appStatus: "Withdrawn",          assignedTo: "Tomas Vega", createdAt: "Apr 30, 2026" },
+  { id: "MTECH-ONB-0025", merchant: "Ironclad Fitness",        submittedBy: "Derek Foss",     appStatus: "Submitted",          assignedTo: "Amara Singh",      createdAt: "Apr 29, 2026" },
+  { id: "MTECH-ONB-0023", merchant: "Watershed Books",         submittedBy: "Amara Singh",       appStatus: "Under Review",       assignedTo: "Derek Foss",    createdAt: "Apr 28, 2026" },
+  { id: "MTECH-ONB-0021", merchant: "Barranca Taqueria",       submittedBy: "Tomas Vega",  appStatus: "Awaiting Merchant",  assignedTo: "Tomas Vega", createdAt: "Apr 27, 2026" },
+  { id: "MTECH-ONB-0019", merchant: "Halcyon Spa & Wellness",  submittedBy: "Derek Foss",     appStatus: "Approved",           assignedTo: "Derek Foss",    createdAt: "Apr 26, 2026" },
 ]
 
 export default function OnboardingQueuePage() {
