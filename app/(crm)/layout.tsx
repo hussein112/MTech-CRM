@@ -2,6 +2,7 @@ import { Manrope } from "next/font/google"
 import { cookies } from "next/headers"
 import { Sidebar } from "@/app/components/dashboard/Sidebar"
 import { SidebarProvider } from "@/app/components/dashboard/SidebarContext"
+import { MainContent } from "@/app/components/dashboard/MainContent"
 import "@/app/styles/dashboard.css"
 
 const manrope = Manrope({
@@ -14,11 +15,8 @@ export default async function CrmLayout({ children }: { children: React.ReactNod
   const cookieStore = await cookies()
   const initialCollapsed = cookieStore.get("sidebar-collapsed")?.value === "true"
 
-  const sidebarW = initialCollapsed ? "64px" : "250px"
-
   return (
     <SidebarProvider initialCollapsed={initialCollapsed}>
-      <style>{`:root { --sidebar-w: ${sidebarW}; }`}</style>
       <div
         className={manrope.variable}
         style={{
@@ -29,17 +27,7 @@ export default async function CrmLayout({ children }: { children: React.ReactNod
         }}
       >
         <Sidebar />
-        <main
-          style={{
-            flex: 1,
-            minWidth: 0,
-            background: "var(--bg)",
-            marginLeft: "var(--sidebar-w, 250px)",
-            transition: "margin-left 0.22s ease",
-          }}
-        >
-          {children}
-        </main>
+        <MainContent>{children}</MainContent>
       </div>
     </SidebarProvider>
   )

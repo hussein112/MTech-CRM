@@ -1,7 +1,7 @@
 "use client"
 
 import Cookies from "js-cookie"
-import { createContext, useContext, useState, useLayoutEffect, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 
 const COOKIE_KEY = "sidebar-collapsed"
 
@@ -18,11 +18,19 @@ interface Props {
 }
 
 export function SidebarProvider({ initialCollapsed = false, children }: Props) {
-  const [collapsed, setCollapsed] = useState(initialCollapsed)
+  // Server: use the SSR-safe prop. Client: always read live from cookie so any
+  // remount (e.g. during App Router navigations) picks up the last toggled value.
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return initialCollapsed
+    return Cookies.get(COOKIE_KEY) === "true"
+  })
 
-  useLayoutEffect(() => {
-    document.documentElement.style.setProperty("--sidebar-w", collapsed ? "64px" : "250px")
-  }, [collapsed])
+  // Belt-and-suspenders: sync once after hydration in case the lazy initializer
+  // ran before the cookie was readable (rare, but possible with SSR streaming).
+  useEffect(() => {
+    const stored = Cookies.get(COOKIE_KEY)
+    if (stored !== undefined) setCollapsed(stored === "true")
+  }, [])
 
   function toggle() {
     setCollapsed(c => {
