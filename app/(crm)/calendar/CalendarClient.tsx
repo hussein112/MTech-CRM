@@ -268,8 +268,6 @@ export function CalendarClient() {
   // Current time indicator
   const nowDate = new Date()
   const nowTop  = nowDate.getHours() * HOUR_HEIGHT + (nowDate.getMinutes() / 60) * HOUR_HEIGHT
-  const nowDs   = ds(nowDate)
-
   return (
     <div style={{ display:"flex", flexDirection:"column", height:"calc(100vh - 56px)", fontFamily:"'Mulish', sans-serif", overflow:"hidden" }}>
 
@@ -326,7 +324,7 @@ export function CalendarClient() {
       <div style={{ flex:1, overflow:"hidden" }}>
         {view === "month"
           ? <MonthView  events={events} base={base} onEventClick={openView} onDayClick={openCreate} />
-          : <TimeGrid   events={events} view={view} base={base} scrollRef={scrollRef} nowTop={nowTop} nowDs={nowDs} onEventClick={openView} onDayClick={openCreate} />
+          : <TimeGrid   events={events} view={view} base={base} scrollRef={scrollRef} nowTop={nowTop} onEventClick={openView} onDayClick={openCreate} />
         }
       </div>
 
@@ -593,13 +591,12 @@ function MonthView({ events, base, onEventClick, onDayClick }: {
 
 // ─── Time Grid (Day / Week) ───────────────────────────────────────────────────
 
-function TimeGrid({ events, view, base, scrollRef, nowTop, nowDs, onEventClick, onDayClick }: {
+function TimeGrid({ events, view, base, scrollRef, nowTop, onEventClick, onDayClick }: {
   events:       CalEvent[]
   view:         ViewType
   base:         Date
-  scrollRef:    React.RefObject<HTMLDivElement>
+  scrollRef:    React.RefObject<HTMLDivElement | null>
   nowTop:       number
-  nowDs:        string
   onEventClick: (e:CalEvent) => void
   onDayClick:   (d:string)   => void
 }) {
