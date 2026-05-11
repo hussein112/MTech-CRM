@@ -1,6 +1,7 @@
 "use client"
 
 import { useSidebar } from "./SidebarContext"
+import { Topbar } from "./Topbar"
 import type { ReactNode } from "react"
 
 export function MainContent({ children }: { children: ReactNode }) {
@@ -13,8 +14,12 @@ export function MainContent({ children }: { children: ReactNode }) {
         background: "var(--bg)",
         marginLeft: collapsed ? 64 : 250,
         transition: "margin-left 0.22s ease",
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
       }}
     >
+      <Topbar />
       {children}
     </main>
   )

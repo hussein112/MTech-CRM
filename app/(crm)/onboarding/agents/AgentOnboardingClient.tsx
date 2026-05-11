@@ -2,38 +2,34 @@
 
 import { useState, useMemo, useRef } from "react"
 
-/* ── Types ── */
+// ── Types ───────────────────────────────────────────────────────────────────
+
 export type OnboardingStatus =
   | "Submitted" | "Under Review" | "Awaiting Merchant"
   | "Awaiting Processor" | "Approved" | "Live" | "Declined" | "Withdrawn"
 
-export interface OnboardingTicket {
+export interface AgentOnboardingTicket {
   id:          string
-  merchant:    string
+  agentName:   string
   submittedBy: string
   appStatus:   OnboardingStatus
   assignedTo:  string
   createdAt:   string
 }
 
-interface InternalForm {
-  ownerStructure: string
-  firstName: string; lastName: string; phone: string; email: string; role: string; ssn: string
-  firstName2: string; lastName2: string; pct1: string; pct2: string
-  legalName: string; dbaName: string; bizType: string
-  address1: string; address2: string; city: string; state: string; zip: string
-  bizPhone: string; bizEmail: string; agent: string; website: string
-  vol: string; avg: string; high: string; processor: string; addNotes: string
-  equipment: string
-  docs: string
+interface AgentForm {
+  firstName:   string
+  lastName:    string
+  phone:       string
+  email:       string
+  companyName: string
+  referrer:    string
+  notes:       string
 }
 
-const EMPTY_FORM: InternalForm = {
-  ownerStructure: "", firstName: "", lastName: "", phone: "", email: "", role: "", ssn: "",
-  firstName2: "", lastName2: "", pct1: "", pct2: "",
-  legalName: "", dbaName: "", bizType: "", address1: "", address2: "",
-  city: "", state: "", zip: "", bizPhone: "", bizEmail: "", agent: "", website: "",
-  vol: "", avg: "", high: "", processor: "", addNotes: "", equipment: "", docs: "",
+const EMPTY_FORM: AgentForm = {
+  firstName: "", lastName: "", phone: "", email: "",
+  companyName: "", referrer: "", notes: "",
 }
 
 const ALL_STATUSES: OnboardingStatus[] = [
@@ -41,7 +37,10 @@ const ALL_STATUSES: OnboardingStatus[] = [
   "Approved", "Live", "Declined", "Withdrawn",
 ]
 
-/* ── Status styling ── */
+const AGENT_FORM_URL = "/agent-onboarding"
+
+// ── Status styling ───────────────────────────────────────────────────────────
+
 const STATUS_STYLE: Record<OnboardingStatus, { bg: string; color: string }> = {
   "Submitted":          { bg: "rgba(14,165,233,.12)",  color: "#0ea5e9" },
   "Under Review":       { bg: "rgba(99,102,241,.12)",  color: "#6366f1" },
@@ -53,19 +52,19 @@ const STATUS_STYLE: Record<OnboardingStatus, { bg: string; color: string }> = {
   "Withdrawn":          { bg: "rgba(107,114,128,.12)", color: "#6b7280" },
 }
 
-/* Status Key descriptions */
 const STATUS_KEY: Array<{ status: OnboardingStatus; desc: string; badgeClass: string }> = [
-  { status: "Submitted",          desc: "Application received, not yet reviewed",                         badgeClass: "badge-pending"  },
-  { status: "Under Review",       desc: "Onboarding team is actively working on the file",                badgeClass: "badge-progress" },
-  { status: "Awaiting Merchant",  desc: "Documents, signatures, or info pending from merchant",           badgeClass: "badge-open"     },
-  { status: "Awaiting Processor", desc: "Submitted to processor, pending approval decision",              badgeClass: "badge-open"     },
-  { status: "Approved",           desc: "Approved; MID and equipment setup in progress",                  badgeClass: "badge-resolved" },
-  { status: "Live",               desc: "Successfully boarded and actively processing",                   badgeClass: "badge-resolved" },
-  { status: "Declined",           desc: "Application rejected by processor or risk team",                 badgeClass: "badge-closed"   },
-  { status: "Withdrawn",          desc: "Merchant withdrew or abandoned prior to boarding",               badgeClass: "badge-closed"   },
+  { status: "Submitted",          desc: "Application received, not yet reviewed",                        badgeClass: "badge-pending"  },
+  { status: "Under Review",       desc: "Onboarding team is actively working on the file",               badgeClass: "badge-progress" },
+  { status: "Awaiting Merchant",  desc: "Documents, signatures, or info pending from the agent",         badgeClass: "badge-open"     },
+  { status: "Awaiting Processor", desc: "Submitted to processor, pending approval decision",             badgeClass: "badge-open"     },
+  { status: "Approved",           desc: "Approved; agent code and setup in progress",                    badgeClass: "badge-resolved" },
+  { status: "Live",               desc: "Successfully boarded and actively processing",                  badgeClass: "badge-resolved" },
+  { status: "Declined",           desc: "Application rejected by processor or risk team",                badgeClass: "badge-closed"   },
+  { status: "Withdrawn",          desc: "Agent withdrew or abandoned prior to boarding",                 badgeClass: "badge-closed"   },
 ]
 
-/* ── Stat badge ── */
+// ── Sub-components ───────────────────────────────────────────────────────────
+
 function StatusBadge({ status }: { status: OnboardingStatus }) {
   const s = STATUS_STYLE[status]
   return (
@@ -75,7 +74,6 @@ function StatusBadge({ status }: { status: OnboardingStatus }) {
   )
 }
 
-/* ── Upload field ── */
 function UploadField({ id, label, required }: { id: string; label: string; required?: boolean }) {
   const [fileName, setFileName] = useState("No file chosen")
   return (
@@ -85,15 +83,16 @@ function UploadField({ id, label, required }: { id: string; label: string; requi
       </div>
       <label style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 14px", background: "var(--bg2)", borderRadius: 8, fontSize: 11, fontWeight: 700, color: "var(--text)", border: "1px solid var(--border)" }}>
         <span className="material-symbols-outlined" style={{ fontSize: 16 }}>upload</span> Browse
-        <input type="file" id={id} multiple accept=".pdf,.png,.jpg,.jpeg" style={{ display: "none" }}
-          onChange={e => setFileName(e.target.files && e.target.files.length > 0 ? `${e.target.files.length} file(s) selected` : "No file chosen")} />
+        <input
+          type="file" id={id} multiple accept=".pdf,.png,.jpg,.jpeg" style={{ display: "none" }}
+          onChange={e => setFileName(e.target.files && e.target.files.length > 0 ? `${e.target.files.length} file(s) selected` : "No file chosen")}
+        />
       </label>
       <div style={{ fontSize: 10, color: "var(--text3)", marginTop: 6 }}>{fileName}</div>
     </div>
   )
 }
 
-/* ── Section header ── */
 function SectionHeader({ num, title }: { num: string; title: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "24px 0 14px", paddingBottom: 8, borderBottom: "1px solid var(--border)" }}>
@@ -103,31 +102,33 @@ function SectionHeader({ num, title }: { num: string; title: string }) {
   )
 }
 
-/* ── Main component ── */
-interface Props { initialTickets: OnboardingTicket[] }
+// ── Main component ───────────────────────────────────────────────────────────
 
-export function OnboardingQueueClient({ initialTickets }: Props) {
-  const [tickets,     setTickets]     = useState<OnboardingTicket[]>(initialTickets)
-  const [query,       setQuery]       = useState("")
-  const [statusFilt,  setStatusFilt]  = useState("")
-  const [assignedFilt,setAssignedFilt]= useState("All")
+interface Props { initialTickets: AgentOnboardingTicket[] }
+
+export function AgentOnboardingClient({ initialTickets }: Props) {
+  const [tickets,      setTickets]      = useState<AgentOnboardingTicket[]>(initialTickets)
+  const [query,        setQuery]        = useState("")
+  const [statusFilt,   setStatusFilt]   = useState("")
+  const [assignedFilt, setAssignedFilt] = useState("All")
   const [statusKeyOpen, setStatusKeyOpen] = useState(false)
 
-  const [selected,    setSelected]    = useState<OnboardingTicket | null>(null)
+  const [selected,     setSelected]     = useState<AgentOnboardingTicket | null>(null)
   const [detailStatus, setDetailStatus] = useState<OnboardingStatus>("Submitted")
 
-  const [showFormLink,     setShowFormLink]     = useState(false)
-  const [showWorkflow,     setShowWorkflow]      = useState(false)
-  const [showInternal,     setShowInternal]      = useState(false)
-  const [copyDone,         setCopyDone]          = useState(false)
+  const [showFormLink, setShowFormLink] = useState(false)
+  const [showWorkflow, setShowWorkflow] = useState(false)
+  const [showInternal, setShowInternal] = useState(false)
+  const [copyDone,     setCopyDone]     = useState(false)
 
-  const [intForm,    setIntForm]    = useState<InternalForm>(EMPTY_FORM)
-  const [intError,   setIntError]   = useState("")
-  const [intSubmitting, setIntSubmitting] = useState(false)
+  const [form,         setForm]         = useState<AgentForm>(EMPTY_FORM)
+  const [formError,    setFormError]    = useState("")
+  const [submitting,   setSubmitting]   = useState(false)
 
   const overlayRef = useRef<HTMLDivElement>(null)
 
-  /* ── Stats ── */
+  // ── Stats ──────────────────────────────────────────────────────────────────
+
   const stats = useMemo(() => ({
     pending:    tickets.filter(t => t.appStatus === "Submitted").length,
     inProgress: tickets.filter(t => ["Under Review", "Awaiting Merchant", "Awaiting Processor"].includes(t.appStatus)).length,
@@ -135,58 +136,62 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
     rejected:   tickets.filter(t => ["Declined", "Withdrawn"].includes(t.appStatus)).length,
   }), [tickets])
 
-  /* ── Filtered list ── */
+  // ── Filtering ─────────────────────────────────────────────────────────────
+
   const filtered = useMemo(() => {
     const q = query.toLowerCase()
     return tickets.filter(t => {
-      if (q && ![t.id, t.merchant, t.submittedBy, t.assignedTo].some(s => s.toLowerCase().includes(q))) return false
+      if (q && ![t.id, t.agentName, t.submittedBy, t.assignedTo].some(s => s.toLowerCase().includes(q))) return false
       if (statusFilt && t.appStatus !== statusFilt) return false
-      if (assignedFilt === "Me" && t.assignedTo !== "Joan Huang") return false
+      if (assignedFilt === "Me" && t.assignedTo !== "Jordan Vance") return false
       return true
     })
   }, [tickets, query, statusFilt, assignedFilt])
 
-  function clearFilters() { setQuery(""); setStatusFilt(""); setAssignedFilt("All") }
   const hasFilters = query || statusFilt || assignedFilt !== "All"
+  function clearFilters() { setQuery(""); setStatusFilt(""); setAssignedFilt("All") }
 
-  /* ── Copy onboarding link ── */
+  // ── Form link copy ────────────────────────────────────────────────────────
+
   async function copyLink() {
     try {
-      await navigator.clipboard.writeText(`${window.location.origin}/onboarding`)
+      await navigator.clipboard.writeText(AGENT_FORM_URL)
       setCopyDone(true)
       setTimeout(() => setCopyDone(false), 2000)
-    } catch { /* fallback */ }
+    } catch { /* ignore */ }
   }
 
-  /* ── Internal form handlers ── */
-  function setIf<K extends keyof InternalForm>(k: K, v: InternalForm[K]) {
-    setIntForm(prev => ({ ...prev, [k]: v }))
+  // ── Internal form ─────────────────────────────────────────────────────────
+
+  function setF<K extends keyof AgentForm>(k: K, v: string) {
+    setForm(prev => ({ ...prev, [k]: v }))
   }
 
-  async function submitInternal() {
-    if (!intForm.firstName.trim() || !intForm.legalName.trim() || !intForm.agent.trim()) {
-      setIntError("Please fill in all required fields.")
+  async function submitForm() {
+    if (!form.firstName.trim() || !form.lastName.trim() || !form.phone.trim() || !form.email.trim()) {
+      setFormError("Please fill in all required fields.")
       return
     }
-    setIntError("")
-    setIntSubmitting(true)
+    setFormError("")
+    setSubmitting(true)
     await new Promise(r => setTimeout(r, 700))
-    const newTicket: OnboardingTicket = {
-      id:          `MTECH-ONB-${String(Math.floor(1000 + Math.random() * 9000))}`,
-      merchant:    intForm.legalName.trim(),
-      submittedBy: "Joan Huang",
+    const newTicket: AgentOnboardingTicket = {
+      id:          `MTECH-AGT-${String(Math.floor(1000 + Math.random() * 9000))}`,
+      agentName:   `${form.firstName.trim()} ${form.lastName.trim()}`,
+      submittedBy: "Jordan Vance",
       appStatus:   "Submitted",
-      assignedTo:  "Joan Huang",
+      assignedTo:  "Jordan Vance",
       createdAt:   new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
     }
     setTickets(prev => [newTicket, ...prev])
-    setIntForm(EMPTY_FORM)
-    setIntSubmitting(false)
+    setForm(EMPTY_FORM)
+    setSubmitting(false)
     setShowInternal(false)
   }
 
-  /* ── Detail view ── */
-  function openDetail(t: OnboardingTicket) {
+  // ── Detail view ───────────────────────────────────────────────────────────
+
+  function openDetail(t: AgentOnboardingTicket) {
     setSelected(t)
     setDetailStatus(t.appStatus)
   }
@@ -197,14 +202,15 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
     setSelected(prev => prev ? { ...prev, appStatus: detailStatus } : null)
   }
 
-  /* ── DETAIL VIEW ── */
+  // ── Detail page ───────────────────────────────────────────────────────────
+
   if (selected) {
     const s = STATUS_STYLE[selected.appStatus]
     return (
       <div className="dash-layout">
         <button className="tkt-back-btn" onClick={() => setSelected(null)}>
           <span className="material-symbols-outlined" style={{ fontSize: 18 }}>arrow_back</span>
-          Back to Onboarding Queue
+          Back to Agent Onboarding Queue
         </button>
 
         <div className="tkt-detail-hero">
@@ -212,9 +218,9 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent-crm)", marginBottom: 6 }}>{selected.id}</div>
               <h2 style={{ fontSize: 20, fontWeight: 900, color: "var(--text)", margin: "0 0 8px", lineHeight: 1.3 }}>
-                Internal Onboarding – {selected.merchant}
+                Agent Onboarding — {selected.agentName}
               </h2>
-              <div style={{ fontSize: 13, color: "var(--text2)", fontWeight: 500 }}>{selected.merchant}</div>
+              <div style={{ fontSize: 13, color: "var(--text2)", fontWeight: 500 }}>{selected.agentName}</div>
             </div>
             <StatusBadge status={selected.appStatus} />
           </div>
@@ -254,11 +260,7 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
             >
               {ALL_STATUSES.map(s => <option key={s}>{s}</option>)}
             </select>
-            <button
-              className="crm-btn crm-btn-primary"
-              onClick={saveDetailStatus}
-              style={{ padding: "9px 20px" }}
-            >
+            <button className="crm-btn crm-btn-primary" onClick={saveDetailStatus} style={{ padding: "9px 20px" }}>
               <span className="material-symbols-outlined" style={{ fontSize: 16 }}>save</span>
               Save Status
             </button>
@@ -269,15 +271,15 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
         <div className="tkt-detail-section">
           <div className="tkt-detail-section-title">Activity</div>
           {[
-            { text: "Ticket created", time: selected.createdAt, color: "#8b5cf6" },
-            { text: `Status set to ${selected.appStatus}`, time: selected.createdAt, color: STATUS_STYLE[selected.appStatus].color },
-            { text: `Assigned to ${selected.assignedTo}`, time: selected.createdAt, color: "#f59e0b" },
+            { text: "Ticket created",                                color: "#8b5cf6"                          },
+            { text: `Status set to ${selected.appStatus}`,          color: STATUS_STYLE[selected.appStatus].color },
+            { text: `Assigned to ${selected.assignedTo}`,           color: "#f59e0b"                          },
           ].map((item, i) => (
             <div key={i} className="tkt-activity-item">
               <div className="tkt-activity-dot" style={{ background: item.color }} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 13, color: "var(--text)", fontWeight: 600 }}>{item.text}</div>
-                <div style={{ fontSize: 11, color: "var(--text3)", marginTop: 2 }}>{item.time}</div>
+                <div style={{ fontSize: 11, color: "var(--text3)", marginTop: 2 }}>{selected.createdAt}</div>
               </div>
             </div>
           ))}
@@ -286,7 +288,8 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
     )
   }
 
-  /* ── QUEUE VIEW ── */
+  // ── Queue view ────────────────────────────────────────────────────────────
+
   const COLS = "120px minmax(0,1fr) 150px 160px 150px 100px"
 
   return (
@@ -295,10 +298,10 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
       {/* Page Header */}
       <div className="dash-header">
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 900, color: "var(--text)", margin: 0, letterSpacing: -0.5 }}>Onboarding Queue</h1>
-          <p style={{ fontSize: 13, color: "var(--text3)", margin: "3px 0 0", fontWeight: 500 }}>Manage incoming merchant onboarding tickets</p>
+          <h1 style={{ fontSize: 22, fontWeight: 900, color: "var(--text)", margin: 0, letterSpacing: -0.5 }}>Agent Onboarding Queue</h1>
+          <p style={{ fontSize: 13, color: "var(--text3)", margin: "3px 0 0", fontWeight: 500 }}>Manage incoming agent onboarding submissions</p>
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <button
             onClick={() => setShowWorkflow(true)}
             style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, background: "var(--bg2)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 10, cursor: "pointer" }}
@@ -308,17 +311,18 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
           </button>
           <button
             onClick={() => setShowFormLink(true)}
-            style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 16px", background: "var(--bg2)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: "pointer" }}
+            style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 16px", background: "var(--bg2)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
           >
-            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>link</span> Get Onboarding Form
+            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>link</span>
+            Get Agent Form
           </button>
           <button
             className="tkt-btn-new"
-            onClick={() => { setIntForm(EMPTY_FORM); setIntError(""); setShowInternal(true) }}
+            onClick={() => { setForm(EMPTY_FORM); setFormError(""); setShowInternal(true) }}
             style={{ marginLeft: 0 }}
           >
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>person_add</span>
-            Internal Onboarding
+            Internal Request
           </button>
         </div>
       </div>
@@ -331,18 +335,28 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", marginBottom: 4 }}>New: Application Status Tracking</div>
           <div style={{ fontSize: 13, color: "var(--text2)", lineHeight: 1.5 }}>
-            We&rsquo;ve added a new &ldquo;App Status&rdquo; column to help you track where each application stands — from Received through Underwriting to Approved or Rejected. Update the status directly from any ticket&rsquo;s detail view.
+            We&rsquo;ve added a new &ldquo;App Status&rdquo; column to help you track where each agent application stands — from Submitted through review to Approved or Declined. Update the status directly from any ticket&rsquo;s detail view.
           </div>
         </div>
+        <button
+          onClick={() => {
+            const banner = (document.currentScript?.parentElement) as HTMLElement | null
+            if (banner) banner.style.display = "none"
+          }}
+          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text3)", padding: 4, flexShrink: 0 }}
+          aria-label="Dismiss"
+        >
+          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>close</span>
+        </button>
       </div>
 
       {/* Stat Cards */}
       <div className="obq-stat-row">
         {[
-          { icon: "pending_actions", color: "#0ea5e9", bg: "rgba(14,165,233,.12)", num: stats.pending,    label: "Pending"          },
-          { icon: "sync",            color: "#6366f1", bg: "rgba(99,102,241,.12)", num: stats.inProgress, label: "In Progress"      },
-          { icon: "check_circle",    color: "#10b981", bg: "rgba(16,185,129,.12)", num: stats.accepted,   label: "Accepted"         },
-          { icon: "cancel",          color: "#ef4444", bg: "rgba(239,68,68,.12)",  num: stats.rejected,   label: "Rejected / Closed"},
+          { icon: "pending_actions", color: "#0ea5e9", bg: "rgba(14,165,233,.12)", num: stats.pending,    label: "Pending"           },
+          { icon: "sync",            color: "#6366f1", bg: "rgba(99,102,241,.12)", num: stats.inProgress, label: "In Progress"       },
+          { icon: "check_circle",    color: "#10b981", bg: "rgba(16,185,129,.12)", num: stats.accepted,   label: "Accepted"          },
+          { icon: "cancel",          color: "#ef4444", bg: "rgba(239,68,68,.12)",  num: stats.rejected,   label: "Rejected / Closed" },
         ].map(card => (
           <div key={card.label} className="obq-stat">
             <div className="obq-stat-icon" style={{ background: card.bg }}>
@@ -362,7 +376,7 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
           <span className="material-symbols-outlined">search</span>
           <input
             type="text"
-            placeholder="Search onboarding tickets…"
+            placeholder="Search agent onboarding tickets…"
             value={query}
             onChange={e => setQuery(e.target.value)}
           />
@@ -396,7 +410,10 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
           <span className="material-symbols-outlined" style={{ fontSize: 18, color: "var(--accent-crm)" }}>info</span>
           <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>Status Key</span>
           <span style={{ fontSize: 11, color: "var(--text3)", fontWeight: 500 }}>— What does each status mean?</span>
-          <span className="material-symbols-outlined" style={{ fontSize: 18, color: "var(--text3)", marginLeft: "auto", transition: "transform .25s", transform: statusKeyOpen ? "rotate(180deg)" : "rotate(0deg)" }}>expand_more</span>
+          <span
+            className="material-symbols-outlined"
+            style={{ fontSize: 18, color: "var(--text3)", marginLeft: "auto", transition: "transform .25s", transform: statusKeyOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+          >expand_more</span>
         </button>
         {statusKeyOpen && (
           <div className="statuskey-body" style={{ marginTop: 8, padding: "16px 20px", background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 12 }}>
@@ -417,7 +434,7 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
         <div style={{ minWidth: 860 }}>
           <div className="obq-table-header" style={{ display: "grid", gridTemplateColumns: COLS }}>
             <div>Ticket ID</div>
-            <div>Subject / Merchant</div>
+            <div>Subject / Agent</div>
             <div>Submitted By</div>
             <div style={{ textAlign: "center" }}>App Status</div>
             <div>Assigned To</div>
@@ -449,10 +466,10 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
                 <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent-crm)" }}>{t.id}</div>
                 <div style={{ overflow: "hidden" }}>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    Internal Onboarding – {t.merchant}
+                    Agent Onboarding — {t.agentName}
                   </div>
                   <div style={{ fontSize: 11, color: "var(--text3)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {t.merchant}
+                    {t.agentName}
                   </div>
                 </div>
                 <div style={{ fontSize: 12, color: "var(--text2)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.submittedBy}</div>
@@ -481,9 +498,7 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
               <span style={{ fontSize: 11, fontWeight: 700, color: "var(--accent-crm)" }}>{t.id}</span>
               <StatusBadge status={t.appStatus} />
             </div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", marginBottom: 4 }}>
-              {t.merchant}
-            </div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", marginBottom: 4 }}>{t.agentName}</div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--text3)" }}>
               <span>{t.submittedBy}</span>
               <span>{t.assignedTo} · {t.createdAt}</span>
@@ -492,38 +507,47 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
         ))}
       </div>
 
-      {/* ── Onboarding Form Link Modal ── */}
+      {/* ── Agent Form Link Modal ─────────────────────────────── */}
       {showFormLink && (
         <div className="crm-modal-overlay" ref={overlayRef} onClick={e => e.target === overlayRef.current && setShowFormLink(false)}>
-          <div className="crm-modal" style={{ maxWidth: 420, padding: 28, borderRadius: 20, textAlign: "center", position: "relative" }}>
-            <button onClick={() => setShowFormLink(false)} style={{ position: "absolute", top: 16, right: 16, background: "var(--bg3)", border: "none", width: 30, height: 30, borderRadius: 8, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div className="crm-modal" style={{ maxWidth: 460, padding: 28, textAlign: "center", position: "relative" }} onClick={e => e.stopPropagation()}>
+            <button
+              onClick={() => setShowFormLink(false)}
+              style={{ position: "absolute", top: 16, right: 16, background: "var(--bg3)", border: "none", width: 30, height: 30, borderRadius: 8, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+            >
               <span className="material-symbols-outlined" style={{ fontSize: 18, color: "var(--text3)" }}>close</span>
             </button>
+
             <div style={{ width: 56, height: 56, borderRadius: 14, background: "var(--accent-crm-light)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
               <span className="material-symbols-outlined" style={{ color: "var(--accent-crm)", fontSize: 28 }}>link</span>
             </div>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", margin: "0 0 6px" }}>Onboarding Form Link</h2>
-            <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 20px", lineHeight: 1.5 }}>Send this link to a merchant for self-service onboarding.</p>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", margin: "0 0 6px" }}>Agent Onboarding Form</h2>
+            <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 20px", lineHeight: 1.5 }}>
+              Send this link to a new agent for self-service registration.
+            </p>
+
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--bg3)", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 14px", marginBottom: 20, gap: 8 }}>
               <span style={{ fontSize: 12, color: "var(--text)", wordBreak: "break-all", fontFamily: "monospace", fontWeight: 600, letterSpacing: "0.5px", textAlign: "left" }}>
-                {typeof window !== "undefined" ? `${window.location.origin}/onboarding` : "/onboarding"}
+                {AGENT_FORM_URL}
               </span>
-              <button onClick={copyLink} title="Copy Link" style={{ background: "transparent", border: "none", cursor: "pointer", color: "var(--text3)", display: "flex", alignItems: "center", justifyContent: "center", padding: 4, borderRadius: 6 }}>
+              <button onClick={copyLink} title="Copy Link" style={{ background: "transparent", border: "none", cursor: "pointer", color: "var(--text3)", display: "flex", alignItems: "center", justifyContent: "center", padding: 4, borderRadius: 6, flexShrink: 0 }}>
                 <span className="material-symbols-outlined" style={{ fontSize: 18 }}>{copyDone ? "check" : "content_copy"}</span>
               </button>
             </div>
+
             <button
               className="crm-btn crm-btn-primary"
               style={{ width: "100%", justifyContent: "center", padding: 13 }}
-              onClick={() => window.open("/onboarding", "_blank")}
+              onClick={() => window.open(AGENT_FORM_URL, "_blank")}
             >
-              <span className="material-symbols-outlined" style={{ fontSize: 18 }}>open_in_new</span> Open in Tab
+              <span className="material-symbols-outlined" style={{ fontSize: 18 }}>open_in_new</span>
+              Open in Tab
             </button>
           </div>
         </div>
       )}
 
-      {/* ── Workflow Help Modal ── */}
+      {/* ── Workflow Help Modal ───────────────────────────────── */}
       {showWorkflow && (
         <div className="crm-modal-overlay" onClick={() => setShowWorkflow(false)}>
           <div className="crm-modal" style={{ maxWidth: 560, padding: 32, position: "relative" }} onClick={e => e.stopPropagation()}>
@@ -535,7 +559,7 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
                 <span className="material-symbols-outlined" style={{ color: "var(--accent-crm)", fontSize: 24 }}>help</span>
               </div>
               <div>
-                <h2 style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", margin: 0 }}>Onboarding Workflow</h2>
+                <h2 style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", margin: 0 }}>Agent Onboarding Workflow</h2>
                 <div style={{ fontSize: 13, color: "var(--text3)", marginTop: 2 }}>Understanding application statuses</div>
               </div>
             </div>
@@ -551,228 +575,84 @@ export function OnboardingQueueClient({ initialTickets }: Props) {
         </div>
       )}
 
-      {/* ── Internal Onboarding Modal ── */}
+      {/* ── Internal Agent Request Modal ──────────────────────── */}
       {showInternal && (
         <div className="crm-modal-overlay" onClick={() => setShowInternal(false)}>
           <div className="crm-modal" style={{ maxWidth: 700, width: "100%" }} onClick={e => e.stopPropagation()}>
 
-            {/* Modal Header */}
+            {/* Header */}
             <div style={{ padding: "22px 28px", display: "flex", alignItems: "center", gap: 14, borderBottom: "1px solid var(--border)" }}>
               <div style={{ width: 42, height: 42, borderRadius: 12, background: "var(--green-light)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <span className="material-symbols-outlined" style={{ color: "var(--green)", fontSize: 22 }}>person_add</span>
               </div>
               <div>
-                <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--text)", margin: 0 }}>Internal Onboarding Request</h2>
-                <p style={{ fontSize: 12, color: "var(--text3)", margin: "2px 0 0", fontWeight: 500 }}>Complete the internal registration form to begin boarding</p>
+                <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--text)", margin: 0 }}>Internal Agent Request</h2>
+                <p style={{ fontSize: 12, color: "var(--text3)", margin: "2px 0 0", fontWeight: 500 }}>Complete the internal registration form to begin boarding a new agent</p>
               </div>
               <button onClick={() => setShowInternal(false)} style={{ marginLeft: "auto", background: "var(--bg3)", border: "none", width: 32, height: 32, borderRadius: 8, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <span className="material-symbols-outlined" style={{ fontSize: 18, color: "var(--text3)" }}>close</span>
               </button>
             </div>
 
-            {/* Modal Body */}
-            <div style={{ padding: "8px 28px 28px", maxHeight: "70vh", overflowY: "auto" }}>
+            {/* Body */}
+            <div style={{ padding: "8px 28px 28px", maxHeight: "72vh", overflowY: "auto" }}>
 
               <SectionHeader num="01" title="Personal Information" />
-              <div className="crm-field">
-                <label>Ownership Structure *</label>
-                <select value={intForm.ownerStructure} onChange={e => setIf("ownerStructure", e.target.value)}>
-                  <option value="">Select Structure</option>
-                  <option>Single Owner</option>
-                  <option>Multiple Owners</option>
-                </select>
-              </div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text)", margin: "6px 0 10px" }}>Primary Owner</div>
               <div className="crm-field-row">
                 <div className="crm-field" style={{ marginBottom: 0 }}>
                   <label>First Name *</label>
-                  <input type="text" value={intForm.firstName} onChange={e => setIf("firstName", e.target.value)} />
+                  <input type="text" value={form.firstName} onChange={e => setF("firstName", e.target.value)} />
                 </div>
                 <div className="crm-field" style={{ marginBottom: 0 }}>
                   <label>Last Name *</label>
-                  <input type="text" value={intForm.lastName} onChange={e => setIf("lastName", e.target.value)} />
+                  <input type="text" value={form.lastName} onChange={e => setF("lastName", e.target.value)} />
                 </div>
               </div>
-              <div className="crm-field-row">
+              <div className="crm-field-row" style={{ marginTop: 0 }}>
                 <div className="crm-field" style={{ marginBottom: 0 }}>
                   <label>Phone Number *</label>
-                  <input type="text" value={intForm.phone} onChange={e => setIf("phone", e.target.value)} />
+                  <input type="text" value={form.phone} onChange={e => setF("phone", e.target.value)} />
                 </div>
                 <div className="crm-field" style={{ marginBottom: 0 }}>
                   <label>Email Address *</label>
-                  <input type="text" value={intForm.email} onChange={e => setIf("email", e.target.value)} />
-                </div>
-              </div>
-              <div className="crm-field-row">
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>Role In Business *</label>
-                  <input type="text" value={intForm.role} onChange={e => setIf("role", e.target.value)} />
-                </div>
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>SSN *</label>
-                  <input type="text" placeholder="XXX-XX-XXXX" value={intForm.ssn} onChange={e => setIf("ssn", e.target.value)} />
+                  <input type="text" value={form.email} onChange={e => setF("email", e.target.value)} />
                 </div>
               </div>
 
-              {intForm.ownerStructure === "Multiple Owners" && (
-                <div style={{ paddingTop: 10 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text)", margin: "6px 0 10px" }}>Secondary Owner (Optional)</div>
-                  <div className="crm-field-row">
-                    <div className="crm-field" style={{ marginBottom: 0 }}>
-                      <label>First Name</label>
-                      <input type="text" value={intForm.firstName2} onChange={e => setIf("firstName2", e.target.value)} />
-                    </div>
-                    <div className="crm-field" style={{ marginBottom: 0 }}>
-                      <label>Last Name</label>
-                      <input type="text" value={intForm.lastName2} onChange={e => setIf("lastName2", e.target.value)} />
-                    </div>
-                  </div>
-                  <div className="crm-field-row">
-                    <div className="crm-field" style={{ marginBottom: 0 }}>
-                      <label>Primary Owner %</label>
-                      <input type="number" value={intForm.pct1} onChange={e => setIf("pct1", e.target.value)} />
-                    </div>
-                    <div className="crm-field" style={{ marginBottom: 0 }}>
-                      <label>Secondary Owner %</label>
-                      <input type="number" value={intForm.pct2} onChange={e => setIf("pct2", e.target.value)} />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <SectionHeader num="02" title="Business Identity" />
-              <div className="crm-field">
-                <label>Legal Business Name *</label>
-                <input type="text" value={intForm.legalName} onChange={e => setIf("legalName", e.target.value)} />
-              </div>
+              <SectionHeader num="02" title="Agency Identity" />
               <div className="crm-field-row">
                 <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>DBA *</label>
-                  <input type="text" value={intForm.dbaName} onChange={e => setIf("dbaName", e.target.value)} />
+                  <label>Company Name (If Applicable)</label>
+                  <input type="text" value={form.companyName} onChange={e => setF("companyName", e.target.value)} />
                 </div>
                 <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>Business Type *</label>
-                  <select value={intForm.bizType} onChange={e => setIf("bizType", e.target.value)}>
-                    <option value="">Select Type</option>
-                    <option>LLC</option>
-                    <option>Corporation</option>
-                    <option>Sole Proprietorship</option>
-                    <option>Partnership</option>
-                    <option>Non-Profit</option>
-                  </select>
+                  <label>Referred By</label>
+                  <input type="text" value={form.referrer} onChange={e => setF("referrer", e.target.value)} />
                 </div>
-              </div>
-              <div className="crm-field">
-                <label>Business Address Line 1 *</label>
-                <input type="text" value={intForm.address1} onChange={e => setIf("address1", e.target.value)} />
-              </div>
-              <div className="crm-field">
-                <label>Business Address Line 2</label>
-                <input type="text" value={intForm.address2} onChange={e => setIf("address2", e.target.value)} />
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 12, marginBottom: 14 }}>
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>City *</label>
-                  <input type="text" value={intForm.city} onChange={e => setIf("city", e.target.value)} />
-                </div>
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>State *</label>
-                  <input type="text" value={intForm.state} onChange={e => setIf("state", e.target.value)} />
-                </div>
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>Zip *</label>
-                  <input type="text" value={intForm.zip} onChange={e => setIf("zip", e.target.value)} />
-                </div>
-              </div>
-              <div className="crm-field-row">
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>Business Phone *</label>
-                  <input type="text" value={intForm.bizPhone} onChange={e => setIf("bizPhone", e.target.value)} />
-                </div>
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>Business Email *</label>
-                  <input type="text" value={intForm.bizEmail} onChange={e => setIf("bizEmail", e.target.value)} />
-                </div>
-              </div>
-              <div className="crm-field-row">
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>Agent Code / Name *</label>
-                  <input type="text" value={intForm.agent} onChange={e => setIf("agent", e.target.value)} />
-                </div>
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>Website</label>
-                  <input type="text" value={intForm.website} onChange={e => setIf("website", e.target.value)} />
-                </div>
-              </div>
-
-              <SectionHeader num="03" title="Processing Details" />
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 14 }}>
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>Monthly Vol ($) *</label>
-                  <input type="number" value={intForm.vol} onChange={e => setIf("vol", e.target.value)} />
-                </div>
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>Avg Ticket ($) *</label>
-                  <input type="number" value={intForm.avg} onChange={e => setIf("avg", e.target.value)} />
-                </div>
-                <div className="crm-field" style={{ marginBottom: 0 }}>
-                  <label>Highest Ticket ($) *</label>
-                  <input type="number" value={intForm.high} onChange={e => setIf("high", e.target.value)} />
-                </div>
-              </div>
-              <div className="crm-field">
-                <label>Current Processor</label>
-                <select value={intForm.processor} onChange={e => setIf("processor", e.target.value)}>
-                  <option value="">None / Not Sure</option>
-                  <option>Fiserv</option><option>TSYS</option><option>Worldpay</option>
-                  <option>Square</option><option>Stripe</option><option>Other</option>
-                </select>
               </div>
               <div className="crm-field">
                 <label>Additional Notes</label>
-                <textarea rows={2} value={intForm.addNotes} onChange={e => setIf("addNotes", e.target.value)} />
+                <textarea rows={2} value={form.notes} onChange={e => setF("notes", e.target.value)} />
               </div>
 
-              <SectionHeader num="04" title="Equipment (Optional)" />
-              <div className="crm-field">
-                <label>Terminal Type Needed</label>
-                <select value={intForm.equipment} onChange={e => setIf("equipment", e.target.value)}>
-                  <option value="">None / Not Sure</option>
-                  <option>Standalone Terminal</option>
-                  <option>Smart POS System</option>
-                  <option>Mobile/Wireless Terminal</option>
-                  <option>Virtual Terminal / E-Commerce</option>
-                  <option>Other</option>
-                </select>
-              </div>
-
-              <SectionHeader num="05" title="Documents" />
+              <SectionHeader num="03" title="Documents" />
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 }}>
-                <UploadField id="onb_idDoc"     label="ID / DRIVER LICENSE"  required />
-                {intForm.ownerStructure === "Multiple Owners" && <UploadField id="onb_idDoc2" label="ID (OWNER 2)" />}
-                <UploadField id="onb_storefront" label="STOREFRONT PICTURES" required />
-                <UploadField id="onb_einFile"    label="EIN / TAX ID"        required />
-                <UploadField id="onb_voided"     label="VOIDED CHECK"        required />
-                <UploadField id="onb_fns"        label="FNS DOCUMENT" />
-              </div>
-              <div className="crm-field">
-                <label>Additional Documents Link / Upload Notes</label>
-                <p style={{ fontSize: 11, color: "var(--text3)", margin: "0 0 6px" }}>Provide a Drive/Dropbox link or specify what was submitted.</p>
-                <textarea rows={2} placeholder="e.g. 'ID and Voided Check attached directly on thread...'" value={intForm.docs} onChange={e => setIf("docs", e.target.value)} />
+                <UploadField id="aonb_idDoc"   label="ID / DRIVER LICENSE" required />
+                <UploadField id="aonb_voided"  label="VOIDED CHECK"        required />
+                <UploadField id="aonb_einFile" label="EIN / TAX ID" />
               </div>
 
-              {intError && (
-                <div style={{ color: "var(--red)", fontSize: 12, marginTop: 10, marginBottom: 8 }}>{intError}</div>
+              {formError && (
+                <div style={{ color: "var(--red, #ef4444)", fontSize: 12, marginTop: 10, marginBottom: 8 }}>{formError}</div>
               )}
 
               <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 20, paddingTop: 18, borderTop: "1px solid var(--border)" }}>
                 <button className="crm-btn crm-btn-ghost" onClick={() => setShowInternal(false)} style={{ padding: "10px 22px" }}>Cancel</button>
-                <button className="crm-btn crm-btn-green" onClick={submitInternal} disabled={intSubmitting} style={{ padding: "10px 24px" }}>
+                <button className="crm-btn crm-btn-green" onClick={submitForm} disabled={submitting} style={{ padding: "10px 24px" }}>
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>rocket_launch</span>
-                  {intSubmitting ? "Submitting…" : "Submit Request"}
+                  {submitting ? "Submitting…" : "Submit Request"}
                 </button>
               </div>
-
             </div>
           </div>
         </div>

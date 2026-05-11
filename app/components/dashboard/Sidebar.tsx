@@ -8,7 +8,7 @@ import { useSidebar } from "./SidebarContext"
 const NAV_ITEMS = [
   { label: "Dashboard",        href: "/dashboard",            icon: "dashboard"           },
   { label: "Tickets",          href: "/tickets",              icon: "confirmation_number" },
-  { label: "Onboarding",       href: "/onboarding",           icon: "group_add",          children: [
+  { label: "Onboarding",       href: "/onboarding/merchants", icon: "group_add", activeMatch: "/onboarding", children: [
     { label: "Merchants", href: "/onboarding/merchants" },
     { label: "Agents",    href: "/onboarding/agents"   },
   ]},
@@ -17,10 +17,8 @@ const NAV_ITEMS = [
   { label: "Activity",         href: "/activity",             icon: "bolt"                },
   { label: "Users",            href: "/users",                icon: "group"               },
   { label: "Agents",           href: "/agents",               icon: "support_agent"       },
-  { label: "Tools",            href: "/tools",                icon: "build",              children: [
-    { label: "Batch",    href: "/tools/batch"    },
-    { label: "Reports",  href: "/tools/reports"  },
-  ]},
+  { label: "Permissions",      href: "/permissions",          icon: "shield_person"       },
+  { label: "Tasks",            href: "/tasks",                icon: "task_alt"            },
   { label: "Resources",        href: "/resources",            icon: "menu_book"           },
   { label: "File Storage",     href: "/storage",              icon: "folder"              },
   { label: "Password Manager", href: "/passwords",            icon: "lock"                },
@@ -102,7 +100,7 @@ export function Sidebar() {
         {/* ── Nav ────────────────────────────────────────── */}
         <nav style={{ flex: 1, overflowY: "auto", overflowX: "hidden", padding: "10px 8px" }}>
           {NAV_ITEMS.map(item => {
-            const isActive    = pathname === item.href || pathname.startsWith(item.href + "/")
+            const isActive    = pathname === item.href || pathname.startsWith((item.activeMatch ?? item.href) + "/")
             const hasChildren = !!item.children
             const isExpanded  = expanded === item.label
 
@@ -138,16 +136,21 @@ export function Sidebar() {
             return (
               <div key={item.label}>
                 <div
-                  onClick={() => hasChildren ? setExpanded(isExpanded ? null : item.label) : undefined}
+                  onClick={hasChildren ? () => setExpanded(isExpanded ? null : item.label) : undefined}
                   style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", borderRadius: 8, marginBottom: 2, cursor: "pointer", background: isActive ? "var(--accent-crm-light)" : "transparent", borderLeft: isActive ? "2px solid var(--accent-crm)" : "2px solid transparent", transition: ".15s" }}
                   onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "var(--bg3)" }}
                   onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent" }}
                 >
                   {hasChildren ? (
                     <>
-                      <span className="material-symbols-outlined" style={{ fontSize: 18, color: isActive ? "var(--accent-crm)" : "var(--text3)", flexShrink: 0 }}>{item.icon}</span>
-                      <span style={{ flex: 1, fontSize: 13, fontWeight: isActive ? 700 : 600, color: isActive ? "var(--accent-crm)" : "var(--text2)" }}>{item.label}</span>
-                      <span className="material-symbols-outlined" style={{ fontSize: 16, color: "var(--text3)", transition: "transform .2s", transform: isExpanded ? "rotate(180deg)" : "none" }}>expand_more</span>
+                      <Link href={item.href} onClick={e => e.stopPropagation()} style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, textDecoration: "none", minWidth: 0 }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 18, color: isActive ? "var(--accent-crm)" : "var(--text3)", flexShrink: 0 }}>{item.icon}</span>
+                        <span style={{ flex: 1, fontSize: 13, fontWeight: isActive ? 700 : 600, color: isActive ? "var(--accent-crm)" : "var(--text2)" }}>{item.label}</span>
+                      </Link>
+                      <span
+                        className="material-symbols-outlined"
+                        style={{ fontSize: 16, color: "var(--text3)", transition: "transform .2s", transform: isExpanded ? "rotate(180deg)" : "none", flexShrink: 0, pointerEvents: "none" }}
+                      >expand_more</span>
                     </>
                   ) : (
                     <Link href={item.href} style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", textDecoration: "none" }}>

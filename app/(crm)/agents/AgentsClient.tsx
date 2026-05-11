@@ -271,7 +271,7 @@ export function AgentsClient({ agents: initial }: Props) {
                         <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase", letterSpacing: ".5px", marginBottom: 2 }}>Parent Agent</div>
                         <button
                           onClick={() => { setSelected(parent); setActiveTab("overview") }}
-                          style={{ fontSize: 13, color: "var(--accent)", fontWeight: 700, background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}
+                          style={{ fontSize: 13, color: "var(--accent-crm)", fontWeight: 700, background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}
                         >
                           {parent.full_name} ({parent.agent_code})
                         </button>
@@ -317,7 +317,7 @@ export function AgentsClient({ agents: initial }: Props) {
                     <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: i < merchants.length - 1 ? "1px solid var(--border)" : "none" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                         <div style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(99,102,241,.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <span className="material-symbols-outlined" style={{ fontSize: 17, color: "var(--accent)" }}>store</span>
+                          <span className="material-symbols-outlined" style={{ fontSize: 17, color: "var(--accent-crm)" }}>store</span>
                         </div>
                         <div>
                           <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{m.dba}</div>
@@ -397,7 +397,7 @@ export function AgentsClient({ agents: initial }: Props) {
             <div className="dash-card-v2" style={{ animation: "fadeUp .3s ease" }}>
               <div className="dv2-title">
                 Agent Documents
-                <button style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", background: "var(--accent)", color: "#fff", border: "none", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                <button style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", background: "var(--accent-crm)", color: "#fff", border: "none", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
                   <span className="material-symbols-outlined" style={{ fontSize: 15 }}>upload_file</span>
                   Upload Document
                 </button>
@@ -410,7 +410,7 @@ export function AgentsClient({ agents: initial }: Props) {
             <div className="dash-card-v2" style={{ animation: "fadeUp .3s ease" }}>
               <div className="dv2-title">
                 Internal Notes
-                <button style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", background: "var(--accent)", color: "#fff", border: "none", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                <button style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", background: "var(--accent-crm)", color: "#fff", border: "none", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
                   <span className="material-symbols-outlined" style={{ fontSize: 15 }}>note_add</span>
                   Add Note
                 </button>
@@ -448,7 +448,7 @@ export function AgentsClient({ agents: initial }: Props) {
           <span style={{ fontSize: 13, color: "var(--text3)", background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 8, padding: "7px 14px" }}>
             {agents.length} agent{agents.length !== 1 ? "s" : ""}
           </span>
-          <button onClick={openAdd} style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 18px", background: "var(--accent)", color: "#fff", border: "none", borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+          <button onClick={openAdd} style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 18px", background: "var(--accent-crm)", color: "#fff", border: "none", borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
             <span className="material-symbols-outlined" style={{ fontSize: 17 }}>person_add</span>
             Add Agent
           </button>
@@ -516,7 +516,7 @@ export function AgentsClient({ agents: initial }: Props) {
                     <td>{a.tier ? <span className="tier-badge">{a.tier}</span> : <span style={{ color: "var(--text3)" }}>—</span>}</td>
                     <td><span className="status-chip" style={stStyle}>{a.status}</span></td>
                     <td style={{ textAlign: "center" }}>
-                      <span style={{ fontWeight: 700, color: a.merchant_count > 0 ? "var(--accent)" : "var(--text3)" }}>{a.merchant_count}</span>
+                      <span style={{ fontWeight: 700, color: a.merchant_count > 0 ? "var(--accent-crm)" : "var(--text3)" }}>{a.merchant_count}</span>
                     </td>
                     <td style={{ color: "var(--text3)" }}>{formatDate(a.created_at)}</td>
                     <td style={{ whiteSpace: "nowrap" }} onClick={e => e.stopPropagation()}>
@@ -678,7 +678,7 @@ function AgentFormModal({ form, setForm, editingId, agents, onClose, onSubmit }:
 
         <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 20 }}>
           <button onClick={onClose} style={{ padding: "9px 18px", borderRadius: 10, border: "1px solid var(--border)", background: "transparent", color: "var(--text3)", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Cancel</button>
-          <button onClick={onSubmit} style={{ padding: "9px 18px", borderRadius: 10, border: "none", background: "var(--accent)", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+          <button onClick={onSubmit} style={{ padding: "9px 18px", borderRadius: 10, border: "none", background: "var(--accent-crm)", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
             {editingId ? "Save Changes" : "Add Agent"}
           </button>
         </div>

@@ -25,19 +25,12 @@ export function SidebarProvider({ initialCollapsed = false, children }: Props) {
     return Cookies.get(COOKIE_KEY) === "true"
   })
 
-  // Belt-and-suspenders: sync once after hydration in case the lazy initializer
-  // ran before the cookie was readable (rare, but possible with SSR streaming).
   useEffect(() => {
-    const stored = Cookies.get(COOKIE_KEY)
-    if (stored !== undefined) setCollapsed(stored === "true")
-  }, [])
+    Cookies.set(COOKIE_KEY, String(collapsed), { expires: 365 })
+  }, [collapsed])
 
   function toggle() {
-    setCollapsed(c => {
-      const next = !c
-      Cookies.set(COOKIE_KEY, String(next), { expires: 365 })
-      return next
-    })
+    setCollapsed(c => !c)
   }
 
   return (

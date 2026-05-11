@@ -127,7 +127,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
     cursor: "pointer", fontFamily: "inherit",
   }
   const btnAccent: React.CSSProperties = {
-    padding: "10px 20px", background: "var(--accent)", color: "#fff",
+    padding: "10px 20px", background: "var(--accent-crm)", color: "#fff",
     border: "none", borderRadius: 10, fontSize: 13, fontWeight: 800,
     cursor: "pointer", fontFamily: "inherit",
   }
@@ -142,7 +142,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
             <button onClick={() => setImproving(false)} style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", cursor: "pointer", color: "var(--text3)" }}>
               <span className="material-symbols-outlined">close</span>
             </button>
-            <div style={{ width: 80, height: 80, borderRadius: 24, background: "var(--accent-light)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
+            <div style={{ width: 80, height: 80, borderRadius: 24, background: "var(--accent-crm-light)", color: "var(--accent-crm)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
               <span className="material-symbols-outlined" style={{ fontSize: 40 }}>engineering</span>
             </div>
             <h2 style={{ margin: "0 0 12px", fontSize: 22, fontWeight: 900, color: "var(--text)", letterSpacing: "-0.4px" }}>Feature In Progress</h2>
@@ -157,7 +157,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
         <div className="crm-modal-overlay" onClick={e => { if (e.target === e.currentTarget) setUploadOpen(false) }}>
           <div className="crm-modal" style={{ width: "100%", maxWidth: 500, padding: 28 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid var(--border)" }}>
-              <span className="material-symbols-outlined" style={{ color: "var(--accent)" }}>cloud_upload</span>
+              <span className="material-symbols-outlined" style={{ color: "var(--accent-crm)" }}>cloud_upload</span>
               <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "var(--text)", flex: 1 }}>Add Resource</h2>
               <button onClick={() => setUploadOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text3)" }}>
                 <span className="material-symbols-outlined">close</span>
@@ -188,7 +188,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
             </div>
 
             <div className="res-dropzone" style={{ marginTop: 16 }}>
-              <div style={{ width: 52, height: 52, borderRadius: "50%", background: "var(--accent-light)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ width: 52, height: 52, borderRadius: "50%", background: "var(--accent-crm-light)", color: "var(--accent-crm)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <span className="material-symbols-outlined" style={{ fontSize: 28 }}>note_add</span>
               </div>
               <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>Click or drag file to upload</div>
@@ -208,7 +208,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
         <div className="crm-modal-overlay" onClick={e => { if (e.target === e.currentTarget) setFolderOpen(false) }}>
           <div className="crm-modal" style={{ width: "100%", maxWidth: 420, padding: 28 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid var(--border)" }}>
-              <span className="material-symbols-outlined" style={{ color: "var(--accent)" }}>create_new_folder</span>
+              <span className="material-symbols-outlined" style={{ color: "var(--accent-crm)" }}>create_new_folder</span>
               <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "var(--text)", flex: 1 }}>Create Folder</h2>
               <button onClick={() => setFolderOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text3)" }}>
                 <span className="material-symbols-outlined">close</span>
@@ -244,7 +244,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
           <div className="crm-modal" style={{ width: "100%", maxWidth: 460, maxHeight: "88vh", overflow: "hidden", display: "flex", flexDirection: "column", padding: 0 }}>
             {/* Header */}
             <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-              <span className="material-symbols-outlined" style={{ color: "var(--accent)", fontSize: 20 }}>edit_note</span>
+              <span className="material-symbols-outlined" style={{ color: "var(--accent-crm)", fontSize: 20 }}>edit_note</span>
               <h2 style={{ margin: 0, fontSize: 15, fontWeight: 800, color: "var(--text)", flex: 1 }}>Resource Details</h2>
               <span
                 className="material-symbols-outlined"
@@ -265,12 +265,12 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
                     type="text"
                     value={detailName}
                     onChange={e => setDetailName(e.target.value)}
-                    onFocus={e => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px rgba(99,102,241,.08)" }}
+                    onFocus={e => { e.target.style.borderColor = "var(--accent-crm)"; e.target.style.boxShadow = "0 0 0 3px rgba(99,102,241,.08)" }}
                     onBlur={e => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none" }}
                     style={{ width: "100%", padding: "7px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg3)", color: "var(--text)", fontSize: 14, fontWeight: 700, outline: "none", fontFamily: "'Mulish', sans-serif", boxSizing: "border-box" }}
                   />
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <span style={{ fontSize: 10, fontWeight: 700, color: "var(--accent)", background: "var(--accent-light)", padding: "2px 8px", borderRadius: 14, textTransform: "uppercase", letterSpacing: ".3px" }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: "var(--accent-crm)", background: "var(--accent-crm-light)", padding: "2px 8px", borderRadius: 14, textTransform: "uppercase", letterSpacing: ".3px" }}>
                       {CAT_LABELS[detailRes.category]}
                     </span>
                     <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text3)", background: "var(--bg3)", padding: "2px 8px", borderRadius: 14, border: "1px solid var(--border)", letterSpacing: ".3px" }}>
@@ -315,7 +315,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
                 style={{ padding: "14px 16px", flexDirection: "row", gap: 12, minHeight: 0, marginBottom: 20 }}
                 onClick={() => setImproving(true)}
               >
-                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--accent-light)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--accent-crm-light)", color: "var(--accent-crm)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <span className="material-symbols-outlined" style={{ fontSize: 18 }}>note_add</span>
                 </div>
                 <div style={{ textAlign: "left", flex: 1 }}>
@@ -330,7 +330,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
               </div>
               <div style={{ border: "1px solid var(--border)", borderRadius: 10, background: "var(--bg3)", overflow: "hidden" }}>
                 <div style={{ padding: "12px 14px", display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--accent-crm)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <span className="material-symbols-outlined" style={{ fontSize: 16, color: "#fff" }}>draft</span>
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
@@ -361,7 +361,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
               </button>
               <button
                 onClick={saveDetailName}
-                style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 18px", background: "var(--accent)", border: "none", borderRadius: 10, fontSize: 13, fontWeight: 800, color: "#fff", cursor: "pointer", fontFamily: "inherit" }}
+                style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 18px", background: "var(--accent-crm)", border: "none", borderRadius: 10, fontSize: 13, fontWeight: 800, color: "#fff", cursor: "pointer", fontFamily: "inherit" }}
               >
                 <span className="material-symbols-outlined" style={{ fontSize: 16 }}>save</span>Save
               </button>
@@ -384,7 +384,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
           </button>
           <button
             onClick={() => setUploadOpen(true)}
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "var(--accent)", color: "#fff", fontSize: 13, fontWeight: 700, padding: "9px 18px", borderRadius: 10, border: "none", cursor: "pointer", fontFamily: "inherit" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "var(--accent-crm)", color: "#fff", fontSize: 13, fontWeight: 700, padding: "9px 18px", borderRadius: 10, border: "none", cursor: "pointer", fontFamily: "inherit" }}
           >
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>
             Add Resource
@@ -402,7 +402,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
               onChange={e => setQuery(e.target.value)}
               placeholder="Search resources..."
               style={{ width: "100%", padding: "12px 16px 12px 44px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 14, color: "var(--text)", outline: "none", fontFamily: "inherit", boxSizing: "border-box" }}
-              onFocus={e => { e.target.style.borderColor = "var(--accent)"; e.target.style.boxShadow = "0 0 0 3px rgba(99,102,241,.1)" }}
+              onFocus={e => { e.target.style.borderColor = "var(--accent-crm)"; e.target.style.boxShadow = "0 0 0 3px rgba(99,102,241,.1)" }}
               onBlur={e => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none" }}
             />
           </div>
@@ -440,7 +440,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
                   <div style={{ width: "100%", height: 110, borderRadius: 10, overflow: "hidden", marginBottom: 10, flexShrink: 0 }}>
                     <CoverIcon type={r.fileType} iconSize={32} />
                   </div>
-                  <span style={{ fontSize: 10, fontWeight: 700, color: "var(--accent)", background: "var(--accent-light)", padding: "2px 8px", borderRadius: 10, marginBottom: 4, textTransform: "uppercase", letterSpacing: ".3px" }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: "var(--accent-crm)", background: "var(--accent-crm-light)", padding: "2px 8px", borderRadius: 10, marginBottom: 4, textTransform: "uppercase", letterSpacing: ".3px" }}>
                     {CAT_LABELS[r.category]}
                   </span>
                   <div style={{ ...ELLIPSIS_2, fontSize: 12, fontWeight: 800, color: "var(--text)", lineHeight: 1.3, marginBottom: 3, width: "100%" }}>
@@ -466,14 +466,14 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
               <button
                 onClick={() => setView("grid")}
                 title="Grid view"
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 30, height: 28, borderRadius: 6, border: "none", cursor: "pointer", transition: ".15s", background: view === "grid" ? "var(--accent)" : "transparent", color: view === "grid" ? "#fff" : "var(--text3)" }}
+                style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 30, height: 28, borderRadius: 6, border: "none", cursor: "pointer", transition: ".15s", background: view === "grid" ? "var(--accent-crm)" : "transparent", color: view === "grid" ? "#fff" : "var(--text3)" }}
               >
                 <span className="material-symbols-outlined" style={{ fontSize: 16 }}>grid_view</span>
               </button>
               <button
                 onClick={() => setView("list")}
                 title="List view"
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 30, height: 28, borderRadius: 6, border: "none", cursor: "pointer", transition: ".15s", background: view === "list" ? "var(--accent)" : "transparent", color: view === "list" ? "#fff" : "var(--text3)" }}
+                style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 30, height: 28, borderRadius: 6, border: "none", cursor: "pointer", transition: ".15s", background: view === "list" ? "var(--accent-crm)" : "transparent", color: view === "list" ? "#fff" : "var(--text3)" }}
               >
                 <span className="material-symbols-outlined" style={{ fontSize: 16 }}>view_list</span>
               </button>
@@ -494,7 +494,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
                     </div>
                     <div style={{ fontSize: 12, color: "var(--text3)", fontWeight: 600, marginBottom: 8 }}>{r.author}</div>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: "auto" }}>
-                      <span style={{ fontSize: 10, fontWeight: 700, color: "var(--accent)", background: "var(--accent-light)", padding: "2px 8px", borderRadius: 10, textTransform: "uppercase" as const }}>
+                      <span style={{ fontSize: 10, fontWeight: 700, color: "var(--accent-crm)", background: "var(--accent-crm-light)", padding: "2px 8px", borderRadius: 10, textTransform: "uppercase" as const }}>
                         {CAT_LABELS[r.category]}
                       </span>
                       <span className="rd-pill">{TYPE_META[r.fileType].label}</span>
@@ -538,7 +538,7 @@ export function ResourcesClient({ resources: initial }: { resources: Resource[] 
                     <div style={{ fontSize: 11, color: "var(--text3)", display: "flex", alignItems: "center", gap: 5, marginTop: 2 }}>
                       <span style={{ textTransform: "uppercase" as const, fontWeight: 700, letterSpacing: ".3px" }}>{TYPE_META[r.fileType].label}</span>
                       <span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--text3)", flexShrink: 0 }} />
-                      <span style={{ fontWeight: 600, color: "var(--accent)", textTransform: "uppercase" as const, fontSize: 10 }}>{CAT_LABELS[r.category]}</span>
+                      <span style={{ fontWeight: 600, color: "var(--accent-crm)", textTransform: "uppercase" as const, fontSize: 10 }}>{CAT_LABELS[r.category]}</span>
                       <span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--text3)", flexShrink: 0 }} />
                       <span>{r.author}</span>
                       <span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--text3)", flexShrink: 0 }} />

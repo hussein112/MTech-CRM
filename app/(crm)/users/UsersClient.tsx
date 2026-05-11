@@ -55,7 +55,7 @@ function MFooter({ onCancel, onConfirm, label }: { onCancel: () => void; onConfi
   return (
     <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 20 }}>
       <button onClick={onCancel} style={{ padding: "9px 18px", borderRadius: 10, border: "1px solid var(--border)", background: "transparent", color: "var(--text3)", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Cancel</button>
-      <button onClick={onConfirm} style={{ padding: "9px 18px", borderRadius: 10, border: "none", background: "var(--accent)", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>{label}</button>
+      <button onClick={onConfirm} style={{ padding: "9px 18px", borderRadius: 10, border: "none", background: "var(--accent-crm)", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>{label}</button>
     </div>
   )
 }
@@ -178,7 +178,7 @@ export function UsersClient({ users: initial, currentUserId }: Props) {
               </button>
               <button
                 onClick={() => { setAddForm(EMPTY_ADD); setAddOpen(true) }}
-                style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 18px", background: "var(--accent)", color: "#fff", border: "none", borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
+                style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 18px", background: "var(--accent-crm)", color: "#fff", border: "none", borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
               >
                 <span className="material-symbols-outlined" style={{ fontSize: 17 }}>person_add</span>
                 Add User
@@ -260,7 +260,7 @@ export function UsersClient({ users: initial, currentUserId }: Props) {
                             autoComplete="off"
                           />
                           {isMe && (
-                            <span style={{ fontSize: 11, fontWeight: 700, color: "var(--accent)", marginLeft: 8, padding: "2px 6px", background: "rgba(99,102,241,.1)", borderRadius: 4, flexShrink: 0 }}>Me</span>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: "var(--accent-crm)", marginLeft: 8, padding: "2px 6px", background: "rgba(99,102,241,.1)", borderRadius: 4, flexShrink: 0 }}>Me</span>
                           )}
                         </div>
                       </div>
@@ -352,7 +352,7 @@ export function UsersClient({ users: initial, currentUserId }: Props) {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{u.full_name || "—"}</span>
-                    {isMe && <span style={{ fontSize: 10, fontWeight: 700, color: "var(--accent)", padding: "1px 5px", background: "rgba(99,102,241,.1)", borderRadius: 4 }}>Me</span>}
+                    {isMe && <span style={{ fontSize: 10, fontWeight: 700, color: "var(--accent-crm)", padding: "1px 5px", background: "rgba(99,102,241,.1)", borderRadius: 4 }}>Me</span>}
                   </div>
                   <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.email}</div>
                 </div>
