@@ -72,13 +72,14 @@ interface Props { tickets: Ticket[]; merchants: MerchantSummary[] }
 function TicketsInner({ tickets, merchants }: Props) {
   const searchParams  = useSearchParams()
   const router        = useRouter()
-  const initialStatus = VALID_STATUSES.find(s => s === searchParams.get("status")) ?? ""
+  const initialStatus   = VALID_STATUSES.find(s => s === searchParams.get("status")) ?? ""
+  const initialAssigned = searchParams.get("assigned") === "me" ? "Me" : "All"
 
   // Filters
   const [query,    setQuery]    = useState("")
   const [status,   setStatus]   = useState(initialStatus)
   const [priority, setPriority] = useState("")
-  const [assigned, setAssigned] = useState("All")
+  const [assigned, setAssigned] = useState(initialAssigned)
   const [brand,    setBrand]    = useState("All")
 
   // Detail view
@@ -155,7 +156,7 @@ function TicketsInner({ tickets, merchants }: Props) {
       if (q && ![t.id, t.subject, t.merchant, t.assignedTo].some(s => s.toLowerCase().includes(q))) return false
       if (status   && t.status   !== status)   return false
       if (priority && t.priority !== priority) return false
-      if (assigned === "Me" && t.assignedTo !== "Joan Huang") return false
+      if (assigned === "Me" && t.assignedTo !== "Hussein Khalil") return false
       if (brand !== "All" && t.brand !== brand) return false
       return true
     })

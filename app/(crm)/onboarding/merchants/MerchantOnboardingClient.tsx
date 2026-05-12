@@ -222,7 +222,7 @@ export function MerchantOnboardingClient({ initialTickets }: Props) {
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent-crm)", marginBottom: 6 }}>{selected.id}</div>
-              <h2 style={{ fontSize: 20, fontWeight: 900, color: "var(--text)", margin: "0 0 8px", lineHeight: 1.3 }}>
+              <h2 style={{ fontSize: 20, fontWeight: 900, color: "var(--text-3)", margin: "0 0 8px", lineHeight: 1.3 }}>
                 Internal Onboarding — {selected.merchant}
               </h2>
               <div style={{ fontSize: 13, color: "var(--text2)", fontWeight: 500 }}>{selected.merchant}</div>

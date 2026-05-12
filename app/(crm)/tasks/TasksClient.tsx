@@ -78,7 +78,7 @@ const inputSt: React.CSSProperties = {
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-export function TasksClient() {
+export function TasksClient({ assignedMe = false }: { assignedMe?: boolean }) {
   const db = getSupabaseBrowser()
 
   const [tasks,   setTasks]   = useState<Task[]>([])
@@ -276,8 +276,11 @@ export function TasksClient() {
     await db.from("tickets").delete().eq("ticket_id", id)
   }
 
-  const pending   = tasks.filter(t => t.status !== "completed")
-  const completed = tasks.filter(t => t.status === "completed")
+  const visible   = assignedMe
+    ? tasks.filter(t => t.assigned.split(",").map(s => s.trim()).includes("Hussein Khalil"))
+    : tasks
+  const pending   = visible.filter(t => t.status !== "completed")
+  const completed = visible.filter(t => t.status === "completed")
   const filteredAgents = agentList.filter(a =>
     a.toLowerCase().includes(agentSearch.toLowerCase()) && !assignees.includes(a)
   )

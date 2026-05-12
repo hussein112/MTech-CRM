@@ -13,16 +13,21 @@ const NAV_ITEMS = [
     { label: "Agents",    href: "/onboarding/agents"   },
   ]},
   { label: "Merchants",        href: "/merchants",            icon: "storefront"          },
+  { label: "Leads",            href: "/leads",                icon: "leaderboard"         },
+  { label: "Rate Calculator",  href: "/rates",                icon: "calculate"           },
   { label: "Inventory",        href: "/inventory",            icon: "inventory_2"         },
   { label: "Activity",         href: "/activity",             icon: "bolt"                },
   { label: "Users",            href: "/users",                icon: "group"               },
   { label: "Agents",           href: "/agents",               icon: "support_agent"       },
   { label: "Permissions",      href: "/permissions",          icon: "shield_person"       },
   { label: "Tasks",            href: "/tasks",                icon: "task_alt"            },
+  { label: "Timecard",         href: "/timecard",             icon: "schedule"            },
   { label: "Resources",        href: "/resources",            icon: "menu_book"           },
   { label: "File Storage",     href: "/storage",              icon: "folder"              },
   { label: "Password Manager", href: "/passwords",            icon: "lock"                },
   { label: "Changelog",        href: "/changelog",            icon: "history"             },
+  { label: "Feedback",         href: "/feedback",             icon: "forum"               },
+  { label: "Profile",          href: "/profile",              icon: "person"              },
 ]
 
 export function Sidebar() {
@@ -50,9 +55,9 @@ export function Sidebar() {
           borderRight: "1px solid var(--border)",
           display: "flex",
           flexDirection: "column",
-          height: "100vh",
+          height: "calc(100vh - 56px)",
           position: "fixed",
-          top: 0,
+          top: 56,
           left: 0,
           zIndex: 100,
           flexShrink: 0,
@@ -60,45 +65,8 @@ export function Sidebar() {
           overflow: "hidden",
         }}
       >
-        {/* ── Header ─────────────────────────────────────── */}
-        <div
-          style={{
-            padding: "0 10px",
-            borderBottom: "1px solid var(--border)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: collapsed ? "center" : "space-between",
-            height: 56,
-            gap: 8,
-          }}
-        >
-          {!collapsed && (
-            <Link
-              href="/dashboard"
-              style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 0, overflow: "hidden" }}
-            >
-              <div style={{ width: 28, height: 28, borderRadius: 8, background: "var(--accent-crm)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 16, color: "#fff" }}>credit_card</span>
-              </div>
-              <span style={{ fontWeight: 900, fontSize: 14, color: "var(--text)", fontFamily: "'Mulish', sans-serif", whiteSpace: "nowrap" }}>
-                <span style={{ color: "var(--accent-crm)" }}>MTech</span>Distributors
-              </span>
-            </Link>
-          )}
-
-          <button
-            onClick={toggle}
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="sidebar-toggle-btn"
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: 20 }}>
-              {collapsed ? "chevron_right" : "chevron_left"}
-            </span>
-          </button>
-        </div>
-
         {/* ── Nav ────────────────────────────────────────── */}
-        <nav style={{ flex: 1, overflowY: "auto", overflowX: "hidden", padding: "10px 8px" }}>
+        <nav className="sidebar-nav" style={{ flex: 1, overflowY: "auto", overflowX: "hidden", padding: "10px 8px" }}>
           {NAV_ITEMS.map(item => {
             const isActive    = pathname === item.href || pathname.startsWith((item.activeMatch ?? item.href) + "/")
             const hasChildren = !!item.children
@@ -205,6 +173,36 @@ export function Sidebar() {
           )}
         </div>
       </aside>
+
+      {/* ── Chevron on border ──────────────────────────── */}
+      <button
+        onClick={toggle}
+        title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        style={{
+          position: "fixed",
+          top: 56 + 20,
+          left: (collapsed ? 64 : 250) - 12,
+          width: 24,
+          height: 24,
+          borderRadius: "50%",
+          background: "var(--bg2)",
+          border: "1px solid var(--border)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          zIndex: 101,
+          boxShadow: "0 2px 8px rgba(0,0,0,.12)",
+          transition: "left 0.22s ease, background .15s",
+          padding: 0,
+        }}
+        onMouseEnter={e => (e.currentTarget.style.background = "var(--bg3)")}
+        onMouseLeave={e => (e.currentTarget.style.background = "var(--bg2)")}
+      >
+        <span className="material-symbols-outlined" style={{ fontSize: 14, color: "var(--text3)" }}>
+          {collapsed ? "chevron_right" : "chevron_left"}
+        </span>
+      </button>
 
       {/* Tooltip — rendered outside aside so overflow:hidden doesn't clip it */}
       {collapsed && tooltip && (

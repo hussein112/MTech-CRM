@@ -1,0 +1,163 @@
+/* ── Feedback grid ── */
+.fb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+/* ── Card ── */
+.fb-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,.04);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.fb-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.07);
+  border-color: var(--text3);
+}
+
+/* ── Text clamp ── */
+.fb-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Category picker (form) ── */
+.fb-cat-pick {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.fb-cat-pick:hover { border-color: var(--text3); }
+.fb-cat-pick.selected {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.05);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+}
+.fb-cat-pick.selected .fb-cat-icon { color: #6366f1; }
+
+/* ── Inputs ── */
+.fb-input {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 15px;
+  font-size: 14px;
+  font-family: 'Mulish', sans-serif;
+  color: var(--text);
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  box-sizing: border-box;
+  display: block;
+}
+.fb-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  background: var(--bg);
+}
+.fb-input.error { border-color: #ef4444; }
+textarea.fb-input { resize: vertical; min-height: 100px; line-height: 1.5; }
+select.fb-input { appearance: none; cursor: pointer; }
+
+/* ── Drop zone ── */
+.fb-dropzone {
+  background: var(--bg2);
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  user-select: none;
+}
+.fb-dropzone:hover  { border-color: var(--text3); }
+.fb-dropzone.drag-over {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.04);
+}
+
+/* ── Attachment pill ── */
+.fb-att-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ── Owner action buttons ── */
+.fb-act-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  font-family: 'Mulish', sans-serif;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.fb-act-btn:hover { color: var(--text); border-color: var(--text3); }
+.fb-act-btn.del:hover {
+  color: #ef4444;
+  border-color: rgba(239,68,68,.4);
+  background: rgba(239,68,68,.05);
+}
+
+/* ── Toast ── */
+.fb-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 14px;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(0,0,0,.2);
+  font-family: 'Mulish', sans-serif;
+  pointer-events: none;
+  animation: fbToastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Animations ── */
+@keyframes fbToastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0);    }
+}
+
+@keyframes fbModalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0);       }
+}

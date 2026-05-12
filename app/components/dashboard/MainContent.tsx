@@ -13,10 +13,11 @@ export function MainContent({ children }: { children: ReactNode }) {
         minWidth: 0,
         background: "var(--bg)",
         marginLeft: collapsed ? 64 : 250,
+        marginTop: 56,
         transition: "margin-left 0.22s ease",
         display: "flex",
         flexDirection: "column",
-        minHeight: "100vh",
+        minHeight: "calc(100vh - 56px)",
       }}
     >
       <Topbar />

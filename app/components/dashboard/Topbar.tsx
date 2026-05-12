@@ -67,17 +67,23 @@ export function Topbar({
   useOutsideClick(notifRef, () => setNotifOpen(false))
   useOutsideClick(userRef,  () => setUserOpen(false))
 
-  // Sync dark mode with <html> data-theme
+  // Sync dark mode from localStorage on mount
   useEffect(() => {
-    const html = document.documentElement
-    const current = html.getAttribute("data-theme") === "dark"
-    setDarkMode(current)
+    try {
+      const stored = localStorage.getItem("crm-theme")
+      const isDark = stored === "dark"
+      setDarkMode(isDark)
+      document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light")
+    } catch {
+      setDarkMode(document.documentElement.getAttribute("data-theme") === "dark")
+    }
   }, [])
 
   function toggleDark() {
     const next = !darkMode
     setDarkMode(next)
     document.documentElement.setAttribute("data-theme", next ? "dark" : "light")
+    try { localStorage.setItem("crm-theme", next ? "dark" : "light") } catch { /* ignore */ }
   }
 
   function handleSearch(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -102,14 +108,28 @@ export function Topbar({
       alignItems: "center",
       gap: 12,
       padding: "0 20px",
-      position: "sticky",
+      position: "fixed",
       top: 0,
-      zIndex: 99,
+      left: 0,
+      right: 0,
+      zIndex: 150,
       flexShrink: 0,
     }}>
 
+      {/* ── Logo ── */}
+      <Link
+        href="/dashboard"
+        style={{ display: "flex", alignItems: "center", gap: 7, textDecoration: "none", flexShrink: 0 }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo.svg" alt="MTech" style={{ height: 28, width: "auto", display: "block" }} />
+        <span style={{ fontWeight: 900, fontSize: 14, color: "var(--text)", fontFamily: "'Mulish', sans-serif", whiteSpace: "nowrap" }}>
+          <span style={{ color: "var(--accent-crm)" }}>MTech</span>Distributors
+        </span>
+      </Link>
+
       {/* ── Search ── */}
-      <div style={{ flex: 1, maxWidth: 420, position: "relative" }}>
+      <div style={{ flex: 1, maxWidth: 420, margin: "0 auto", position: "relative" }}>
         <span className="material-symbols-outlined" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 16, color: "var(--text3)", pointerEvents: "none" }}>
           search
         </span>

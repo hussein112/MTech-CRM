@@ -44,6 +44,52 @@ function getFileType(name: string, mime?: string): FileTypeKey {
   return "other"
 }
 
+// ── Mock data (demo mode when Supabase is not configured) ──────────────────
+
+const MOCK_DATA: Record<string, StorageItem[]> = {
+  "": [
+    { name: "Marketing Assets",       path: "Marketing Assets",       isFolder: true,  updatedAt: "2025-04-15T10:23:00Z" },
+    { name: "Client Contracts",       path: "Client Contracts",       isFolder: true,  updatedAt: "2025-03-28T14:10:00Z" },
+    { name: "Product Specs",          path: "Product Specs",          isFolder: true,  updatedAt: "2025-05-02T09:00:00Z" },
+    { name: "Reports",                path: "Reports",                isFolder: true,  updatedAt: "2025-05-08T11:30:00Z" },
+    { name: "Company Overview.pdf",   path: "Company Overview.pdf",   isFolder: false, size: 2_516_582, mimeType: "application/pdf",   updatedAt: "2025-04-20T08:14:00Z" },
+    { name: "Brand Guidelines.pdf",   path: "Brand Guidelines.pdf",   isFolder: false, size: 1_153_433, mimeType: "application/pdf",   updatedAt: "2025-03-10T16:45:00Z" },
+    { name: "Team Photo Q1.jpg",      path: "Team Photo Q1.jpg",      isFolder: false, size: 4_293_120, mimeType: "image/jpeg",         updatedAt: "2025-02-14T12:00:00Z" },
+    { name: "Q2 Sales Summary.xlsx",  path: "Q2 Sales Summary.xlsx",  isFolder: false, size: 448_256,   mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", updatedAt: "2025-05-01T09:30:00Z" },
+    { name: "Product Demo.mp4",       path: "Product Demo.mp4",       isFolder: false, size: 30_103_040,mimeType: "video/mp4",          updatedAt: "2025-04-05T14:22:00Z" },
+    { name: "Onboarding Checklist.docx", path: "Onboarding Checklist.docx", isFolder: false, size: 89_088, mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", updatedAt: "2025-05-09T10:00:00Z" },
+    { name: "Partner Logos.zip",      path: "Partner Logos.zip",      isFolder: false, size: 8_847_360, mimeType: "application/zip",   updatedAt: "2025-04-18T11:15:00Z" },
+    { name: "API Docs.md",            path: "API Docs.md",            isFolder: false, size: 24_576,    mimeType: "text/markdown",      updatedAt: "2025-05-07T15:30:00Z" },
+  ],
+  "Marketing Assets": [
+    { name: "Social Media Kit.zip",    path: "Marketing Assets/Social Media Kit.zip",    isFolder: false, size: 12_582_912, mimeType: "application/zip",  updatedAt: "2025-04-22T13:00:00Z" },
+    { name: "Campaign Banner A.png",   path: "Marketing Assets/Campaign Banner A.png",   isFolder: false, size: 2_097_152,  mimeType: "image/png",         updatedAt: "2025-05-03T10:45:00Z" },
+    { name: "Campaign Banner B.png",   path: "Marketing Assets/Campaign Banner B.png",   isFolder: false, size: 1_835_008,  mimeType: "image/png",         updatedAt: "2025-05-03T10:47:00Z" },
+    { name: "Product Brochure.pdf",    path: "Marketing Assets/Product Brochure.pdf",    isFolder: false, size: 3_407_872,  mimeType: "application/pdf",   updatedAt: "2025-04-10T09:20:00Z" },
+    { name: "Brand Video.mp4",         path: "Marketing Assets/Brand Video.mp4",         isFolder: false, size: 52_428_800, mimeType: "video/mp4",          updatedAt: "2025-03-25T16:00:00Z" },
+    { name: "Logo Variations.zip",     path: "Marketing Assets/Logo Variations.zip",     isFolder: false, size: 4_718_592,  mimeType: "application/zip",   updatedAt: "2025-02-28T11:00:00Z" },
+  ],
+  "Client Contracts": [
+    { name: "Acme Corp Agreement.pdf",    path: "Client Contracts/Acme Corp Agreement.pdf",    isFolder: false, size: 1_048_576, mimeType: "application/pdf", updatedAt: "2025-04-01T09:00:00Z" },
+    { name: "TechFlow NDA.pdf",           path: "Client Contracts/TechFlow NDA.pdf",           isFolder: false, size: 786_432,   mimeType: "application/pdf", updatedAt: "2025-03-15T14:30:00Z" },
+    { name: "RetailMax SLA.docx",         path: "Client Contracts/RetailMax SLA.docx",         isFolder: false, size: 120_832,   mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", updatedAt: "2025-05-06T11:20:00Z" },
+    { name: "Contract Template 2025.docx",path: "Client Contracts/Contract Template 2025.docx",isFolder: false, size: 98_304,    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", updatedAt: "2025-01-08T08:00:00Z" },
+  ],
+  "Product Specs": [
+    { name: "POS Terminal Spec Sheet.pdf",      path: "Product Specs/POS Terminal Spec Sheet.pdf",      isFolder: false, size: 5_242_880, mimeType: "application/pdf", updatedAt: "2025-04-28T10:00:00Z" },
+    { name: "Hardware Integration Guide.pdf",   path: "Product Specs/Hardware Integration Guide.pdf",   isFolder: false, size: 3_145_728, mimeType: "application/pdf", updatedAt: "2025-05-01T08:30:00Z" },
+    { name: "Software Release Notes v4.2.md",   path: "Product Specs/Software Release Notes v4.2.md",   isFolder: false, size: 18_432,    mimeType: "text/markdown",   updatedAt: "2025-05-08T16:45:00Z" },
+    { name: "Compatibility Matrix.xlsx",        path: "Product Specs/Compatibility Matrix.xlsx",        isFolder: false, size: 327_680,   mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", updatedAt: "2025-04-30T14:00:00Z" },
+  ],
+  "Reports": [
+    { name: "Q1 2025 Performance.xlsx",        path: "Reports/Q1 2025 Performance.xlsx",        isFolder: false, size: 1_572_864, mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", updatedAt: "2025-04-05T09:00:00Z" },
+    { name: "Merchant Onboarding Report.pdf",  path: "Reports/Merchant Onboarding Report.pdf",  isFolder: false, size: 2_359_296, mimeType: "application/pdf", updatedAt: "2025-04-20T11:00:00Z" },
+    { name: "Annual Revenue 2024.xlsx",        path: "Reports/Annual Revenue 2024.xlsx",        isFolder: false, size: 892_928,   mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", updatedAt: "2025-01-15T10:30:00Z" },
+    { name: "Support Ticket Analysis.pdf",     path: "Reports/Support Ticket Analysis.pdf",     isFolder: false, size: 1_835_008, mimeType: "application/pdf", updatedAt: "2025-05-10T08:00:00Z" },
+    { name: "NPS Survey Results Q2.xlsx",      path: "Reports/NPS Survey Results Q2.xlsx",      isFolder: false, size: 614_400,   mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", updatedAt: "2025-05-11T07:30:00Z" },
+  ],
+}
+
 // ── Formatters ─────────────────────────────────────────────────────────────
 
 function fmtSize(bytes?: number) {
@@ -137,7 +183,13 @@ export function StorageClient() {
   // ── Load files ────────────────────────────────────────────────────────────
 
   const loadFiles = useCallback(async () => {
-    if (!supabase) return
+    if (!supabase) {
+      setLoading(true)
+      await new Promise(r => setTimeout(r, 320))
+      setItems(MOCK_DATA[prefix] ?? [])
+      setLoading(false)
+      return
+    }
     setLoading(true)
     setError(null)
     const { data, error: err } = await supabase.storage.from(BUCKET).list(prefix, {
@@ -208,7 +260,7 @@ export function StorageClient() {
   // ── File operations ───────────────────────────────────────────────────────
 
   async function handleUpload(fileList: FileList) {
-    if (!supabase) return
+    if (!supabase) { showToast("Configure Supabase to enable uploads", false); return }
     setUploading(true)
     let ok = 0, fail = 0
     for (const file of Array.from(fileList)) {
@@ -224,7 +276,8 @@ export function StorageClient() {
   }
 
   async function handleCreateFolder() {
-    if (!supabase || !newFolderName.trim()) return
+    if (!supabase) { showToast("Configure Supabase to create folders", false); return }
+    if (!newFolderName.trim()) return
     const name = newFolderName.trim()
     const keepPath = prefix ? `${prefix}/${name}/.keep` : `${name}/.keep`
     const { error: err } = await supabase.storage
@@ -238,7 +291,8 @@ export function StorageClient() {
   }
 
   async function handleDelete() {
-    if (!supabase || !deleteTarget) return
+    if (!supabase) { showToast("Configure Supabase to delete files", false); setDeleteTarget(null); return }
+    if (!deleteTarget) return
     setDeleting(true)
     if (deleteTarget.isFolder) {
       const { data } = await supabase.storage.from(BUCKET).list(deleteTarget.path, { limit: 1000 })
@@ -258,7 +312,7 @@ export function StorageClient() {
   }
 
   function openPreview(item: StorageItem) {
-    if (!supabase) return
+    if (!supabase) { setPreviewUrl(""); setPreview(item); return }
     const { data } = supabase.storage.from(BUCKET).getPublicUrl(item.path)
     setPreviewUrl(data.publicUrl)
     setPreview(item)
@@ -270,7 +324,7 @@ export function StorageClient() {
   }
 
   function handleCopyUrl(item: StorageItem) {
-    if (!supabase) return
+    if (!supabase) { showToast("Configure Supabase to copy file URLs", false); return }
     const { data } = supabase.storage.from(BUCKET).getPublicUrl(item.path)
     navigator.clipboard.writeText(data.publicUrl).then(() => showToast("URL copied"))
   }
@@ -389,31 +443,43 @@ export function StorageClient() {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                <button
-                  onClick={() => handleCopyUrl(preview)}
-                  style={{ ...btnGhost, padding: "7px 12px", fontSize: 12 }}
-                  title="Copy URL"
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>link</span>
-                  Copy URL
-                </button>
-                <a
-                  href={previewUrl}
-                  download={preview.name}
-                  style={{ ...btnAccent, padding: "7px 12px", fontSize: 12, textDecoration: "none" }}
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>download</span>
-                  Download
-                </a>
-                <button
-                  onClick={() => { setDeleteTarget(preview); setPreview(null); setPreviewUrl("") }}
-                  title="Delete"
-                  style={{ width: 34, height: 34, borderRadius: 9, border: "1px solid var(--border)", background: "none", cursor: "pointer", color: "var(--text3)", display: "flex", alignItems: "center", justifyContent: "center" }}
-                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.color = "#ef4444"; (e.currentTarget as HTMLElement).style.borderColor = "#ef4444" }}
-                  onMouseOut={e => { (e.currentTarget as HTMLElement).style.color = "var(--text3)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--border)" }}
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: 18 }}>delete</span>
-                </button>
+                {!supabase && (
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text3)", background: "var(--bg3)", border: "1px solid var(--border)", borderRadius: 8, padding: "6px 12px", display: "flex", alignItems: "center", gap: 5 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>info</span>
+                    Demo mode
+                  </span>
+                )}
+                {supabase && (
+                  <button
+                    onClick={() => handleCopyUrl(preview)}
+                    style={{ ...btnGhost, padding: "7px 12px", fontSize: 12 }}
+                    title="Copy URL"
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>link</span>
+                    Copy URL
+                  </button>
+                )}
+                {supabase && (
+                  <a
+                    href={previewUrl}
+                    download={preview.name}
+                    style={{ ...btnAccent, padding: "7px 12px", fontSize: 12, textDecoration: "none" }}
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>download</span>
+                    Download
+                  </a>
+                )}
+                {supabase && (
+                  <button
+                    onClick={() => { setDeleteTarget(preview); setPreview(null); setPreviewUrl("") }}
+                    title="Delete"
+                    style={{ width: 34, height: 34, borderRadius: 9, border: "1px solid var(--border)", background: "none", cursor: "pointer", color: "var(--text3)", display: "flex", alignItems: "center", justifyContent: "center" }}
+                    onMouseOver={e => { (e.currentTarget as HTMLElement).style.color = "#ef4444"; (e.currentTarget as HTMLElement).style.borderColor = "#ef4444" }}
+                    onMouseOut={e => { (e.currentTarget as HTMLElement).style.color = "var(--text3)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--border)" }}
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>delete</span>
+                  </button>
+                )}
                 <button
                   onClick={() => { setPreview(null); setPreviewUrl("") }}
                   style={{ width: 34, height: 34, borderRadius: 9, border: "1px solid var(--border)", background: "none", cursor: "pointer", color: "var(--text3)", display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -425,16 +491,27 @@ export function StorageClient() {
 
             {/* Body */}
             <div style={{ flex: 1, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)" }}>
-              {previewType === "image" && (
+              {!supabase && (
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, padding: 48, textAlign: "center" }}>
+                  <div style={{ width: 80, height: 80, borderRadius: 24, background: "var(--bg3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 40, color: "var(--text3)" }}>preview</span>
+                  </div>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: "var(--text)" }}>Preview unavailable in demo mode</div>
+                  <div style={{ fontSize: 13, color: "var(--text3)", maxWidth: 340, lineHeight: 1.6 }}>
+                    Add your Supabase credentials to <code style={{ background: "var(--bg3)", border: "1px solid var(--border)", padding: "1px 6px", borderRadius: 5 }}>.env.local</code> to enable previews, downloads, and uploads.
+                  </div>
+                </div>
+              )}
+              {supabase && previewType === "image" && (
                 <img src={previewUrl} alt={preview.name} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", padding: 16 }} />
               )}
-              {previewType === "pdf" && (
+              {supabase && previewType === "pdf" && (
                 <iframe src={previewUrl} title={preview.name} style={{ width: "100%", height: "100%", border: "none" }} />
               )}
-              {previewType === "video" && (
+              {supabase && previewType === "video" && (
                 <video src={previewUrl} controls style={{ maxWidth: "100%", maxHeight: "100%" }} />
               )}
-              {previewType === "download" && (
+              {supabase && previewType === "download" && (
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20, padding: 40, textAlign: "center" }}>
                   <div style={{ width: 100, height: 100, borderRadius: 20, overflow: "hidden" }}>
                     <FileIcon name={preview.name} mimeType={preview.mimeType} size={48} />
