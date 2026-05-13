@@ -3,15 +3,17 @@
 import { useState, useMemo, useRef } from "react"
 
 // ─── Types ────────────────────────────────────────────
-export type ProductStatus   = "Active" | "Draft" | "Archived"
+export type ProductStatus = "Active" | "Draft" | "Archived"
 export type ProductCategory = "Terminals" | "POS Systems" | "ATM" | "Printer" | "Accessories" | "Paper & Ribbons" | "Other"
-export type UnitStatus      = "Available" | "Deployed" | "Reserved" | "Defective"
+export type UnitStatus = "Available" | "Deployed" | "Reserved" | "Defective"
 
 export interface DeviceUnit {
   id: string
   serial: string
   status: UnitStatus
   notes: string
+  merchant?: string
+  invoice?: string
 }
 
 export interface ProductVariant {
@@ -41,22 +43,37 @@ export interface Product {
 const CATEGORIES: ProductCategory[] = [
   "Terminals", "POS Systems", "ATM", "Printer", "Accessories", "Paper & Ribbons", "Other",
 ]
-const STATUSES: ProductStatus[]    = ["Active", "Draft", "Archived"]
-const UNIT_STATUSES: UnitStatus[]  = ["Available", "Deployed", "Reserved", "Defective"]
+const STATUSES: ProductStatus[] = ["Active", "Draft", "Archived"]
+const UNIT_STATUSES: UnitStatus[] = ["Available", "Deployed", "Reserved", "Defective"]
 const DEFAULT_BRANDS = ["Clover", "Dejavoo", "Dexa", "Ingenico", "PAX", "Verifone", "Square", "SwipeSimple", "Epson", "Star", "Apple", "Other"]
+const MOCK_MERCHANTS = [
+  "164TH ST CONVENIENCE", "2 BROTHERS TIRE SHOP", "280 SUPERMARKET", 
+  "3 BROTHERS TIRE SHOP AND", "Ace Hardware", "Burger King", 
+  "Central Cafe", "Downtown Diner", "Elm Street Books", "Fresh Market", 
+  "Global Tech", "Harbor Seafood", "Island Bakery", "Java Coffee House", 
+  "KFC", "McDonald's", "Pizza Hut", "Starbucks", "Subway", "Target", 
+  "Walmart", "Wendy's"
+]
 const INV_COLS = "72px minmax(0,1fr) 130px 140px 100px 90px 40px"
 
 // ─── Helpers ──────────────────────────────────────────
+function getInitials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  if (parts.length === 0 || !parts[0]) return ""
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase()
+  return (parts[0][0] + parts[1][0]).toUpperCase()
+}
+
 function productStatusStyle(s: ProductStatus) {
-  if (s === "Active")   return { background: "rgba(16,185,129,.12)",  color: "#10b981" }
-  if (s === "Draft")    return { background: "rgba(245,158,11,.12)",  color: "#f59e0b" }
+  if (s === "Active") return { background: "rgba(16,185,129,.12)", color: "#10b981" }
+  if (s === "Draft") return { background: "rgba(245,158,11,.12)", color: "#f59e0b" }
   return { background: "rgba(107,114,128,.12)", color: "#6b7280" }
 }
 
 function unitStatusStyle(s: UnitStatus) {
-  if (s === "Available") return { background: "rgba(16,185,129,.12)",  color: "#10b981" }
-  if (s === "Deployed")  return { background: "rgba(99,102,241,.12)",  color: "#6366f1" }
-  if (s === "Reserved")  return { background: "rgba(245,158,11,.12)",  color: "#f59e0b" }
+  if (s === "Available") return { background: "rgba(16,185,129,.12)", color: "#10b981" }
+  if (s === "Deployed") return { background: "rgba(99,102,241,.12)", color: "#6366f1" }
+  if (s === "Reserved") return { background: "rgba(245,158,11,.12)", color: "#f59e0b" }
   return { background: "rgba(239,68,68,.12)", color: "#ef4444" }
 }
 
@@ -75,7 +92,7 @@ function priceRange(p: Product): string {
 }
 
 // ─── Form types ───────────────────────────────────────
-interface UnitDraft { id: string; serial: string; status: UnitStatus; notes: string }
+interface UnitDraft { id: string; serial: string; status: UnitStatus; notes: string; merchant?: string; invoice?: string }
 
 interface VariantDraft {
   id: string
@@ -113,6 +130,27 @@ function VariantCard({ v, idx, baseSku, onChange, onRemove }: {
   onChange: (id: string, patch: Partial<VariantDraft>) => void
   onRemove: (id: string) => void
 }) {
+  const [editingUn, setEditingUn] = useState<string | null>(null)
+  const [editForm, setEditForm] = useState({ serial: "", status: "Available" as UnitStatus, notes: "", merchant: "", invoice: "" })
+  const [showMerchants, setShowMerchants] = useState(false)
+
+  const filteredMerchants = MOCK_MERCHANTS.filter(m => m.toLowerCase().includes(editForm.merchant.toLowerCase()))
+
+  function saveUnitEdit() {
+    if (!editForm.serial.trim() || !editingUn) return
+    onChange(v.id, {
+      units: v.units.map(u => u.id === editingUn ? {
+        ...u,
+        serial: editForm.serial.trim().toUpperCase(),
+        status: editForm.status,
+        notes: editForm.notes.trim(),
+        merchant: editForm.merchant.trim(),
+        invoice: editForm.invoice.trim()
+      } : u)
+    })
+    setEditingUn(null)
+  }
+
   function set<K extends keyof VariantDraft>(k: K, val: VariantDraft[K]) {
     onChange(v.id, { [k]: val } as Partial<VariantDraft>)
   }
@@ -174,9 +212,9 @@ function VariantCard({ v, idx, baseSku, onChange, onRemove }: {
       <div className="dev-section">
         <div className="dev-header">
           <div className="dev-header-title">
-            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>devices</span>
-            Individual Units
-            {v.units.length > 0 && <span className="dev-count">{v.units.length}</span>}
+            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>devices</span>
+            <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text3)", letterSpacing: "0.5px" }}>DEVICES / SERIAL NUMBERS</span>
+            {v.units.length > 0 && <span className="dev-count" style={{ background: "rgba(99,102,241,.1)", color: "#6366f1", padding: "1px 8px", borderRadius: 12, fontSize: 11, fontWeight: 700, marginLeft: 6 }}>{v.units.length}</span>}
           </div>
         </div>
 
@@ -184,14 +222,93 @@ function VariantCard({ v, idx, baseSku, onChange, onRemove }: {
           <div className="dev-list">
             {v.units.map(u => {
               const us = unitStatusStyle(u.status)
+
+              if (editingUn === u.id) {
+                return (
+                  <div key={u.id} style={{ background: "var(--bg3)", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 14px", marginBottom: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.03)" }}>
+                    <div style={{ display: "flex", gap: 5, marginBottom: 10 }}>
+                      <input
+                        value={editForm.serial}
+                        onChange={e => setEditForm({ ...editForm, serial: e.target.value })}
+                        style={{ flex: 1, padding: "8px 12px", borderRadius: 8, border: "1.5px solid var(--text)", fontSize: 13, outline: "none", fontWeight: 700, color: "var(--text)", background: "var(--bg)" }}
+                        autoFocus
+                      />
+                      <select
+                        value={editForm.status}
+                        onChange={e => setEditForm({ ...editForm, status: e.target.value as UnitStatus })}
+                        style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--text)", fontSize: 13, outline: "none", fontFamily: "inherit" }}
+                      >
+                        {UNIT_STATUSES.map(s => <option key={s}>{s}</option>)}
+                      </select>
+                      <input
+                        value={editForm.notes}
+                        onChange={e => setEditForm({ ...editForm, notes: e.target.value })}
+                        placeholder="Notes"
+                        style={{ flex: 1, padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--text)", fontSize: 13, outline: "none", fontFamily: "inherit" }}
+                      />
+                      <div className="flex gap-2 flex-col">
+                        <button onClick={saveUnitEdit} style={{ background: "none", border: "none", color: "#6366f1", cursor: "pointer", display: "flex", alignItems: "center", padding: "0 6px", transition: "transform 0.1s" }} title="Save">
+                          <span className="material-symbols-outlined" style={{ fontSize: 18, fontWeight: 700 }}>check</span>
+                        </button>
+                        <button onClick={() => setEditingUn(null)} style={{ background: "none", border: "none", color: "var(--text3)", cursor: "pointer", display: "flex", alignItems: "center", padding: "0 6px", transition: "transform 0.1s" }} title="Cancel">
+                          <span className="material-symbols-outlined" style={{ fontSize: 18, fontWeight: 700 }}>close</span>
+                        </button>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <div style={{ flex: 2, position: "relative" }}>
+                        <span className="material-symbols-outlined" style={{ position: "absolute", left: 12, top: 10, fontSize: 16, color: "var(--text3)" }}>search</span>
+                        <input
+                          value={editForm.merchant}
+                          onChange={e => { setEditForm({ ...editForm, merchant: e.target.value }); setShowMerchants(true) }}
+                          onFocus={() => setShowMerchants(true)}
+                          onBlur={() => setTimeout(() => setShowMerchants(false), 200)}
+                          placeholder="Search merchant..."
+                          style={{ width: "100%", padding: "8px 12px 8px 36px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--text)", fontSize: 13, outline: "none", boxSizing: "border-box", fontFamily: "inherit" }}
+                        />
+                        {showMerchants && filteredMerchants.length > 0 && (
+                          <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 6, background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 10, boxShadow: "0 8px 24px rgba(0,0,0,0.12)", zIndex: 10, maxHeight: 240, overflowY: "auto", overflowX: "hidden" }}>
+                            {filteredMerchants.map((m, i) => (
+                              <div
+                                key={m}
+                                onClick={() => { setEditForm({ ...editForm, merchant: m }); setShowMerchants(false) }}
+                                style={{ padding: "10px 14px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer", borderBottom: i === filteredMerchants.length - 1 ? "none" : "1px solid var(--border)" }}
+                                onMouseOver={e => e.currentTarget.style.background = "var(--bg3)"}
+                                onMouseOut={e => e.currentTarget.style.background = "transparent"}
+                              >
+                                <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #a855f7, #8b5cf6)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 11, fontWeight: 800, flexShrink: 0 }}>
+                                  {getInitials(m)}
+                                </div>
+                                <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", textTransform: "uppercase" }}>{m}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <input
+                        value={editForm.invoice}
+                        onChange={e => setEditForm({ ...editForm, invoice: e.target.value })}
+                        placeholder="Invoice #"
+                        style={{ flex: 1, padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--text)", fontSize: 13, outline: "none", fontFamily: "inherit" }}
+                      />
+                    </div>
+                  </div>
+                )
+              }
+
               return (
                 <div key={u.id} className="dev-row">
                   <span className="dev-serial">{u.serial}</span>
                   <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 12, textTransform: "uppercase" as const, letterSpacing: ".3px", whiteSpace: "nowrap" as const, flexShrink: 0, ...us }}>{u.status}</span>
-                  {u.notes && <span className="dev-notes">{u.notes}</span>}
+                  <span className="dev-notes" style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {[u.notes, u.merchant, u.invoice ? `Inv: ${u.invoice}` : ""].filter(Boolean).join(" • ")}
+                  </span>
                   <div className="dev-actions">
+                    <button onClick={() => { setEditingUn(u.id); setEditForm({ serial: u.serial, status: u.status, notes: u.notes, merchant: u.merchant || "", invoice: u.invoice || "" }) }} title="Edit unit" style={{ marginRight: 6 }}>
+                      <span className="material-symbols-outlined" style={{ fontSize: 17, color: "var(--text2)" }}>edit</span>
+                    </button>
                     <button onClick={() => removeUnit(u.id)} title="Remove unit">
-                      <span className="material-symbols-outlined" style={{ fontSize: 16 }}>delete</span>
+                      <span className="material-symbols-outlined" style={{ fontSize: 17, color: "var(--text3)" }}>delete</span>
                     </button>
                   </div>
                 </div>
@@ -224,19 +341,19 @@ interface Props {
 
 export function InventoryClient({ initialProducts, initialBrands = DEFAULT_BRANDS }: Props) {
   const [products, setProducts] = useState(initialProducts)
-  const [query,    setQuery]    = useState("")
-  const [catFilt,  setCatFilt]  = useState("")
+  const [query, setQuery] = useState("")
+  const [catFilt, setCatFilt] = useState("")
   const [statFilt, setStatFilt] = useState("")
 
-  const [brands,      setBrands]      = useState(initialBrands)
-  const [showBrandMgr,setShowBrandMgr]= useState(false)
-  const [newBrand,    setNewBrand]    = useState("")
+  const [brands, setBrands] = useState(initialBrands)
+  const [showBrandMgr, setShowBrandMgr] = useState(false)
+  const [newBrand, setNewBrand] = useState("")
 
   const [showSlider, setShowSlider] = useState(false)
-  const [isEdit,     setIsEdit]     = useState(false)
-  const [editId,     setEditId]     = useState<string | null>(null)
-  const [draft,      setDraftRaw]   = useState<ProductDraft>(EMPTY_DRAFT)
-  const [formError,  setFormError]  = useState("")
+  const [isEdit, setIsEdit] = useState(false)
+  const [editId, setEditId] = useState<string | null>(null)
+  const [draft, setDraftRaw] = useState<ProductDraft>(EMPTY_DRAFT)
+  const [formError, setFormError] = useState("")
   const [isDragging, setIsDragging] = useState(false)
 
   const fileRef = useRef<HTMLInputElement>(null)
@@ -246,8 +363,8 @@ export function InventoryClient({ initialProducts, initialBrands = DEFAULT_BRAND
     const q = query.toLowerCase()
     return products.filter(p => {
       if (q && ![p.name, p.sku, p.brand, ...p.tags].some(s => s.toLowerCase().includes(q))) return false
-      if (catFilt  && p.category !== catFilt)  return false
-      if (statFilt && p.status   !== statFilt) return false
+      if (catFilt && p.category !== catFilt) return false
+      if (statFilt && p.status !== statFilt) return false
       return true
     })
   }, [products, query, catFilt, statFilt])
@@ -299,7 +416,7 @@ export function InventoryClient({ initialProducts, initialBrands = DEFAULT_BRAND
 
   function saveProduct() {
     if (!draft.name.trim()) { setFormError("Product name is required."); return }
-    if (!draft.sku.trim())  { setFormError("Base SKU is required."); return }
+    if (!draft.sku.trim()) { setFormError("Base SKU is required."); return }
     if (draft.variants.length === 0) { setFormError("At least one variant is required."); return }
 
     const variants: ProductVariant[] = draft.variants.map(v => ({
@@ -308,7 +425,7 @@ export function InventoryClient({ initialProducts, initialBrands = DEFAULT_BRAND
       cost: parseFloat(v.cost) || 0,
       price: parseFloat(v.price) || 0,
       stock: parseInt(v.stock) || 0,
-      units: v.units.map(u => ({ id: u.id, serial: u.serial, status: u.status, notes: u.notes })),
+      units: v.units.map(u => ({ id: u.id, serial: u.serial, status: u.status, notes: u.notes, merchant: u.merchant, invoice: u.invoice })),
     }))
 
     const tags = draft.tags.split(",").map(t => t.trim()).filter(Boolean)
@@ -361,7 +478,7 @@ export function InventoryClient({ initialProducts, initialBrands = DEFAULT_BRAND
     ]
     const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n")
     const blob = new Blob([csv], { type: "text/csv" })
-    const url  = URL.createObjectURL(blob)
+    const url = URL.createObjectURL(blob)
     const a = document.createElement("a"); a.href = url; a.download = "inventory.csv"; a.click()
     URL.revokeObjectURL(url)
   }
@@ -434,7 +551,7 @@ export function InventoryClient({ initialProducts, initialBrands = DEFAULT_BRAND
           )}
 
           {filtered.map((p, i) => {
-            const ps    = productStatusStyle(p.status)
+            const ps = productStatusStyle(p.status)
             const stock = totalStock(p)
             return (
               <div

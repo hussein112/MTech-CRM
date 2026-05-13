@@ -8,35 +8,35 @@ type Stage =
   | "New Inquiry" | "Qualified" | "Proposal Sent" | "Site Planning"
   | "Awaiting Approval" | "Approved" | "Installation Scheduled"
 
-type Priority  = "Low" | "Medium" | "High"
-type LeadView  = "pipeline" | "list"
+type Priority = "Low" | "Medium" | "High"
+type LeadView = "pipeline" | "list"
 type DetailTab = "overview" | "proposal" | "equipment" | "costing" | "floorplan"
 
 interface EquipmentItem { name: string; qty: number; unitPrice: number }
 
 interface Lead {
-  id:            string
-  companyName:   string
-  industry:      string
-  locations:     number
-  website?:      string
-  contactName:   string
+  id: string
+  companyName: string
+  industry: string
+  locations: number
+  website?: string
+  contactName: string
   contactPhone?: string
   contactEmail?: string
-  leadSource?:   string
-  budget?:       number
-  services?:     string
-  notes?:        string
-  assignedRep?:  string
-  priority:      Priority
-  stage:         Stage
-  createdAt:     string
-  updatedAt:     string
-  equipment?:    EquipmentItem[]
+  leadSource?: string
+  budget?: number
+  services?: string
+  notes?: string
+  assignedRep?: string
+  priority: Priority
+  stage: Stage
+  createdAt: string
+  updatedAt: string
+  equipment?: EquipmentItem[]
   proposalNotes?: string
   contractTerm?: string
-  monthlyFee?:   number
-  setupFee?:     number
+  monthlyFee?: number
+  setupFee?: number
 }
 
 // ── Config ─────────────────────────────────────────────────────────────────
@@ -47,29 +47,29 @@ const STAGES: Stage[] = [
 ]
 
 const STAGE_COLOR: Record<Stage, string> = {
-  "New Inquiry":            "#6366f1",
-  "Qualified":              "#06b6d4",
-  "Proposal Sent":          "#f59e0b",
-  "Site Planning":          "#8b5cf6",
-  "Awaiting Approval":      "#f97316",
-  "Approved":               "#10b981",
+  "New Inquiry": "#6366f1",
+  "Qualified": "#06b6d4",
+  "Proposal Sent": "#f59e0b",
+  "Site Planning": "#8b5cf6",
+  "Awaiting Approval": "#f97316",
+  "Approved": "#10b981",
   "Installation Scheduled": "#3b82f6",
 }
 
 const STAGE_ICON: Record<Stage, string> = {
-  "New Inquiry":            "person_add",
-  "Qualified":              "verified",
-  "Proposal Sent":          "send",
-  "Site Planning":          "map",
-  "Awaiting Approval":      "pending",
-  "Approved":               "check_circle",
+  "New Inquiry": "person_add",
+  "Qualified": "verified",
+  "Proposal Sent": "send",
+  "Site Planning": "map",
+  "Awaiting Approval": "pending",
+  "Approved": "check_circle",
   "Installation Scheduled": "build",
 }
 
 const PRIORITY_STYLE: Record<Priority, { color: string; bg: string }> = {
-  Low:    { color: "#10b981", bg: "rgba(16,185,129,.1)"  },
-  Medium: { color: "#f59e0b", bg: "rgba(245,158,11,.1)"  },
-  High:   { color: "#ef4444", bg: "rgba(239,68,68,.1)"   },
+  Low: { color: "#10b981", bg: "rgba(16,185,129,.1)" },
+  Medium: { color: "#f59e0b", bg: "rgba(245,158,11,.1)" },
+  High: { color: "#ef4444", bg: "rgba(239,68,68,.1)" },
 }
 
 const REPS = ["Hussein Khalil", "Joan Huang", "Moe Kadi", "Zu Jia He Cen", "Tomas Vega", "Amara Singh"]
@@ -86,9 +86,9 @@ const MOCK_LEADS: Lead[] = [
     assignedRep: "Hussein Khalil", priority: "High", stage: "Proposal Sent",
     createdAt: "Apr 28, 2026", updatedAt: "May 9, 2026",
     equipment: [
-      { name: "Clover Station Duo",    qty: 2, unitPrice: 1299 },
-      { name: "Kitchen Display System",qty: 1, unitPrice: 899  },
-      { name: "Receipt Printer",       qty: 2, unitPrice: 249  },
+      { name: "Clover Station Duo", qty: 2, unitPrice: 1299 },
+      { name: "Kitchen Display System", qty: 1, unitPrice: 899 },
+      { name: "Receipt Printer", qty: 2, unitPrice: 249 },
     ],
     proposalNotes: "Custom dual-pricing setup requested. Reviewed kitchen display placement with chef.",
     contractTerm: "3-Year", monthlyFee: 89, setupFee: 350,
@@ -103,7 +103,7 @@ const MOCK_LEADS: Lead[] = [
     createdAt: "May 1, 2026", updatedAt: "May 10, 2026",
     equipment: [
       { name: "PAX A920 Terminal", qty: 3, unitPrice: 549 },
-      { name: "Receipt Printer",   qty: 1, unitPrice: 249 },
+      { name: "Receipt Printer", qty: 1, unitPrice: 249 },
     ],
     proposalNotes: "Awaiting floor plan from contractor. Equipment placement TBD.",
     contractTerm: "2-Year", monthlyFee: 69, setupFee: 200,
@@ -117,7 +117,7 @@ const MOCK_LEADS: Lead[] = [
     assignedRep: "Moe Kadi", priority: "Medium", stage: "Qualified",
     createdAt: "May 3, 2026", updatedAt: "May 8, 2026",
     equipment: [
-      { name: "Clover Mini",      qty: 2, unitPrice: 799 },
+      { name: "Clover Mini", qty: 2, unitPrice: 799 },
       { name: "Customer Display", qty: 2, unitPrice: 199 },
     ],
     contractTerm: "2-Year", monthlyFee: 59, setupFee: 150,
@@ -133,9 +133,9 @@ const MOCK_LEADS: Lead[] = [
     createdAt: "Apr 22, 2026", updatedAt: "May 11, 2026",
     equipment: [
       { name: "Clover Station Solo", qty: 3, unitPrice: 999 },
-      { name: "Barcode Scanner",     qty: 6, unitPrice: 149 },
-      { name: "Cash Drawer",         qty: 3, unitPrice: 119 },
-      { name: "Receipt Printer",     qty: 3, unitPrice: 249 },
+      { name: "Barcode Scanner", qty: 6, unitPrice: 149 },
+      { name: "Cash Drawer", qty: 3, unitPrice: 119 },
+      { name: "Receipt Printer", qty: 3, unitPrice: 249 },
     ],
     proposalNotes: "Legal team reviewing contract. HIPAA compliance addendum attached.",
     contractTerm: "4-Year", monthlyFee: 149, setupFee: 750,
@@ -149,8 +149,8 @@ const MOCK_LEADS: Lead[] = [
     assignedRep: "Amara Singh", priority: "Medium", stage: "New Inquiry",
     createdAt: "May 7, 2026", updatedAt: "May 7, 2026",
     equipment: [
-      { name: "Clover Mini",    qty: 1, unitPrice: 799 },
-      { name: "Barcode Scanner",qty: 1, unitPrice: 149 },
+      { name: "Clover Mini", qty: 1, unitPrice: 799 },
+      { name: "Barcode Scanner", qty: 1, unitPrice: 149 },
     ],
   },
   {
@@ -164,9 +164,9 @@ const MOCK_LEADS: Lead[] = [
     createdAt: "Apr 15, 2026", updatedAt: "May 10, 2026",
     equipment: [
       { name: "Clover Station Duo", qty: 4, unitPrice: 1299 },
-      { name: "PAX A920 Terminal",  qty: 8, unitPrice: 549  },
-      { name: "Receipt Printer",    qty: 4, unitPrice: 249  },
-      { name: "Cash Drawer",        qty: 4, unitPrice: 119  },
+      { name: "PAX A920 Terminal", qty: 8, unitPrice: 549 },
+      { name: "Receipt Printer", qty: 4, unitPrice: 249 },
+      { name: "Cash Drawer", qty: 4, unitPrice: 119 },
     ],
     proposalNotes: "Contract signed. Scheduling site survey for all 4 locations.",
     contractTerm: "4-Year", monthlyFee: 249, setupFee: 1200,
@@ -190,8 +190,8 @@ const MOCK_LEADS: Lead[] = [
     createdAt: "May 2, 2026", updatedAt: "May 8, 2026",
     equipment: [
       { name: "PAX A920 Terminal", qty: 4, unitPrice: 549 },
-      { name: "Clover Mini",       qty: 2, unitPrice: 799 },
-      { name: "Receipt Printer",   qty: 2, unitPrice: 249 },
+      { name: "Clover Mini", qty: 2, unitPrice: 799 },
+      { name: "Receipt Printer", qty: 2, unitPrice: 249 },
     ],
     proposalNotes: "Waiting on decision from ownership group. Follow up scheduled May 14.",
     contractTerm: "3-Year", monthlyFee: 99, setupFee: 300,
@@ -206,11 +206,11 @@ const MOCK_LEADS: Lead[] = [
     assignedRep: "Hussein Khalil", priority: "High", stage: "Installation Scheduled",
     createdAt: "Apr 10, 2026", updatedAt: "May 11, 2026",
     equipment: [
-      { name: "Clover Station Duo",    qty: 4, unitPrice: 1299 },
-      { name: "PAX A920 Terminal",     qty: 6, unitPrice: 549  },
-      { name: "Kitchen Display System",qty: 2, unitPrice: 899  },
-      { name: "Receipt Printer",       qty: 6, unitPrice: 249  },
-      { name: "Cash Drawer",           qty: 4, unitPrice: 119  },
+      { name: "Clover Station Duo", qty: 4, unitPrice: 1299 },
+      { name: "PAX A920 Terminal", qty: 6, unitPrice: 549 },
+      { name: "Kitchen Display System", qty: 2, unitPrice: 899 },
+      { name: "Receipt Printer", qty: 6, unitPrice: 249 },
+      { name: "Cash Drawer", qty: 4, unitPrice: 119 },
     ],
     proposalNotes: "Installation scheduled May 20–22. Site survey completed.",
     contractTerm: "4-Year", monthlyFee: 229, setupFee: 1000,
@@ -225,8 +225,8 @@ const MOCK_LEADS: Lead[] = [
     createdAt: "May 5, 2026", updatedAt: "May 9, 2026",
     equipment: [
       { name: "Clover Station Solo", qty: 2, unitPrice: 999 },
-      { name: "Receipt Printer",     qty: 2, unitPrice: 249 },
-      { name: "Barcode Scanner",     qty: 2, unitPrice: 149 },
+      { name: "Receipt Printer", qty: 2, unitPrice: 249 },
+      { name: "Barcode Scanner", qty: 2, unitPrice: 149 },
     ],
     contractTerm: "3-Year", monthlyFee: 79, setupFee: 250,
   },
@@ -249,7 +249,7 @@ const MOCK_LEADS: Lead[] = [
     createdAt: "May 4, 2026", updatedAt: "May 9, 2026",
     equipment: [
       { name: "PAX A920 Terminal", qty: 2, unitPrice: 549 },
-      { name: "Receipt Printer",   qty: 1, unitPrice: 249 },
+      { name: "Receipt Printer", qty: 1, unitPrice: 249 },
     ],
     contractTerm: "2-Year", monthlyFee: 59, setupFee: 150,
   },
@@ -424,19 +424,19 @@ function LeadDetail({ lead, onClose, onStageChange }: {
   lead: Lead; onClose: () => void; onStageChange: (id: string, s: Stage) => void
 }) {
   const [tab, setTab] = useState<DetailTab>("overview")
-  const color   = STAGE_COLOR[lead.stage]
-  const pStyle  = PRIORITY_STYLE[lead.priority]
+  const color = STAGE_COLOR[lead.stage]
+  const pStyle = PRIORITY_STYLE[lead.priority]
   const stageIdx = STAGES.indexOf(lead.stage)
-  const eqTotal  = (lead.equipment ?? []).reduce((s, e) => s + e.qty * e.unitPrice, 0)
+  const eqTotal = (lead.equipment ?? []).reduce((s, e) => s + e.qty * e.unitPrice, 0)
   const annualRevenue = (lead.monthlyFee ?? 0) * 12
   const contractYears = lead.contractTerm ? parseInt(lead.contractTerm) : 0
 
   const TABS: { id: DetailTab; icon: string; label: string }[] = [
-    { id: "overview",  icon: "dashboard",  label: "Overview"      },
-    { id: "proposal",  icon: "handshake",  label: "Proposal"      },
-    { id: "equipment", icon: "devices",    label: "Equipment"     },
-    { id: "costing",   icon: "analytics",  label: "Costing & ROI" },
-    { id: "floorplan", icon: "map",        label: "Floor Plan"    },
+    { id: "overview", icon: "dashboard", label: "Overview" },
+    { id: "proposal", icon: "handshake", label: "Proposal" },
+    { id: "equipment", icon: "devices", label: "Equipment" },
+    { id: "costing", icon: "analytics", label: "Costing & ROI" },
+    { id: "floorplan", icon: "map", label: "Floor Plan" },
   ]
 
   return (
@@ -464,8 +464,8 @@ function LeadDetail({ lead, onClose, onStageChange }: {
                 {lead.website && <><span>·</span><span>{lead.website}</span></>}
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" as const }}>
-                <Badge label={lead.stage}    color={color}       bg={color + "18"}  />
-                <Badge label={lead.priority} color={pStyle.color} bg={pStyle.bg}    />
+                <Badge label={lead.stage} color={color} bg={color + "18"} />
+                <Badge label={lead.priority} color={pStyle.color} bg={pStyle.bg} />
                 {lead.assignedRep && (
                   <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text3)", display: "flex", alignItems: "center", gap: 4 }}>
                     <span className="material-symbols-outlined" style={{ fontSize: 13 }}>person</span>
@@ -501,9 +501,9 @@ function LeadDetail({ lead, onClose, onStageChange }: {
       <div style={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px 20px", marginBottom: 12, overflowX: "auto" as const }}>
         <div style={{ display: "flex", alignItems: "center", minWidth: "max-content" }}>
           {STAGES.map((s, i) => {
-            const past    = i < stageIdx
+            const past = i < stageIdx
             const current = i === stageIdx
-            const sc      = STAGE_COLOR[s]
+            const sc = STAGE_COLOR[s]
             return (
               <div key={s} style={{ display: "flex", alignItems: "center" }}>
                 <button
@@ -546,10 +546,10 @@ function LeadDetail({ lead, onClose, onStageChange }: {
         {tab === "overview" && (
           <div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 10, marginBottom: 20 }}>
-              <InfoTile icon="phone"   label="Phone"    value={lead.contactPhone ?? "—"} color="#6366f1" />
-              <InfoTile icon="email"   label="Email"    value={lead.contactEmail ?? "—"} color="#06b6d4" />
-              <InfoTile icon="source"  label="Source"   value={lead.leadSource ?? "—"}   color="#f59e0b" />
-              <InfoTile icon="devices" label="Services" value={lead.services ?? "—"}     color="#8b5cf6" />
+              <InfoTile icon="phone" label="Phone" value={lead.contactPhone ?? "—"} color="#6366f1" />
+              <InfoTile icon="email" label="Email" value={lead.contactEmail ?? "—"} color="#06b6d4" />
+              <InfoTile icon="source" label="Source" value={lead.leadSource ?? "—"} color="#f59e0b" />
+              <InfoTile icon="devices" label="Services" value={lead.services ?? "—"} color="#8b5cf6" />
             </div>
             {lead.notes && (
               <div style={{ background: "var(--bg3)", border: "1px solid var(--border)", borderRadius: 10, padding: "14px 16px", marginBottom: 20 }}>
@@ -560,7 +560,7 @@ function LeadDetail({ lead, onClose, onStageChange }: {
             <div style={{ fontSize: 13, fontWeight: 800, color: "var(--text)", marginBottom: 12 }}>Activity</div>
             {[
               { icon: "person_add", color: "#6366f1", text: `Lead created — ${lead.contactName} added by ${lead.assignedRep ?? "system"}`, time: lead.createdAt },
-              { icon: "update",     color: "#f59e0b", text: `Stage set to "${lead.stage}"`, time: lead.updatedAt },
+              { icon: "update", color: "#f59e0b", text: `Stage set to "${lead.stage}"`, time: lead.updatedAt },
               ...(lead.proposalNotes ? [{ icon: "handshake", color: "#10b981", text: "Proposal notes added", time: lead.updatedAt }] : []),
             ].map((a, i, arr) => (
               <div key={i} style={{ display: "flex", gap: 10, paddingBottom: 12, marginBottom: 12, borderBottom: i < arr.length - 1 ? "1px solid var(--border)" : "none" }}>
@@ -581,9 +581,9 @@ function LeadDetail({ lead, onClose, onStageChange }: {
           <div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 20 }}>
               {[
-                { label: "Monthly Fee",    value: lead.monthlyFee ? `$${lead.monthlyFee}/mo` : "—", color: "var(--accent-crm)" },
-                { label: "Setup Fee",      value: lead.setupFee   ? `$${lead.setupFee}`       : "—", color: "var(--text)"      },
-                { label: "Contract Term",  value: lead.contractTerm ?? "—",                          color: "var(--text)"      },
+                { label: "Monthly Fee", value: lead.monthlyFee ? `$${lead.monthlyFee}/mo` : "—", color: "var(--accent-crm)" },
+                { label: "Setup Fee", value: lead.setupFee ? `$${lead.setupFee}` : "—", color: "var(--text)" },
+                { label: "Contract Term", value: lead.contractTerm ?? "—", color: "var(--text)" },
               ].map(c => (
                 <div key={c.label} style={{ background: "var(--bg3)", border: "1px solid var(--border)", borderRadius: 10, padding: "14px 16px" }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase" as const, marginBottom: 4 }}>{c.label}</div>
@@ -593,9 +593,9 @@ function LeadDetail({ lead, onClose, onStageChange }: {
             </div>
             {lead.proposalNotes
               ? <div style={{ background: "var(--bg3)", border: "1px solid var(--border)", borderRadius: 10, padding: "14px 16px" }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase" as const, marginBottom: 6 }}>Proposal Notes</div>
-                  <div style={{ fontSize: 13, color: "var(--text)", lineHeight: 1.6 }}>{lead.proposalNotes}</div>
-                </div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase" as const, marginBottom: 6 }}>Proposal Notes</div>
+                <div style={{ fontSize: 13, color: "var(--text)", lineHeight: 1.6 }}>{lead.proposalNotes}</div>
+              </div>
               : <div style={{ textAlign: "center", padding: "40px 0", color: "var(--text3)", fontSize: 13 }}>No proposal details yet</div>
             }
           </div>
@@ -634,9 +634,9 @@ function LeadDetail({ lead, onClose, onStageChange }: {
             <div>
               <div style={{ fontSize: 13, fontWeight: 800, color: "var(--text)", marginBottom: 12 }}>Cost Breakdown</div>
               {[
-                { label: "Equipment Total",     value: eqTotal,                        color: "#ef4444" },
-                { label: "Setup Fee",           value: lead.setupFee ?? 0,             color: "#f59e0b" },
-                { label: "First Year Monthly",  value: annualRevenue,                  color: "#6366f1" },
+                { label: "Equipment Total", value: eqTotal, color: "#ef4444" },
+                { label: "Setup Fee", value: lead.setupFee ?? 0, color: "#f59e0b" },
+                { label: "First Year Monthly", value: annualRevenue, color: "#6366f1" },
               ].map((row, i) => (
                 <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid var(--border)" }}>
                   <span style={{ fontSize: 13, color: "var(--text2)", fontWeight: 600 }}>{row.label}</span>
@@ -697,19 +697,19 @@ function LeadDetail({ lead, onClose, onStageChange }: {
 
 function NewLeadModal({ onClose, onCreate }: { onClose: () => void; onCreate: (l: Lead) => void }) {
   const [companyName, setCompanyName] = useState("")
-  const [industry,    setIndustry]    = useState("")
-  const [locations,   setLocations]   = useState("1")
-  const [website,     setWebsite]     = useState("")
+  const [industry, setIndustry] = useState("")
+  const [locations, setLocations] = useState("1")
+  const [website, setWebsite] = useState("")
   const [contactName, setContactName] = useState("")
-  const [phone,       setPhone]       = useState("")
-  const [email,       setEmail]       = useState("")
-  const [leadSource,  setLeadSource]  = useState("")
-  const [budget,      setBudget]      = useState("")
-  const [services,    setServices]    = useState("")
-  const [notes,       setNotes]       = useState("")
+  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
+  const [leadSource, setLeadSource] = useState("")
+  const [budget, setBudget] = useState("")
+  const [services, setServices] = useState("")
+  const [notes, setNotes] = useState("")
   const [assignedRep, setAssignedRep] = useState("")
-  const [priority,    setPriority]    = useState<Priority>("Medium")
-  const [error,       setError]       = useState("")
+  const [priority, setPriority] = useState<Priority>("Medium")
+  const [error, setError] = useState("")
 
   function create() {
     if (!companyName.trim()) return setError("Company name is required.")
@@ -828,15 +828,15 @@ function NewLeadModal({ onClose, onCreate }: { onClose: () => void; onCreate: (l
 // ── Main component ─────────────────────────────────────────────────────────
 
 export function LeadsClient() {
-  const [leads,       setLeads]       = useState<Lead[]>(MOCK_LEADS)
-  const [view,        setView]        = useState<LeadView>("pipeline")
-  const [search,      setSearch]      = useState("")
+  const [leads, setLeads] = useState<Lead[]>(MOCK_LEADS)
+  const [view, setView] = useState<LeadView>("pipeline")
+  const [search, setSearch] = useState("")
   const [stageFilter, setStageFilter] = useState<Stage | "">("")
-  const [detailLead,  setDetailLead]  = useState<Lead | null>(null)
-  const [modalOpen,   setModalOpen]   = useState(false)
-  const [toast,       setToast]       = useState<string | null>(null)
+  const [detailLead, setDetailLead] = useState<Lead | null>(null)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [toast, setToast] = useState<string | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const dragId     = useRef<string | null>(null)
+  const dragId = useRef<string | null>(null)
 
   function showToast(msg: string) {
     setToast(msg)

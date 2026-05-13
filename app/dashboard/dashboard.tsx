@@ -34,7 +34,7 @@ interface Props {
 
 export function DashboardClient({ stats, tickets, activity, chartData, today }: Props) {
   return (
-    <div style={{ padding: 24, maxWidth: 1440, margin: "0 auto" }}>
+    <div style={{ padding: 24 }}>
 
       {/* Page Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>

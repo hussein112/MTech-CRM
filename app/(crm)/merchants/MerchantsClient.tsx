@@ -621,6 +621,46 @@ export function MerchantsClient({ initialMerchants }: Props) {
   if (selectedMerchant) {
     const m = selectedMerchant
     const mSty = merchantStatusStyle(m.status)
+
+    const initials = m.dba.split(" ").filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase()
+    const AVATAR_COLORS = ["#6366f1","#8b5cf6","#ec4899","#f59e0b","#10b981","#06b6d4","#ef4444"]
+    const avatarColor = AVATAR_COLORS[m.dba.charCodeAt(0) % AVATAR_COLORS.length]
+    const riskColor = m.riskLevel === "High" ? "#ef4444" : m.riskLevel === "Medium" ? "#f59e0b" : "#10b981"
+
+    let activeSince = "—"
+    if (m.onboardedDate) {
+      const d = new Date(m.onboardedDate)
+      const now = new Date()
+      const mo = (now.getFullYear() - d.getFullYear()) * 12 + now.getMonth() - d.getMonth()
+      activeSince = mo >= 12 ? `${Math.floor(mo / 12)} yr` : `${mo} mo`
+    }
+
+    function FieldBox({ label, value, icon }: { label: string; value?: string; icon: string }) {
+      return (
+        <div style={{ background: "var(--bg3)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px 16px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 14, color: "var(--text3)" }}>{icon}</span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase" as const, letterSpacing: "0.07em" }}>{label}</span>
+          </div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{value || "—"}</div>
+        </div>
+      )
+    }
+
+    function SectionCard({ icon, iconColor, iconBg, title, children }: { icon: string; iconColor: string; iconBg: string; title: string; children: React.ReactNode }) {
+      return (
+        <div style={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, marginBottom: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 18, color: iconColor }}>{icon}</span>
+            </div>
+            <span style={{ fontSize: 15, fontWeight: 800, color: "var(--text)" }}>{title}</span>
+          </div>
+          {children}
+        </div>
+      )
+    }
+
     return (
       <div className="dash-layout">
         <button className="tkt-back-btn" onClick={() => setSelectedMerchant(null)}>
@@ -628,78 +668,138 @@ export function MerchantsClient({ initialMerchants }: Props) {
           Back to Merchants
         </button>
 
-        {/* Header card */}
-        <div className="tkt-detail-hero" style={{ marginBottom: 16 }}>
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text3)", marginBottom: 6 }}>MID: {m.mid}</div>
-              <h2 style={{ fontSize: 22, fontWeight: 900, color: "var(--text)", margin: "0 0 4px" }}>{m.dba}</h2>
-              <div style={{ fontSize: 13, color: "var(--text2)", fontWeight: 500 }}>{m.legalName}</div>
-            </div>
-            <div style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, padding: "5px 14px", borderRadius: 20, ...mSty }}>{m.status}</span>
-              <button className="crm-btn crm-btn-ghost" style={{ padding: "7px 14px", fontSize: 12 }} onClick={() => openEditModal(m)}>
-                <span className="material-symbols-outlined" style={{ fontSize: 15 }}>edit</span>
-                Edit
+        {/* ── Hero card ── */}
+        <div style={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 20, padding: "22px 28px", marginBottom: 16, display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap" }}>
+          {/* Avatar */}
+          <div style={{ width: 80, height: 80, borderRadius: 20, background: avatarColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, fontWeight: 900, color: "#fff", flexShrink: 0, letterSpacing: -1, boxShadow: `0 4px 20px ${avatarColor}55` }}>
+            {initials}
+          </div>
+
+          {/* Identity */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+              <span style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", letterSpacing: -0.5 }}>{m.dba}</span>
+              <button onClick={() => openEditModal(m)} style={{ width: 32, height: 32, borderRadius: 8, background: "var(--bg3)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 16, color: "var(--text3)" }}>edit</span>
+              </button>
+              <button style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(239,68,68,.08)", border: "1px solid rgba(239,68,68,.2)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 16, color: "#ef4444" }}>delete</span>
               </button>
             </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 11, fontWeight: 800, background: "rgba(99,102,241,.12)", color: "#6366f1", padding: "3px 10px", borderRadius: 20 }}>MID: {m.mid || "LEAD"}</span>
+              <span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--border)", flexShrink: 0, display: "inline-block" }} />
+              <span className="material-symbols-outlined" style={{ fontSize: 14, color: "var(--text3)" }}>corporate_fare</span>
+              <span style={{ fontSize: 13, color: "var(--text2)", fontWeight: 500 }}>{m.legalName || "—"}</span>
+            </div>
           </div>
-          <div className="tkt-detail-meta-grid" style={{ marginTop: 18 }}>
-            <div className="tkt-detail-meta-item"><div className="meta-label">Processor</div><div className="meta-val">{m.processor || "—"}</div></div>
-            <div className="tkt-detail-meta-item"><div className="meta-label">Agent</div><div className="meta-val">{m.salesRep || "—"}</div></div>
-            <div className="tkt-detail-meta-item"><div className="meta-label">Business Type</div><div className="meta-val">{m.bizType || "—"}</div></div>
-            <div className="tkt-detail-meta-item"><div className="meta-label">Onboarded</div><div className="meta-val">{m.onboardedDate || "—"}</div></div>
+
+          {/* Right stat boxes */}
+          <div style={{ display: "flex", alignItems: "stretch", background: "var(--bg3)", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden", flexShrink: 0 }}>
+            {[
+              { value: String(m.devices.length), label: "EQUIPMENT" },
+              { value: String(m.openTickets),    label: "OPEN TICKETS" },
+            ].map((s, i) => (
+              <div key={i} style={{ display: "flex", flexDirection: "column" as const, alignItems: "center", justifyContent: "center", padding: "14px 26px", borderRight: "1px solid var(--border)" }}>
+                <span style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", lineHeight: 1 }}>{s.value}</span>
+                <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase" as const, letterSpacing: "0.08em", marginTop: 4 }}>{s.label}</span>
+              </div>
+            ))}
+            <div style={{ display: "flex", flexDirection: "column" as const, alignItems: "center", justifyContent: "center", padding: "14px 26px" }}>
+              <select
+                value={m.status}
+                onChange={e => updateSelected(prev => ({ ...prev, status: e.target.value as MerchantStatus }))}
+                style={{ fontSize: 12, fontWeight: 800, padding: "5px 14px", borderRadius: 20, border: "none", cursor: "pointer", background: mSty.background, color: mSty.color, outline: "none", fontFamily: "inherit", appearance: "none" as const, textAlign: "center" as const }}
+              >
+                <option>Active</option><option>Inactive</option><option>Pending</option><option>Closed</option>
+              </select>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase" as const, letterSpacing: "0.08em", marginTop: 6 }}>STATUS</span>
+            </div>
           </div>
         </div>
 
-        {/* Tabs */}
+        {/* ── Tabs ── */}
         <div style={{ display: "flex", gap: 2, borderBottom: "2px solid var(--border)", marginBottom: 20, overflowX: "auto" }}>
           {(["overview", "equipment", "tickets", "documents", "notes"] as ActiveTab[]).map(tab => (
-            <button
-              key={tab}
-              className={`merch-tab${activeTab === tab ? " active" : ""}`}
-              onClick={() => setActiveTab(tab)}
-            >
+            <button key={tab} className={`merch-tab${activeTab === tab ? " active" : ""}`} onClick={() => setActiveTab(tab)}>
               {tab === "equipment" ? "Equipment & Services" : tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
           ))}
         </div>
 
-        {/* Overview */}
+        {/* ── Overview ── */}
         {activeTab === "overview" && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-            <InfoCard title="Owner / Principal" icon="person">
-              <InfoRow label="Name"  value={m.ownerName} />
-              <InfoRow label="Phone" value={m.ownerPhone} />
-              <InfoRow label="Email" value={m.ownerEmail} />
-            </InfoCard>
-            <InfoCard title="Business Information" icon="business">
-              <InfoRow label="DBA Name"  value={m.dba} />
-              <InfoRow label="Legal Name" value={m.legalName} />
-              <InfoRow label="MCC Code"  value={m.mcc} />
-              <InfoRow label="Phone"     value={m.bizPhone} />
-              <InfoRow label="Website"   value={m.website} />
-              <InfoRow label="Address"   value={m.address} />
-              <InfoRow label="Hours"     value={m.operatingHours} />
-            </InfoCard>
-            <InfoCard title="Agent Details" icon="support_agent">
-              <InfoRow label="Agent"  value={m.salesRep} />
-              <InfoRow label="Email"  value={m.agentEmail} />
-              <InfoRow label="Phone"  value={m.agentPhone} />
-              <InfoRow label="Code"   value={m.agentCode} />
-            </InfoCard>
-            <InfoCard title="Account Details" icon="settings">
-              <InfoRow label="Monthly Volume" value={m.monthlyVol != null ? `$${m.monthlyVol.toLocaleString()}` : undefined} />
-              <InfoRow label="Avg Ticket"     value={m.avgTicket != null ? `$${m.avgTicket.toFixed(2)}` : undefined} />
-              <InfoRow label="Risk Level"     value={m.riskLevel} />
-              <InfoRow label="Contract Term"  value={m.contractTerm} />
-              <InfoRow label="Billing Cycle"  value={m.billingCycle} />
-              <InfoRow label="Onboarded"      value={m.onboardedDate} />
-            </InfoCard>
+          <div>
+            {/* 4 stat cards */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 20 }}>
+              {[
+                { label: "MONTHLY VOLUME", value: m.monthlyVol != null ? `$${m.monthlyVol.toLocaleString()}` : "—", icon: "bar_chart",       iconColor: "#6366f1", iconBg: "rgba(99,102,241,.1)" },
+                { label: "AVG. TICKET",    value: m.avgTicket  != null ? `$${m.avgTicket.toFixed(2)}` : "—",    icon: "receipt_long",   iconColor: "#10b981", iconBg: "rgba(16,185,129,.1)" },
+                { label: "ACTIVE SINCE",   value: activeSince,                                                   icon: "hourglass_empty", iconColor: "var(--text2)", iconBg: "var(--bg3)" },
+                { label: "RISK LEVEL",     value: m.riskLevel ?? "—",                                           icon: "security",        iconColor: riskColor, iconBg: `${riskColor}1a`, valueColor: riskColor },
+              ].map((s, i) => (
+                <div key={i} style={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px 22px", display: "flex", alignItems: "center", gap: 16 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: s.iconBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 22, color: s.iconColor }}>{s.icon}</span>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 10, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase" as const, letterSpacing: "0.08em", marginBottom: 4 }}>{s.label}</div>
+                    <div style={{ fontSize: 22, fontWeight: 900, color: (s as { valueColor?: string }).valueColor ?? "var(--text)" }}>{s.value}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Owner */}
+            <SectionCard icon="person" iconColor="#10b981" iconBg="rgba(16,185,129,.12)" title="Owner">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                <FieldBox label="Owner Name"  value={m.ownerName}  icon="badge" />
+                <FieldBox label="Owner Phone" value={m.ownerPhone} icon="phone_iphone" />
+                <FieldBox label="Owner Email" value={m.ownerEmail} icon="mail" />
+              </div>
+            </SectionCard>
+
+            {/* Business Details */}
+            <SectionCard icon="business" iconColor="#6366f1" iconBg="rgba(99,102,241,.12)" title="Business Details">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 12 }}>
+                <FieldBox label="DBA Name"      value={m.dba}       icon="storefront" />
+                <FieldBox label="Legal Name"    value={m.legalName} icon="gavel" />
+                <FieldBox label="Business Type" value={m.bizType}   icon="category" />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: m.address || m.operatingHours ? 12 : 0 }}>
+                <FieldBox label="MCC Code"       value={m.mcc}     icon="tag" />
+                <FieldBox label="Business Phone" value={m.bizPhone} icon="call" />
+                <FieldBox label="Website"        value={m.website}  icon="language" />
+              </div>
+              {(m.address || m.operatingHours) && (
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <FieldBox label="Address"         value={m.address}        icon="location_on" />
+                  <FieldBox label="Operating Hours" value={m.operatingHours} icon="schedule" />
+                </div>
+              )}
+            </SectionCard>
+
+            {/* Agent & Account side by side */}
+            <SectionCard icon="support_agent" iconColor="#f59e0b" iconBg="rgba(245,158,11,.12)" title="Agent">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                <FieldBox label="Agent Name"  value={m.salesRep}   icon="person" />
+                <FieldBox label="Agent Code"  value={m.agentCode}  icon="badge" />
+                <FieldBox label="Agent Email" value={m.agentEmail} icon="mail" />
+                <FieldBox label="Agent Phone" value={m.agentPhone} icon="call" />
+              </div>
+            </SectionCard>
+            <SectionCard icon="settings" iconColor="#06b6d4" iconBg="rgba(6,182,212,.12)" title="Account Data">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                <FieldBox label="Processor"     value={m.processor}     icon="corporate_fare" />
+                <FieldBox label="Contract Term" value={m.contractTerm}  icon="contract" />
+                <FieldBox label="Billing Cycle" value={m.billingCycle}  icon="calendar_month" />
+                <FieldBox label="Onboarded"     value={m.onboardedDate} icon="event_available" />
+              </div>
+            </SectionCard>
           </div>
         )}
 
-        {/* Equipment */}
+        {/* ── Equipment ── */}
         {activeTab === "equipment" && (
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>

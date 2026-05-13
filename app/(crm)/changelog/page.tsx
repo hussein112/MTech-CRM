@@ -367,7 +367,7 @@ const ENTRIES: CLEntry[] = [
 
 export default function ChangelogPage() {
   return (
-    <div style={{ padding: "24px", maxWidth: 960, margin: "0 auto" }}>
+    <div style={{ padding: "24px" }}>
       <div style={{ marginBottom: 40, textAlign: "center" }}>
         <div style={{ width: 64, height: 64, background: "var(--accent-light)", borderRadius: 20, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
           <span className="material-symbols-outlined" style={{ fontSize: 32, color: "var(--accent)" }}>campaign</span>

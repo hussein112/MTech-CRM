@@ -316,7 +316,7 @@ export function TimecardClient() {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ fontFamily:"'Mulish',sans-serif", maxWidth:900, margin:"0 auto" }}>
+    <div style={{ fontFamily:"'Mulish',sans-serif", padding: 24 }}>
 
       {/* Toast */}
       {toast && (

@@ -1,0 +1,1 @@
+﻿app/(crm)/permissions/PermissionsClient.tsx(306,75): error TS18047: 'selId' is possibly 'null'.

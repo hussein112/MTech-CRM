@@ -3,6 +3,9 @@
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
+import Logo from "../../../public/logo_black.png"
+import LogoWhite from "../../../public/logo_white.png"
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface NotifItem {
@@ -121,11 +124,11 @@ export function Topbar({
         href="/dashboard"
         style={{ display: "flex", alignItems: "center", gap: 7, textDecoration: "none", flexShrink: 0 }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.svg" alt="MTech" style={{ height: 28, width: "auto", display: "block" }} />
-        <span style={{ fontWeight: 900, fontSize: 14, color: "var(--text)", fontFamily: "'Mulish', sans-serif", whiteSpace: "nowrap" }}>
-          <span style={{ color: "var(--accent-crm)" }}>MTech</span>Distributors
-        </span>
+        {darkMode ? 
+          <Image src={LogoWhite} alt="Mtech Distributors" width={200} height={20}  style={{pointerEvents: "none", userSelect: "none"}}/>
+        :
+          <Image src={Logo} alt="Mtech Distributors" width={200} height={20} style={{pointerEvents: "none", userSelect: "none"}} />
+        }
       </Link>
 
       {/* ── Search ── */}
@@ -161,7 +164,8 @@ export function Topbar({
         {/* ── Calendar shortcut ── */}
         <Link
           href="/calendar"
-          style={{ width: 36, height: 36, borderRadius: 9, background: "var(--bg3)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)", textDecoration: "none", flexShrink: 0 }}
+          className="rounded-full"
+          style={{ width: 36, height: 36, background: "var(--bg3)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)", textDecoration: "none", flexShrink: 0 }}
         >
           <span className="material-symbols-outlined" style={{ fontSize: 18 }}>calendar_month</span>
         </Link>
@@ -169,8 +173,9 @@ export function Topbar({
         {/* ── Notifications ── */}
         <div ref={notifRef} style={{ position: "relative" }}>
           <button
+            className="rounded-full"
             onClick={() => { setNotifOpen(o => !o); setUserOpen(false) }}
-            style={{ position: "relative", width: 36, height: 36, borderRadius: 9, background: "var(--bg3)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)", cursor: "pointer", flexShrink: 0 }}
+            style={{ position: "relative", width: 36, height: 36, background: "var(--bg3)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)", cursor: "pointer", flexShrink: 0 }}
           >
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>notifications</span>
             {unreadCount > 0 && (
@@ -296,8 +301,9 @@ export function Topbar({
         <div ref={userRef} style={{ position: "relative" }}>
           <button
             onClick={() => { setUserOpen(o => !o); setNotifOpen(false) }}
-            style={{ width: 36, height: 36, borderRadius: 9, background: "#5b3fde", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#fff", cursor: "pointer", border: "none", flexShrink: 0 }}
+            style={{ width: 36, height: 36, background: "var(--accent-crm)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#fff", cursor: "pointer", border: "none", flexShrink: 0 }}
             title={userName}
+            className="rounded-full"
           >
             {userInitials}
           </button>
@@ -342,10 +348,10 @@ export function Topbar({
               <div style={{ padding: "6px 8px" }}>
                 {[
                   { label: "My Tickets",  href: "/tickets",   icon: "confirmation_number" },
-                  { label: "Timecard",    href: "/timecard",  icon: "schedule"            },
                   { label: "My Tasks",    href: "/tasks",     icon: "task_alt"            },
                   { label: "Feedback",    href: "/feedback",  icon: "rate_review"         },
                   { label: "Profile",     href: "/profile",   icon: "person"              },
+                  { label: "Timecard",    href: "/timecard",  icon: "schedule"            },
                 ].map(item => (
                   <Link
                     key={item.href}

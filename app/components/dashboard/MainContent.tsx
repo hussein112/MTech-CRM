@@ -12,7 +12,7 @@ export function MainContent({ children }: { children: ReactNode }) {
         flex: 1,
         minWidth: 0,
         background: "var(--bg)",
-        marginLeft: collapsed ? 64 : 250,
+        marginLeft: collapsed ? 64 : 200,
         marginTop: 56,
         transition: "margin-left 0.22s ease",
         display: "flex",
