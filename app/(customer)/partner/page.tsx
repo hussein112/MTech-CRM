@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { PartnerClient } from "./PartnerClient"
-import "./partner.css"
 
 export const metadata: Metadata = {
   title: "Mtech Partner Portal",

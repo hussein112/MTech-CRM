@@ -391,8 +391,7 @@ export function StorageClient() {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div
-      style={{ fontFamily: "'Mulish', sans-serif" }}
+    <div className="dash-layout" style={{ fontFamily: "'Mulish', sans-serif" }}
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}

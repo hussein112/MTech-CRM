@@ -5,9 +5,9 @@ import type { Ticket } from "@/app/types/dashboard"
 
 // ─── Types ────────────────────────────────────────────
 export type MerchantStatus = "Active" | "Inactive" | "Pending" | "Closed"
-type DeviceStatus  = "Active" | "Offline" | "Damaged" | "Returned" | "TBD"
-type DeviceType    = "Terminal" | "POS" | "Printer" | "Pin Pad" | "Accessory" | "Service / Integration" | "Other"
-type RiskLevel     = "Low" | "Medium" | "High"
+type DeviceStatus = "Active" | "Offline" | "Damaged" | "Returned" | "TBD"
+type DeviceType = "Terminal" | "POS" | "Printer" | "Pin Pad" | "Accessory" | "Service / Integration" | "Other"
+type RiskLevel = "Low" | "Medium" | "High"
 
 export interface Device {
   id: string
@@ -59,6 +59,7 @@ export interface Merchant {
   website?: string
   address?: string
   operatingHours?: string
+  bizEmail?: string
   salesRep?: string
   agentEmail?: string
   agentPhone?: string
@@ -68,6 +69,8 @@ export interface Merchant {
   riskLevel?: RiskLevel
   contractTerm?: string
   billingCycle?: "Monthly" | "Quarterly" | "Annual"
+  pricing_type?: string
+  ebt?: string
   onboardedDate?: string
   devices: Device[]
   docs: MerchantDoc[]
@@ -78,30 +81,30 @@ export interface Merchant {
 
 // ─── Constants ────────────────────────────────────────
 const PROCESSORS = ["Fiserv", "TSYS", "Maverick", "Elavon"]
-const AGENTS     = ["Joan Huang", "Moe Kadi", "Zu Jia He Cen"]
+const AGENTS = ["Joan Huang", "Moe Kadi", "Zu Jia He Cen"]
 const DEVICE_BRANDS = ["Clover", "Dejavoo", "PAX", "Ingenico", "Verifone", "Square", "SwipeSimple", "Epson", "Star", "Other"]
-const DOC_TYPES  = ["FNS", "EIN", "Account Update Form", "Voided Check", "Bank Statement", "Contract", "Photo ID", "Application", "Other"]
-const ID_TYPES   = ["TID", "TPN", "EPI", "Other", "None"]
+const DOC_TYPES = ["FNS", "EIN", "Account Update Form", "Voided Check", "Bank Statement", "Contract", "Photo ID", "Application", "Other"]
+const ID_TYPES = ["TID", "TPN", "EPI", "Other", "None"]
 const PRINTER_CONNS = ["Ethernet (LAN)", "WiFi", "Bluetooth", "USB", "Other"]
 const MERCH_COLS = "120px minmax(0,1fr) minmax(0,1fr) 110px 90px minmax(0,1fr) 70px"
 
 function merchantStatusStyle(s: MerchantStatus) {
   const m: Record<MerchantStatus, { background: string; color: string }> = {
-    Active:   { background: "rgba(16,185,129,.12)",  color: "#10b981" },
+    Active: { background: "rgba(16,185,129,.12)", color: "#10b981" },
     Inactive: { background: "rgba(107,114,128,.12)", color: "#6b7280" },
-    Pending:  { background: "rgba(245,158,11,.12)",  color: "#f59e0b" },
-    Closed:   { background: "rgba(239,68,68,.12)",   color: "#ef4444" },
+    Pending: { background: "rgba(245,158,11,.12)", color: "#f59e0b" },
+    Closed: { background: "rgba(239,68,68,.12)", color: "#ef4444" },
   }
   return m[s]
 }
 
 function deviceStatusStyle(s: DeviceStatus) {
   const m: Record<DeviceStatus, { background: string; color: string }> = {
-    Active:   { background: "rgba(16,185,129,.12)",  color: "#10b981" },
-    Offline:  { background: "rgba(245,158,11,.12)",  color: "#f59e0b" },
-    Damaged:  { background: "rgba(239,68,68,.12)",   color: "#ef4444" },
+    Active: { background: "rgba(16,185,129,.12)", color: "#10b981" },
+    Offline: { background: "rgba(245,158,11,.12)", color: "#f59e0b" },
+    Damaged: { background: "rgba(239,68,68,.12)", color: "#ef4444" },
     Returned: { background: "rgba(107,114,128,.12)", color: "#6b7280" },
-    TBD:      { background: "rgba(99,102,241,.12)",  color: "#6366f1" },
+    TBD: { background: "rgba(99,102,241,.12)", color: "#6366f1" },
   }
   return m[s]
 }
@@ -185,29 +188,9 @@ function CField({ label, children }: { label: string; children: React.ReactNode 
 }
 
 function CRow({ children }: { children: React.ReactNode }) {
-  return <div className="crm-field-row">{children}</div>
+  return <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 14, marginBottom: 14 }}>{children}</div>
 }
 
-function InfoCard({ title, icon, children }: { title: string; icon: string; children: React.ReactNode }) {
-  return (
-    <div style={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 14, padding: "18px 20px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-        <span className="material-symbols-outlined" style={{ fontSize: 16, color: "var(--accent-crm)" }}>{icon}</span>
-        <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", textTransform: "uppercase" as const, letterSpacing: 0.5 }}>{title}</span>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column" as const, gap: 8 }}>{children}</div>
-    </div>
-  )
-}
-
-function InfoRow({ label, value }: { label: string; value?: string | number }) {
-  return (
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
-      <span style={{ fontSize: 12, color: "var(--text3)", fontWeight: 500, flexShrink: 0 }}>{label}</span>
-      <span style={{ fontSize: 12, color: "var(--text)", fontWeight: 600, textAlign: "right" as const }}>{value ?? "—"}</span>
-    </div>
-  )
-}
 
 function ModalHeader({ icon, title, subtitle, onClose }: { icon: string; title: string; subtitle: string; onClose: () => void }) {
   return (
@@ -371,37 +354,37 @@ export function MerchantsClient({ initialMerchants }: Props) {
   const [merchants, setMerchants] = useState(initialMerchants)
 
   // Filters
-  const [query,         setQuery]         = useState("")
-  const [statusFilt,    setStatusFilt]    = useState("")
-  const [agentFilt,     setAgentFilt]     = useState("")
+  const [query, setQuery] = useState("")
+  const [statusFilt, setStatusFilt] = useState("")
+  const [agentFilt, setAgentFilt] = useState("")
   const [processorFilt, setProcessorFilt] = useState("")
 
   // Navigation
   const [selectedMerchant, setSelectedMerchant] = useState<Merchant | null>(null)
-  const [selectedTicket,   setSelectedTicket]   = useState<Ticket | null>(null)
-  const [activeTab,        setActiveTab]        = useState<ActiveTab>("overview")
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null)
+  const [activeTab, setActiveTab] = useState<ActiveTab>("overview")
 
   // Modals
-  const [showNew,       setShowNew]       = useState(false)
-  const [showEdit,      setShowEdit]      = useState(false)
+  const [showNew, setShowNew] = useState(false)
+  const [showEdit, setShowEdit] = useState(false)
   const [showSelection, setShowSelection] = useState(false)
-  const [showDevice,    setShowDevice]    = useState(false)
+  const [showDevice, setShowDevice] = useState(false)
   const [showUploadDoc, setShowUploadDoc] = useState(false)
-  const [showEditDoc,   setShowEditDoc]   = useState(false)
-  const [showAddNote,   setShowAddNote]   = useState(false)
+  const [showEditDoc, setShowEditDoc] = useState(false)
+  const [showAddNote, setShowAddNote] = useState(false)
 
   // Forms
-  const [newForm,    setNewFormRaw]  = useState<MerchantForm>(EMPTY_FORM)
-  const [editForm,   setEditFormRaw] = useState<MerchantForm>(EMPTY_FORM)
+  const [newForm, setNewFormRaw] = useState<MerchantForm>(EMPTY_FORM)
+  const [editForm, setEditFormRaw] = useState<MerchantForm>(EMPTY_FORM)
   const [deviceForm, setDeviceFormRaw] = useState<DeviceForm>(EMPTY_DEVICE)
-  const [docForm,    setDocFormRaw]  = useState<DocForm>(EMPTY_DOC)
-  const [editDocId,  setEditDocId]   = useState("")
+  const [docForm, setDocFormRaw] = useState<DocForm>(EMPTY_DOC)
+  const [editDocId, setEditDocId] = useState("")
   const [editDocForm, setEditDocFormRaw] = useState<DocForm>(EMPTY_DOC)
   const [noteContent, setNoteContent] = useState("")
-  const [newError,    setNewError]   = useState("")
-  const [editError,   setEditError]  = useState("")
+  const [newError, setNewError] = useState("")
+  const [editError, setEditError] = useState("")
   const [deviceError, setDeviceError] = useState("")
-  const [docError,    setDocError]   = useState("")
+  const [docError, setDocError] = useState("")
 
   function setNew<K extends keyof MerchantForm>(k: K, v: MerchantForm[K]) { setNewFormRaw(f => ({ ...f, [k]: v })) }
   function setEdit<K extends keyof MerchantForm>(k: K, v: MerchantForm[K]) { setEditFormRaw(f => ({ ...f, [k]: v })) }
@@ -414,8 +397,8 @@ export function MerchantsClient({ initialMerchants }: Props) {
     const q = query.toLowerCase()
     return merchants.filter(m => {
       if (q && ![m.mid, m.dba, m.legalName, m.processor, m.salesRep ?? ""].some(s => s.toLowerCase().includes(q))) return false
-      if (statusFilt    && m.status    !== statusFilt)    return false
-      if (agentFilt     && m.salesRep  !== agentFilt)     return false
+      if (statusFilt && m.status !== statusFilt) return false
+      if (agentFilt && m.salesRep !== agentFilt) return false
       if (processorFilt && m.processor !== processorFilt) return false
       return true
     })
@@ -450,8 +433,8 @@ export function MerchantsClient({ initialMerchants }: Props) {
   }
 
   function createMerchant() {
-    if (!newForm.dba.trim())  { setNewError("DBA Name is required."); return }
-    if (!newForm.mid.trim())  { setNewError("MID is required."); return }
+    if (!newForm.dba.trim()) { setNewError("DBA Name is required."); return }
+    if (!newForm.mid.trim()) { setNewError("MID is required."); return }
     const newM: Merchant = {
       id: `M-${String(merchants.length + 1).padStart(3, "0")}`,
       mid: newForm.mid, dba: newForm.dba, legalName: newForm.legalName,
@@ -623,7 +606,7 @@ export function MerchantsClient({ initialMerchants }: Props) {
     const mSty = merchantStatusStyle(m.status)
 
     const initials = m.dba.split(" ").filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase()
-    const AVATAR_COLORS = ["#6366f1","#8b5cf6","#ec4899","#f59e0b","#10b981","#06b6d4","#ef4444"]
+    const AVATAR_COLORS = ["#6366f1", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981", "#06b6d4", "#ef4444"]
     const avatarColor = AVATAR_COLORS[m.dba.charCodeAt(0) % AVATAR_COLORS.length]
     const riskColor = m.riskLevel === "High" ? "#ef4444" : m.riskLevel === "Medium" ? "#f59e0b" : "#10b981"
 
@@ -637,20 +620,20 @@ export function MerchantsClient({ initialMerchants }: Props) {
 
     function FieldBox({ label, value, icon }: { label: string; value?: string; icon: string }) {
       return (
-        <div style={{ background: "var(--bg3)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px 16px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 14, color: "var(--text3)" }}>{icon}</span>
-            <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase" as const, letterSpacing: "0.07em" }}>{label}</span>
+        <div className="flex gap-5 items-center" style={{ border: "1px solid var(--border)", borderRadius: 12, padding: "14px 16px" }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 25, color: "var(--accent-crm)" }}>{icon}</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase" as const, letterSpacing: "0.07em" }}>{label}</span>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text)" }}>{value || "—"}</div>
           </div>
-          <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{value || "—"}</div>
         </div>
       )
     }
 
     function SectionCard({ icon, iconColor, iconBg, title, children }: { icon: string; iconColor: string; iconBg: string; title: string; children: React.ReactNode }) {
       return (
-        <div style={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, marginBottom: 16 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+        <div style={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 16, marginBottom: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "20px 24px", backgroundColor: "var(--bg3)", borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <span className="material-symbols-outlined" style={{ fontSize: 18, color: iconColor }}>{icon}</span>
             </div>
@@ -698,7 +681,7 @@ export function MerchantsClient({ initialMerchants }: Props) {
           <div style={{ display: "flex", alignItems: "stretch", background: "var(--bg3)", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden", flexShrink: 0 }}>
             {[
               { value: String(m.devices.length), label: "EQUIPMENT" },
-              { value: String(m.openTickets),    label: "OPEN TICKETS" },
+              { value: String(m.openTickets), label: "OPEN TICKETS" },
             ].map((s, i) => (
               <div key={i} style={{ display: "flex", flexDirection: "column" as const, alignItems: "center", justifyContent: "center", padding: "14px 26px", borderRight: "1px solid var(--border)" }}>
                 <span style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", lineHeight: 1 }}>{s.value}</span>
@@ -719,7 +702,7 @@ export function MerchantsClient({ initialMerchants }: Props) {
         </div>
 
         {/* ── Tabs ── */}
-        <div style={{ display: "flex", gap: 2, borderBottom: "2px solid var(--border)", marginBottom: 20, overflowX: "auto" }}>
+        <div style={{ display: "flex", gap: 2, borderBottom: "2px solid var(--border)", marginBottom: 20 }}>
           {(["overview", "equipment", "tickets", "documents", "notes"] as ActiveTab[]).map(tab => (
             <button key={tab} className={`merch-tab${activeTab === tab ? " active" : ""}`} onClick={() => setActiveTab(tab)}>
               {tab === "equipment" ? "Equipment & Services" : tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -731,12 +714,12 @@ export function MerchantsClient({ initialMerchants }: Props) {
         {activeTab === "overview" && (
           <div>
             {/* 4 stat cards */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 20 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, marginBottom: 20 }}>
               {[
-                { label: "MONTHLY VOLUME", value: m.monthlyVol != null ? `$${m.monthlyVol.toLocaleString()}` : "—", icon: "bar_chart",       iconColor: "#6366f1", iconBg: "rgba(99,102,241,.1)" },
-                { label: "AVG. TICKET",    value: m.avgTicket  != null ? `$${m.avgTicket.toFixed(2)}` : "—",    icon: "receipt_long",   iconColor: "#10b981", iconBg: "rgba(16,185,129,.1)" },
-                { label: "ACTIVE SINCE",   value: activeSince,                                                   icon: "hourglass_empty", iconColor: "var(--text2)", iconBg: "var(--bg3)" },
-                { label: "RISK LEVEL",     value: m.riskLevel ?? "—",                                           icon: "security",        iconColor: riskColor, iconBg: `${riskColor}1a`, valueColor: riskColor },
+                { label: "MONTHLY VOLUME", value: m.monthlyVol != null ? `$${m.monthlyVol.toLocaleString()}` : "—", icon: "bar_chart", iconColor: "#6366f1", iconBg: "rgba(99,102,241,.1)" },
+                { label: "AVG. TICKET", value: m.avgTicket != null ? `$${m.avgTicket.toFixed(2)}` : "—", icon: "receipt_long", iconColor: "#10b981", iconBg: "rgba(16,185,129,.1)" },
+                { label: "ACTIVE SINCE", value: activeSince, icon: "hourglass_empty", iconColor: "var(--text2)", iconBg: "var(--bg3)" },
+                { label: "RISK LEVEL", value: m.riskLevel ?? "—", icon: "security", iconColor: riskColor, iconBg: `${riskColor}1a`, valueColor: riskColor },
               ].map((s, i) => (
                 <div key={i} style={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px 22px", display: "flex", alignItems: "center", gap: 16 }}>
                   <div style={{ width: 44, height: 44, borderRadius: 12, background: s.iconBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -751,49 +734,59 @@ export function MerchantsClient({ initialMerchants }: Props) {
             </div>
 
             {/* Owner */}
-            <SectionCard icon="person" iconColor="#10b981" iconBg="rgba(16,185,129,.12)" title="Owner">
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-                <FieldBox label="Owner Name"  value={m.ownerName}  icon="badge" />
+            <SectionCard icon="person" iconColor="#fff" iconBg="#10b981" title="Owner">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, padding: "16px 25px" }}>
+                <FieldBox label="Owner Name" value={m.ownerName} icon="badge" />
                 <FieldBox label="Owner Phone" value={m.ownerPhone} icon="phone_iphone" />
                 <FieldBox label="Owner Email" value={m.ownerEmail} icon="mail" />
               </div>
             </SectionCard>
 
             {/* Business Details */}
-            <SectionCard icon="business" iconColor="#6366f1" iconBg="rgba(99,102,241,.12)" title="Business Details">
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 12 }}>
-                <FieldBox label="DBA Name"      value={m.dba}       icon="storefront" />
-                <FieldBox label="Legal Name"    value={m.legalName} icon="gavel" />
-                <FieldBox label="Business Type" value={m.bizType}   icon="category" />
+            <SectionCard icon="business" iconColor="#fff" iconBg="var(--accent-crm)" title="Business Details">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, padding: "16px 25px 0 25px", marginBottom: 12 }}>
+                <FieldBox label="DBA Name" value={m.dba} icon="storefront" />
+                <FieldBox label="Legal Name" value={m.legalName} icon="gavel" />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: m.address || m.operatingHours ? 12 : 0 }}>
-                <FieldBox label="MCC Code"       value={m.mcc}     icon="tag" />
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, padding: "5px 25px", marginBottom: 12 }}>
+                <FieldBox label="MID" value={m.mid} icon="tag" />
+                <FieldBox label="Business Type" value={m.bizType} icon="category" />
+                <FieldBox label="MCC Code" value={m.mcc} icon="qr_code_scanner" />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, padding: "5px 25px", marginBottom: 12 }}>
+                <FieldBox label="Processor" value={m.processor} icon="language" />
+                <FieldBox label="Website" value={m.website} icon="language" />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, padding: "5px 25px", marginBottom: 12 }}>
                 <FieldBox label="Business Phone" value={m.bizPhone} icon="call" />
-                <FieldBox label="Website"        value={m.website}  icon="language" />
+                <FieldBox label="Operating Hours" value={m.operatingHours} icon="schedule" />
               </div>
               {(m.address || m.operatingHours) && (
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                  <FieldBox label="Address"         value={m.address}        icon="location_on" />
-                  <FieldBox label="Operating Hours" value={m.operatingHours} icon="schedule" />
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, padding: "0 25px 16px 25px" }}>
+                  <FieldBox label="Contact Email" value={m.bizEmail} icon="mail" />
+                  <FieldBox label="Address" value={m.address} icon="location_on" />
                 </div>
               )}
+
             </SectionCard>
 
-            {/* Agent & Account side by side */}
-            <SectionCard icon="support_agent" iconColor="#f59e0b" iconBg="rgba(245,158,11,.12)" title="Agent">
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-                <FieldBox label="Agent Name"  value={m.salesRep}   icon="person" />
-                <FieldBox label="Agent Code"  value={m.agentCode}  icon="badge" />
+            {/* Agent */}
+            <SectionCard icon="support_agent" iconColor="#fff" iconBg="#f59e0b" title="Agent">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, padding: "32px 25px" }}>
+                <FieldBox label="Agent Name" value={m.salesRep} icon="id_card" />
                 <FieldBox label="Agent Email" value={m.agentEmail} icon="mail" />
                 <FieldBox label="Agent Phone" value={m.agentPhone} icon="call" />
+                <FieldBox label="Agent Code" value={m.agentCode} icon="tag" />
               </div>
             </SectionCard>
-            <SectionCard icon="settings" iconColor="#06b6d4" iconBg="rgba(6,182,212,.12)" title="Account Data">
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-                <FieldBox label="Processor"     value={m.processor}     icon="corporate_fare" />
-                <FieldBox label="Contract Term" value={m.contractTerm}  icon="contract" />
-                <FieldBox label="Billing Cycle" value={m.billingCycle}  icon="calendar_month" />
-                <FieldBox label="Onboarded"     value={m.onboardedDate} icon="event_available" />
+            {/* Account Data */}
+            <SectionCard icon="settings" iconColor="#fff" iconBg="var(--accent-crm)" title="Account Data">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, padding: "32px 25px" }}>
+                <FieldBox label="Onboarded" value={m.onboardedDate} icon="calendar_today" />
+                <FieldBox label="Contract Term" value={m.contractTerm} icon="article" />
+                <FieldBox label="Billing Cycle" value={m.billingCycle} icon="autorenew" />
+                <FieldBox label="Pricing Type" value={m.pricing_type} icon="sell" />
+                <FieldBox label="EBT" value={m.ebt} icon="credit_card" />
               </div>
             </SectionCard>
           </div>
@@ -968,7 +961,7 @@ export function MerchantsClient({ initialMerchants }: Props) {
         {showSelection && (
           <ModalWrap onClose={() => setShowSelection(false)}>
             <ModalHeader icon="category" title="Add Configuration" subtitle="What would you like to add?" onClose={() => setShowSelection(false)} />
-            <div style={{ padding: 28, display: "flex", gap: 14 }}>
+            <div style={{ padding: 28, display: "flex", gap: 14, flexWrap: "wrap" }}>
               {[
                 { icon: "point_of_sale", label: "Hardware Device", desc: "Terminal, POS System,\nPin Pad, Register." },
                 { icon: "hub", label: "Software & Services", desc: "Online Ordering, Delivery,\nAnalytics, Accounting." },
@@ -1003,7 +996,7 @@ export function MerchantsClient({ initialMerchants }: Props) {
                 </CField>
                 <CField label="Type">
                   <select value={deviceForm.type} onChange={e => setDev("type", e.target.value as DeviceType)}>
-                    {["Terminal","POS","Printer","Pin Pad","Accessory","Service / Integration","Other"].map(t => <option key={t}>{t}</option>)}
+                    {["Terminal", "POS", "Printer", "Pin Pad", "Accessory", "Service / Integration", "Other"].map(t => <option key={t}>{t}</option>)}
                   </select>
                 </CField>
               </CRow>
@@ -1037,7 +1030,7 @@ export function MerchantsClient({ initialMerchants }: Props) {
               <CRow>
                 <CField label="Status">
                   <select value={deviceForm.status} onChange={e => setDev("status", e.target.value as DeviceStatus)}>
-                    {["Active","Offline","Damaged","Returned","TBD"].map(s => <option key={s}>{s}</option>)}
+                    {["Active", "Offline", "Damaged", "Returned", "TBD"].map(s => <option key={s}>{s}</option>)}
                   </select>
                 </CField>
                 <CField label="Active Date"><input value={deviceForm.activeDate} placeholder="e.g. Mar 15, 2024" onChange={e => setDev("activeDate", e.target.value)} autoComplete="off" /></CField>
@@ -1200,7 +1193,7 @@ export function MerchantsClient({ initialMerchants }: Props) {
                 onKeyDown={e => e.key === "Enter" && openDetail(m)}
                 style={{ display: "grid", gridTemplateColumns: MERCH_COLS, gap: 12, padding: "12px 16px", borderBottom: "1px solid var(--border)", alignItems: "center", animation: "fadeIn 0.3s ease both", animationDelay: `${i * 30}ms` }}
               >
-                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text3)", fontFamily: "monospace" }}>{m.mid}</div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--accent-crm)", fontFamily: "monospace" }}>{m.mid}</div>
                 <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.dba}</div>
                 <div style={{ fontSize: 12, color: "var(--text2)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.legalName}</div>
                 <div style={{ fontSize: 12, color: "var(--text2)" }}>{m.processor || "—"}</div>

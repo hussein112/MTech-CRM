@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { label: "Leads", href: "/leads", icon: "groups" },
   { label: "Tickets", href: "/tickets", icon: "confirmation_number" },
   {
-    label: "Onboarding", href: "/onboarding/merchants", icon: "article", activeMatch: "/onboarding", children: [
+    label: "Onboarding", href: "", icon: "article", activeMatch: "/onboarding", children: [
       { label: "Merchants", href: "/onboarding/merchants" },
       { label: "Agents", href: "/onboarding/agents" },
     ]
@@ -113,7 +113,7 @@ export function Sidebar() {
                 >
                   {hasChildren ? (
                     <>
-                      <Link href={item.href} onClick={e => e.stopPropagation()} style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, textDecoration: "none", minWidth: 0 }}>
+                      <Link href={item.href} onClick={() => setExpanded(isExpanded ? null : item.label)} style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, textDecoration: "none", minWidth: 0 }}>
                         <span className="material-symbols-outlined" style={{ fontSize: 18, color: isActive ? "var(--accent-crm)" : "var(--text2)", flexShrink: 0 }}>{item.icon}</span>
                         <span style={{ flex: 1, fontSize: 13, fontWeight: isActive ? 700 : 600, color: isActive ? "var(--accent-crm)" : "var(--text2)" }}>{item.label}</span>
                       </Link>
@@ -157,7 +157,7 @@ export function Sidebar() {
         <div style={{ padding: "12px 8px", borderTop: "1px solid var(--border)" }}>
           {collapsed ? (
             <Link
-              href="/tickets/new"
+              href="/tickets?new=true"
               style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 40, background: "var(--accent-crm)", color: "#fff", borderRadius: 10, textDecoration: "none", transition: ".15s" }}
               onMouseEnter={e => openTooltip("New Ticket", e)}
               onMouseLeave={() => setTooltip(null)}
@@ -166,7 +166,7 @@ export function Sidebar() {
             </Link>
           ) : (
             <Link
-              href="/tickets/new"
+              href="/tickets?new=true"
               style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "var(--accent-crm)", color: "#fff", borderRadius: 10, padding: "10px 0", fontSize: 13, fontWeight: 800, textDecoration: "none", transition: ".15s" }}
             >
               <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>

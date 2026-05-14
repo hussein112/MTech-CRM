@@ -1,4 +1,4 @@
-@import "../globals.css";
+@import "tailwindcss";
 
 #viewDashboard {
   font-family: 'Manrope', sans-serif;
@@ -4195,6 +4195,7 @@ html[data-theme="dark"] .rc-rating.red {
   cursor: pointer;
   user-select: none;
   flex-direction: column;
+  padding-left: 36px;
 }
 
 .perm-check-circle {

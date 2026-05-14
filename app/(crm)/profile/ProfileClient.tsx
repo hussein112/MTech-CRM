@@ -6,24 +6,24 @@ import Link from "next/link"
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const USER = {
-  name:        "Hussein Khalil",
-  initials:    "HK",
-  role:        "Admin",
-  email:       "husseinkhalil@mtech-dist.com",
-  phone:       "+961 71 248 017",
-  department:  "Operations",
-  location:    "Beirut, Lebanon",
-  timezone:    "Asia/Beirut (GMT+3)",
-  joinDate:    "March 12, 2024",
-  bio:         "CRM administrator overseeing merchant onboarding, ticket resolution, and platform operations for MTech Distributors.",
+  name: "Hussein Khalil",
+  initials: "HK",
+  role: "Admin",
+  email: "husseinkhalil@mtech-dist.com",
+  phone: "+961 71 248 017",
+  department: "Operations",
+  location: "Beirut, Lebanon",
+  timezone: "Asia/Beirut (GMT+3)",
+  joinDate: "March 12, 2024",
+  bio: "CRM administrator overseeing merchant onboarding, ticket resolution, and platform operations for MTech Distributors.",
   avatarColor: "#5b3fde",
 }
 
 const STATS = [
-  { label: "Open Tickets",    value: "12",  icon: "confirmation_number", color: "#6366f1" },
-  { label: "Total Resolved",  value: "84",  icon: "check_circle",        color: "#10b981" },
-  { label: "Tasks Completed", value: "37",  icon: "task_alt",            color: "#f59e0b" },
-  { label: "Attendance Rate", value: "96%", icon: "event_available",     color: "#06b6d4" },
+  { label: "Open Tickets", value: "12", icon: "confirmation_number", color: "#6366f1" },
+  { label: "Total Resolved", value: "84", icon: "check_circle", color: "#10b981" },
+  { label: "Tasks Completed", value: "37", icon: "task_alt", color: "#f59e0b" },
+  { label: "Attendance Rate", value: "96%", icon: "event_available", color: "#06b6d4" },
 ]
 
 const SKILLS = [
@@ -32,23 +32,21 @@ const SKILLS = [
 ]
 
 const ACTIVITY = [
-  { icon: "check_circle",        color: "#10b981", text: "Resolved ticket #4521 — Chargeback dispute",         time: "2h ago"    },
-  { icon: "storefront",          color: "#6366f1", text: "Approved TechStore POS merchant onboarding",         time: "4h ago"    },
-  { icon: "task_alt",            color: "#f59e0b", text: "Completed task: Review merchant ID #8821 docs",      time: "Yesterday" },
-  { icon: "confirmation_number", color: "#8b5cf6", text: "Created ticket #4588 — API integration issue",      time: "Yesterday" },
-  { icon: "shield_person",       color: "#06b6d4", text: "Updated role permissions for Agents group",          time: "2d ago"    },
-  { icon: "person_add",          color: "#f43f5e", text: "Added user Diana Chen to the platform",              time: "3d ago"    },
-  { icon: "storefront",          color: "#10b981", text: "Flagged FastFood Co — missing bank statements",      time: "4d ago"    },
+  { icon: "check_circle", color: "#10b981", text: "Resolved ticket #4521 — Chargeback dispute", time: "2h ago" },
+  { icon: "storefront", color: "#6366f1", text: "Approved TechStore POS merchant onboarding", time: "4h ago" },
+  { icon: "task_alt", color: "#f59e0b", text: "Completed task: Review merchant ID #8821 docs", time: "Yesterday" },
+  { icon: "confirmation_number", color: "#8b5cf6", text: "Created ticket #4588 — API integration issue", time: "Yesterday" },
+  { icon: "shield_person", color: "#06b6d4", text: "Updated role permissions for Agents group", time: "2d ago" },
 ]
 
 // ── Field component ───────────────────────────────────────────────────────────
 
 function InfoField({ label, value, editing, onChange, type = "text", textarea = false }: {
-  label:    string
-  value:    string
-  editing:  boolean
+  label: string
+  value: string
+  editing: boolean
   onChange: (v: string) => void
-  type?:    string
+  type?: string
   textarea?: boolean
 }) {
   const inputSt: React.CSSProperties = {
@@ -65,11 +63,11 @@ function InfoField({ label, value, editing, onChange, type = "text", textarea = 
       {editing ? (
         textarea
           ? <textarea rows={4} value={value} onChange={e => onChange(e.target.value)} style={{ ...inputSt, lineHeight: 1.5 }}
-              onFocus={e => (e.currentTarget.style.borderColor = "var(--accent-crm)")}
-              onBlur={e  => (e.currentTarget.style.borderColor = "var(--border)")} />
+            onFocus={e => (e.currentTarget.style.borderColor = "var(--accent-crm)")}
+            onBlur={e => (e.currentTarget.style.borderColor = "var(--border)")} />
           : <input type={type} value={value} onChange={e => onChange(e.target.value)} style={inputSt}
-              onFocus={e => (e.currentTarget.style.borderColor = "var(--accent-crm)")}
-              onBlur={e  => (e.currentTarget.style.borderColor = "var(--border)")} />
+            onFocus={e => (e.currentTarget.style.borderColor = "var(--accent-crm)")}
+            onBlur={e => (e.currentTarget.style.borderColor = "var(--border)")} />
       ) : (
         <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", padding: "10px 0", borderBottom: "1px solid var(--border)", lineHeight: 1.5 }}>
           {value || <span style={{ color: "var(--text3)" }}>—</span>}
@@ -115,30 +113,30 @@ function Toggle({ on, onChange, label, sub }: { on: boolean; onChange: (v: boole
 
 export function ProfileClient() {
   // Personal info edit state
-  const [editing,    setEditing]    = useState(false)
-  const [name,       setName]       = useState(USER.name)
-  const [email,      setEmail]      = useState(USER.email)
-  const [phone,      setPhone]      = useState(USER.phone)
-  const [dept,       setDept]       = useState(USER.department)
-  const [location,   setLocation]   = useState(USER.location)
-  const [bio,        setBio]        = useState(USER.bio)
+  const [editing, setEditing] = useState(false)
+  const [name, setName] = useState(USER.name)
+  const [email, setEmail] = useState(USER.email)
+  const [phone, setPhone] = useState(USER.phone)
+  const [dept, setDept] = useState(USER.department)
+  const [location, setLocation] = useState(USER.location)
+  const [bio, setBio] = useState(USER.bio)
 
   // Password change state
-  const [pwOpen,     setPwOpen]     = useState(false)
-  const [curPw,      setCurPw]      = useState("")
-  const [newPw,      setNewPw]      = useState("")
-  const [confPw,     setConfPw]     = useState("")
-  const [pwErr,      setPwErr]      = useState("")
+  const [pwOpen, setPwOpen] = useState(false)
+  const [curPw, setCurPw] = useState("")
+  const [newPw, setNewPw] = useState("")
+  const [confPw, setConfPw] = useState("")
+  const [pwErr, setPwErr] = useState("")
 
   // Saved-name snapshot for cancel
   const [saved, setSaved] = useState({ name, email, phone, dept, location, bio })
 
   // Preferences toggles
-  const [notifEmail,   setNotifEmail]   = useState(true)
+  const [notifEmail, setNotifEmail] = useState(true)
   const [notifBrowser, setNotifBrowser] = useState(true)
-  const [notifTasks,   setNotifTasks]   = useState(true)
-  const [notifMentions,setNotifMentions]= useState(true)
-  const [twoFA,        setTwoFA]        = useState(false)
+  const [notifTasks, setNotifTasks] = useState(true)
+  const [notifMentions, setNotifMentions] = useState(true)
+  const [twoFA, setTwoFA] = useState(false)
 
   // Toast
   const [toast, setToast] = useState<string | null>(null)
@@ -168,9 +166,9 @@ export function ProfileClient() {
   }
 
   function submitPassword() {
-    if (!curPw)              return setPwErr("Enter your current password.")
-    if (newPw.length < 8)   return setPwErr("New password must be at least 8 characters.")
-    if (newPw !== confPw)    return setPwErr("Passwords don't match.")
+    if (!curPw) return setPwErr("Enter your current password.")
+    if (newPw.length < 8) return setPwErr("New password must be at least 8 characters.")
+    if (newPw !== confPw) return setPwErr("Passwords don't match.")
     setPwErr(""); setCurPw(""); setNewPw(""); setConfPw("")
     setPwOpen(false)
     showToast("Password changed successfully")
@@ -269,8 +267,8 @@ export function ProfileClient() {
                   borderRadius: 16, padding: "16px 20px", textAlign: "center", minWidth: 100,
                   transition: "transform 0.2s", cursor: "default"
                 }}
-                onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-2px)")}
-                onMouseLeave={e => (e.currentTarget.style.transform = "none")}
+                  onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-2px)")}
+                  onMouseLeave={e => (e.currentTarget.style.transform = "none")}
                 >
                   <div style={{ width: 36, height: 36, borderRadius: 10, background: s.color + "22", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px" }}>
                     <span className="material-symbols-outlined" style={{ fontSize: 18, color: s.color }}>{s.icon}</span>
@@ -284,14 +282,13 @@ export function ProfileClient() {
           </div>
         </div>
 
-        {/* ── Main two-column layout ───────────────────────────────────────────────── */}
-        <div className="dash-grid dash-grid-2-1">
+        {/* ── Main layout rows ───────────────────────────────────────────────── */}
+        <div className="dash-rows">
 
-          {/* Left column (Form / Settings) */}
-          <div className="dash-rows">
-
+          {/* Row 1: Personal Info & Recent Activity */}
+          <div className="dash-grid dash-grid-2-1">
             {/* Personal info */}
-            <div className="dash-card-v2">
+            <div className="dash-card-v2" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
                 <CardTitle icon="person">Personal Information</CardTitle>
                 {!editing ? (
@@ -316,18 +313,83 @@ export function ProfileClient() {
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "0 24px" }}>
-                <InfoField label="Display Name" value={name}     editing={editing} onChange={setName} />
-                <InfoField label="Email"        value={email}    editing={editing} onChange={setEmail}    type="email" />
-                <InfoField label="Phone"        value={phone}    editing={editing} onChange={setPhone}    type="tel" />
-                <InfoField label="Department"   value={dept}     editing={editing} onChange={setDept} />
-                <InfoField label="Location"     value={location} editing={editing} onChange={setLocation} />
-                <InfoField label="Timezone"     value={USER.timezone} editing={false}  onChange={() => {}} />
+                <InfoField label="Display Name" value={name} editing={editing} onChange={setName} />
+                <InfoField label="Email" value={email} editing={editing} onChange={setEmail} type="email" />
+                <InfoField label="Phone" value={phone} editing={editing} onChange={setPhone} type="tel" />
+                <InfoField label="Department" value={dept} editing={editing} onChange={setDept} />
+                <InfoField label="Location" value={location} editing={editing} onChange={setLocation} />
+                <InfoField label="Timezone" value={USER.timezone} editing={false} onChange={() => { }} />
               </div>
               <InfoField label="Bio" value={bio} editing={editing} onChange={setBio} textarea />
             </div>
 
+            {/* Recent activity */}
+            <div className="dash-card-v2" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+              <CardTitle icon="history">Recent Activity</CardTitle>
+              <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                {ACTIVITY.map((a, i) => (
+                  <div key={i} style={{ display: "flex", gap: 12, paddingBottom: 16, marginBottom: 16, borderBottom: i < ACTIVITY.length - 1 ? "1px solid var(--border)" : "none" }}>
+                    <div style={{ width: 32, height: 32, borderRadius: 10, background: a.color + "22", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
+                      <span className="material-symbols-outlined" style={{ fontSize: 16, color: a.color }}>{a.icon}</span>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", lineHeight: 1.5 }}>{a.text}</div>
+                      <div style={{ fontSize: 11, fontWeight: 500, color: "var(--text3)", marginTop: 4 }}>{a.time}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Row 2: Notifications & Quick Links */}
+          <div className="dash-grid dash-grid-2-1">
+            {/* Notification preferences */}
+            <div className="dash-card-v2" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+              <CardTitle icon="notifications">Notifications</CardTitle>
+              <Toggle on={notifEmail} onChange={setNotifEmail} label="Email Notifications" sub="Receive updates via email" />
+              <Toggle on={notifBrowser} onChange={setNotifBrowser} label="Browser Notifications" sub="Desktop push alerts" />
+              <Toggle on={notifTasks} onChange={setNotifTasks} label="Task Reminders" sub="Due dates and assignments" />
+              <Toggle on={notifMentions} onChange={setNotifMentions} label="Mentions" sub="When you're @mentioned" />
+            </div>
+
+            {/* Quick links */}
+            <div className="dash-card-v2" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+              <CardTitle icon="apps">Quick Links</CardTitle>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
+                {[
+                  { label: "My Tickets", href: "/tickets?assigned=me", icon: "confirmation_number", color: "#6366f1" },
+                  { label: "My Tasks", href: "/tasks?assigned=me", icon: "task_alt", color: "#f59e0b" },
+                  { label: "Timecard", href: "/timecard", icon: "schedule", color: "#10b981" },
+                  { label: "Feedback", href: "/feedback", icon: "forum", color: "#8b5cf6" },
+                ].map(item => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 12,
+                      padding: "14px 16px", borderRadius: 12,
+                      background: "var(--bg3)", border: "1px solid var(--border)",
+                      textDecoration: "none", color: "var(--text)", transition: "all .15s",
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = item.color; (e.currentTarget as HTMLElement).style.background = item.color + "11" }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLElement).style.background = "var(--bg3)" }}
+                  >
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: item.color + "22", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <span className="material-symbols-outlined" style={{ fontSize: 18, color: item.color }}>{item.icon}</span>
+                    </div>
+                    <span style={{ fontSize: 14, fontWeight: 700 }}>{item.label}</span>
+                    <span className="material-symbols-outlined" style={{ fontSize: 16, color: "var(--text3)", marginLeft: "auto", transition: "transform .15s" }}>chevron_right</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Row 3: Account Security & Skills */}
+          <div className="dash-grid dash-grid-2-1">
             {/* Account security */}
-            <div className="dash-card-v2">
+            <div className="dash-card-v2" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
               <CardTitle icon="security">Account Security</CardTitle>
 
               <div style={{ marginBottom: 20 }}>
@@ -352,14 +414,14 @@ export function ProfileClient() {
                     )}
                     <input type="password" placeholder="Current password" value={curPw} onChange={e => setCurPw(e.target.value)} style={pwInputSt}
                       onFocus={e => (e.currentTarget.style.borderColor = "var(--accent-crm)")}
-                      onBlur={e  => (e.currentTarget.style.borderColor = "var(--border)")} />
+                      onBlur={e => (e.currentTarget.style.borderColor = "var(--border)")} />
                     <input type="password" placeholder="New password" value={newPw} onChange={e => setNewPw(e.target.value)} style={pwInputSt}
                       onFocus={e => (e.currentTarget.style.borderColor = "var(--accent-crm)")}
-                      onBlur={e  => (e.currentTarget.style.borderColor = "var(--border)")} />
+                      onBlur={e => (e.currentTarget.style.borderColor = "var(--border)")} />
                     <input type="password" placeholder="Confirm new password" value={confPw} onChange={e => setConfPw(e.target.value)} style={pwInputSt}
                       onFocus={e => (e.currentTarget.style.borderColor = "var(--accent-crm)")}
-                      onBlur={e  => (e.currentTarget.style.borderColor = "var(--border)")} />
-                    <button onClick={submitPassword} className="crm-btn" style={{ padding: "10px 0", background: "var(--accent-crm)", border: "none", color: "#fff", fontSize: 13, borderRadius: 10, width: "100%", marginTop: 4, cursor: "pointer", fontFamily: "inherit", fontWeight: 700 }}>
+                      onBlur={e => (e.currentTarget.style.borderColor = "var(--border)")} />
+                    <button onClick={submitPassword} className="crm-btn" style={{ padding: "10px", background: "var(--accent-crm)", border: "none", color: "#fff", fontSize: 13, borderRadius: 10, width: "100%", marginTop: 4, cursor: "pointer", fontFamily: "inherit", fontWeight: 700 }}>
                       Update Password
                     </button>
                   </div>
@@ -369,54 +431,8 @@ export function ProfileClient() {
               <Toggle on={twoFA} onChange={setTwoFA} label="Two-Factor Authentication" sub="Add an extra layer of security" />
             </div>
 
-            {/* Notification preferences */}
-            <div className="dash-card-v2">
-              <CardTitle icon="notifications">Notifications</CardTitle>
-              <Toggle on={notifEmail}    onChange={setNotifEmail}    label="Email Notifications"   sub="Receive updates via email" />
-              <Toggle on={notifBrowser}  onChange={setNotifBrowser}  label="Browser Notifications" sub="Desktop push alerts" />
-              <Toggle on={notifTasks}    onChange={setNotifTasks}    label="Task Reminders"        sub="Due dates and assignments" />
-              <Toggle on={notifMentions} onChange={setNotifMentions} label="Mentions"              sub="When you're @mentioned" />
-            </div>
-
-          </div>
-
-          {/* Right column (Info / Quick Links) */}
-          <div className="dash-rows">
-            
-            {/* Quick links */}
-            <div className="dash-card-v2">
-              <CardTitle icon="apps">Quick Links</CardTitle>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
-                {[
-                  { label: "My Tickets",  href: "/tickets?assigned=me", icon: "confirmation_number", color: "#6366f1" },
-                  { label: "My Tasks",    href: "/tasks?assigned=me",   icon: "task_alt",            color: "#f59e0b" },
-                  { label: "Timecard",    href: "/timecard",            icon: "schedule",            color: "#10b981" },
-                  { label: "Feedback",    href: "/feedback",            icon: "forum",               color: "#8b5cf6" },
-                ].map(item => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 12,
-                      padding: "14px 16px", borderRadius: 12,
-                      background: "var(--bg3)", border: "1px solid var(--border)",
-                      textDecoration: "none", color: "var(--text)", transition: "all .15s",
-                    }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = item.color; (e.currentTarget as HTMLElement).style.background = item.color + "11" }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLElement).style.background = "var(--bg3)" }}
-                  >
-                    <div style={{ width: 36, height: 36, borderRadius: 10, background: item.color + "22", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <span className="material-symbols-outlined" style={{ fontSize: 18, color: item.color }}>{item.icon}</span>
-                    </div>
-                    <span style={{ fontSize: 14, fontWeight: 700 }}>{item.label}</span>
-                    <span className="material-symbols-outlined" style={{ fontSize: 16, color: "var(--text3)", marginLeft: "auto", transition: "transform .15s" }}>chevron_right</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
             {/* Skills */}
-            <div className="dash-card-v2">
+            <div className="dash-card-v2" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
               <CardTitle icon="star">Skills &amp; Expertise</CardTitle>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                 {SKILLS.map(s => (
@@ -426,34 +442,16 @@ export function ProfileClient() {
                     fontSize: 13, fontWeight: 700, color: "var(--text)",
                     transition: "all .15s", cursor: "default"
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,.15)"; e.currentTarget.style.color = "var(--text)" }}
-                  onMouseLeave={e => { e.currentTarget.style.background = "rgba(99,102,241,.08)"; e.currentTarget.style.color = "var(--text)" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,.15)"; e.currentTarget.style.color = "var(--text)" }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(99,102,241,.08)"; e.currentTarget.style.color = "var(--text)" }}
                   >
                     {s}
                   </span>
                 ))}
               </div>
             </div>
-
-            {/* Recent activity */}
-            <div className="dash-card-v2">
-              <CardTitle icon="history">Recent Activity</CardTitle>
-              <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                {ACTIVITY.map((a, i) => (
-                  <div key={i} style={{ display: "flex", gap: 12, paddingBottom: 16, marginBottom: 16, borderBottom: i < ACTIVITY.length - 1 ? "1px solid var(--border)" : "none" }}>
-                    <div style={{ width: 32, height: 32, borderRadius: 10, background: a.color + "22", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
-                      <span className="material-symbols-outlined" style={{ fontSize: 16, color: a.color }}>{a.icon}</span>
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", lineHeight: 1.5 }}>{a.text}</div>
-                      <div style={{ fontSize: 11, fontWeight: 500, color: "var(--text3)", marginTop: 4 }}>{a.time}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
           </div>
+
         </div>
       </div>
     </div>

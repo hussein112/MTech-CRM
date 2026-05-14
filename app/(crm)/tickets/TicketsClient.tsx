@@ -113,6 +113,18 @@ function TicketsInner({ tickets, merchants }: Props) {
     return () => window.removeEventListener("keydown", h)
   }, [showPicker, showForm])
 
+  // Open modal if ?new=true
+  useEffect(() => {
+    if (searchParams.get("new") === "true") {
+      setPickerQuery("")
+      setPickedMerchant(null)
+      setFormState(EMPTY_TICKET)
+      setSubmitted(false)
+      setShowPicker(true)
+      router.replace("/tickets", { scroll: false })
+    }
+  }, [searchParams, router])
+
   function openPicker() {
     setPickerQuery(""); setPickedMerchant(null)
     setFormState(EMPTY_TICKET); setSubmitted(false)

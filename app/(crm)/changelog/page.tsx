@@ -380,7 +380,7 @@ export default function ChangelogPage() {
         </p>
       </div>
 
-      <div className="card" style={{ padding: "0 32px", backgroundColor: "#fff" }}>
+      <div className="card" style={{ padding: "0 32px", backgroundColor: "#fff", borderRadius: "16px" }}>
         {ENTRIES.map((entry, ei) => {
           const firstH3Idx = entry.sections.findIndex(s => !!s.h)
           return (

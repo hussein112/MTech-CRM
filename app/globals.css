@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -103,13 +102,13 @@
 }
 
 html[data-theme="dark"] {
-  --text:  #f1f5f9;
+  --text: #f1f5f9;
   --text2: #94a3b8;
   --text3: #64748b;
 
-  --bg:    #0d1525;
-  --bg2:   #151e30;
-  --bg3:   #1c2a40;
+  --bg: #0d1525;
+  --bg2: #151e30;
+  --bg3: #1c2a40;
 
   --border: rgba(255, 255, 255, 0.08);
 
@@ -155,9 +154,11 @@ html[data-theme="dark"] {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
