@@ -203,9 +203,9 @@ export function TimecardClient() {
       const next = !isClockedIn
 
       if (next) {
-        const shiftStart = new Date(now)
+        const shiftStart = new Date(now!)
         shiftStart.setHours(10, 0, 0, 0)
-        const diffMins = (now.getTime() - shiftStart.getTime()) / 60000
+        const diffMins = (now!.getTime() - shiftStart.getTime()) / 60000
         const gracePeriod = 15
 
         if (diffMins < -gracePeriod) {
@@ -222,7 +222,7 @@ export function TimecardClient() {
         }
 
         const status = diffMins > 10 ? "Late" : "Worked"
-        const newLog = { in: now.toISOString(), out: null }
+        const newLog = { in: now!.toISOString(), out: null }
         setMockData(prev => {
           const existing = prev[nowDs]
           return {
@@ -242,7 +242,7 @@ export function TimecardClient() {
           const existing = prev[nowDs]
           if (!existing) return prev
           const logs = [...existing.logs]
-          logs[logs.length - 1].out = now.toISOString()
+          logs[logs.length - 1].out = now!.toISOString()
           return { ...prev, [nowDs]: { ...existing, logs } }
         })
         setIsClockedIn(false)
@@ -258,7 +258,7 @@ export function TimecardClient() {
 
   function applyQuickRange(range: string) {
     setReportRange(range)
-    const today = new Date(now); today.setHours(0, 0, 0, 0)
+    const today = new Date(now!); today.setHours(0, 0, 0, 0)
     const dow = today.getDay() || 7 // Mon = 1, Sun = 7
     let start = new Date(today)
     let end = new Date(today)
@@ -291,7 +291,7 @@ export function TimecardClient() {
 
     if (card) {
       status = card.status
-      const diffHours = calcHours(card.logs, now.getTime())
+      const diffHours = calcHours(card.logs, now!.getTime())
       total = fmtHrs(diffHours)
       inTime = fmtTime(card.logs[0].in)
       const lastOut = card.logs[card.logs.length - 1].out
@@ -459,8 +459,8 @@ export function TimecardClient() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 12 }}>
             {weekDays.map((d, i) => {
-              const isFuture = d > now
-              const isToday = d.toDateString() === now.toDateString()
+              const isFuture = d > now!
+              const isToday = d.toDateString() === now!.toDateString()
               const ds = toDs(d)
               const card = mockData[ds]
 
@@ -472,7 +472,7 @@ export function TimecardClient() {
               if (card) {
                 statusText = card.status
                 statusColor = STATUS_COLOR[card.status] || "var(--accent-crm)"
-                hoursLabel = fmtHrs(calcHours(card.logs, now.getTime()))
+                hoursLabel = fmtHrs(calcHours(card.logs, now!.getTime()))
                 icon = card.status === "Late" ? "schedule" : "check_circle"
               } else {
                 if (isToday) { statusText = "Today"; statusColor = "var(--accent-crm)"; icon = "today" }
@@ -675,7 +675,7 @@ export function TimecardClient() {
 
                   const ds = toDs(d)
                   const card = mockData[ds]
-                  const isToday = d.toDateString() === now.toDateString()
+                  const isToday = d.toDateString() === now!.toDateString()
 
                   return (
                     <div key={i} style={{ minHeight: 100, borderRadius: 16, background: isToday ? "rgba(99,102,241,0.05)" : "var(--bg)", border: `2px solid ${isToday ? "var(--accent-crm)" : "var(--border)"}`, padding: 12, display: "flex", flexDirection: "column", position: "relative" }}>
@@ -687,7 +687,7 @@ export function TimecardClient() {
                             <div style={{ width: 6, height: 6, borderRadius: "50%", background: STATUS_COLOR[card.status] }} />
                             {card.status}
                           </div>
-                          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", paddingLeft: 4 }}>{fmtHrs(calcHours(card.logs, now.getTime()))}</span>
+                          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", paddingLeft: 4 }}>{fmtHrs(calcHours(card.logs, now!.getTime()))}</span>
                         </div>
                       )}
                     </div>
@@ -760,7 +760,7 @@ export function TimecardClient() {
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                   {reportEntries.map(tc => {
-                    const hrs = calcHours(tc.logs, now.getTime())
+                    const hrs = calcHours(tc.logs, now!.getTime())
                     return (
                       <div key={tc.date} style={{ border: "1px solid var(--border)", borderRadius: 24, background: "var(--bg2)", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.02)" }}>
                         <div style={{ padding: "20px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--border)", background: "var(--bg)" }}>
@@ -789,7 +789,7 @@ export function TimecardClient() {
                             <tbody>
                               {tc.logs.map((log, i) => {
                                 const start = new Date(log.in).getTime()
-                                const end = log.out ? new Date(log.out).getTime() : now.getTime()
+                                const end = log.out ? new Date(log.out).getTime() : now!.getTime()
                                 const dur = Math.max(0, (end - start) / 3600000)
                                 return (
                                   <tr key={i} style={{ background: "var(--bg)", borderRadius: 12 }}>
@@ -852,7 +852,7 @@ export function TimecardClient() {
 
               <p style={{ fontSize: 12, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text3)", marginBottom: 16 }}>This Week's Log</p>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {weekDays.filter(d => !isWeekend(d) && d <= now).reverse().map((d, i) => {
+                {weekDays.filter(d => !isWeekend(d) && d <= now!).reverse().map((d, i) => {
                   const card = mockData[toDs(d)]
                   let status = "Absent", icon = "cancel", color = "#ef4444", detail = "No shift recorded"
                   if (card) {
@@ -866,7 +866,7 @@ export function TimecardClient() {
                       <div>
                         <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
                           {d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
-                          {d.toDateString() === now.toDateString() && <span style={{ fontSize: 10, background: "var(--accent-crm)", color: "#fff", padding: "2px 6px", borderRadius: 4, textTransform: "uppercase" }}>Today</span>}
+                          {d.toDateString() === now!.toDateString() && <span style={{ fontSize: 10, background: "var(--accent-crm)", color: "#fff", padding: "2px 6px", borderRadius: 4, textTransform: "uppercase" }}>Today</span>}
                         </div>
                         <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text3)", marginTop: 4 }}>{detail}</div>
                       </div>
